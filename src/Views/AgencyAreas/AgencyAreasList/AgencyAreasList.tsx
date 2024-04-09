@@ -3,8 +3,7 @@ import styles from './AgencyAreasList.module.scss';
 import { TransitionGroup } from 'react-transition-group';
 import { Area } from '../../../Models';
 import { AgencyAreasListItem } from './AgencyAreasListItem/AgencyAreasListItem';
-import { Divider } from '../../../Components/Divider/Divider';
-import { SFButton, SFCollapse } from 'sfui';
+import { SFButton, SFCollapse, SFDivider } from 'sfui';
 import { AgencyAreasNoResult } from './AgencyAreasNoResults/AgencyAreasNoResults';
 import { AgencyAreasNoAreasCreated } from './AgencyNoAreasCreated/AgencyNoAreasCreated';
 
@@ -73,7 +72,7 @@ export const AgencyAreasList = ({
                 onEdit={() => onEdit(area)}
                 onDelete={() => onDelete(area)}
               />
-              {index < visibleAreas.length - 1 && <Divider />}
+              {index < visibleAreas.length - 1 && <SFDivider />}
             </SFCollapse>
           ))}
         </TransitionGroup>

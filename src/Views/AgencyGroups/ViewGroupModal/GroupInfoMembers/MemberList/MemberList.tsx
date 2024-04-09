@@ -3,8 +3,7 @@ import { TransitionGroup } from 'react-transition-group';
 import { GroupMember, User } from '../../../../../Models';
 import { MemberListItem } from './MemberListItem/MemberListItem';
 import { UserContext } from '../../../../../Context';
-import { Divider } from '../../../../../Components/Divider/Divider';
-import { SFCollapse } from 'sfui';
+import { SFCollapse, SFDivider } from 'sfui';
 
 export interface MemberListProps {
   isActive: boolean;
@@ -34,7 +33,7 @@ export const MemberList = ({
             user={user}
           />
 
-          {index < members.length - 1 && <Divider size={1} />}
+          {index < members.length - 1 && <SFDivider />}
         </SFCollapse>
       ))}
     </TransitionGroup>

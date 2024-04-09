@@ -2,6 +2,7 @@ import React, { useContext } from 'react';
 import styles from './ShiftForm.module.scss';
 import {
   SFDatePicker,
+  SFDivider,
   SFNumericField,
   SFPeopleOption,
   SFSelect,
@@ -9,7 +10,6 @@ import {
   SFTextField
 } from 'sfui';
 import { AreasField } from '../../../../Components/AreasField/AreasField';
-import { Divider } from '../../../../Components/Divider/Divider';
 import { ShiftFormValue, ShiftRecurrence } from '../../../../Models';
 import { MemberPicker } from '../../../../Components/MemberPicker/MemberPicker';
 import { RepeatForm } from './RepeatForm/RepeatForm';
@@ -94,7 +94,7 @@ export const ShiftForm = ({
         />
       </div>
 
-      <Divider />
+      <SFDivider />
 
       <div className={styles.section}>
         <SFText type="component-1-medium">Date and Time</SFText>
@@ -182,7 +182,7 @@ export const ShiftForm = ({
           )}
       </div>
 
-      <Divider />
+      <SFDivider />
 
       <div className={styles.section}>
         <SFText type="component-1-medium">Staff</SFText>

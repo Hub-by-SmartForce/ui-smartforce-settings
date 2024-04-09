@@ -2,7 +2,7 @@ import React, { Fragment } from 'react';
 import styles from './ManageBusinessCard.module.scss';
 import { BusinessCard } from 'business-card-component';
 import { SettingsContentRender } from '../SettingsContentRender';
-import { SFButton, SFScrollable } from 'sfui';
+import { SFButton, SFDivider, SFScrollable } from 'sfui';
 import {
   UserContext,
   MediaContext,
@@ -25,7 +25,6 @@ import {
   SettingsError
 } from '../../Models';
 import { SETTINGS_CUSTOM_EVENT } from '../../Constants';
-import { Divider } from '../../Components/Divider/Divider';
 
 const OFFICER_DISABLED_LIST: string[] = ['show_name', 'show_officer_id'];
 const AGENCY_DISABLED_LIST: string[] = [
@@ -167,7 +166,9 @@ export const ManageBusinessCard = ({
                   values={switchData.officer_information}
                   onChange={onOfficerChange}
                 />
-                <Divider />
+
+                <SFDivider />
+
                 <BusinessCardSwitchForm
                   title="Agency Information"
                   disabledList={AGENCY_DISABLED_LIST}

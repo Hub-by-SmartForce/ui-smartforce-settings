@@ -1,8 +1,7 @@
 import React from 'react';
 import styles from './AgencyEventsModal.module.scss';
 import { PanelModal, PanelModalAnchor } from '../../../Components';
-import { SFTextField } from 'sfui';
-import { Divider } from '../../../Components/Divider/Divider';
+import { SFDivider, SFTextField } from 'sfui';
 import { ColorPicker } from './ColorPicker/ColorPicker';
 import { AgencyEvent, AgencyEventType, SettingsError } from '../../../Models';
 import { ApiContext } from '../../../Context';
@@ -121,7 +120,7 @@ export const AgencyEventsModal = ({
           value={formValue?.name}
           onChange={(e) => onNameChange(e.target.value)}
         />
-        <Divider />
+        <SFDivider />
         <ColorPicker
           title="Set color"
           selected={formValue?.color}

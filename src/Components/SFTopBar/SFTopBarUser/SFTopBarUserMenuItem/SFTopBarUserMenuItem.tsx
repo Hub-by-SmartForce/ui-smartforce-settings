@@ -34,7 +34,7 @@ export const SFTopBarUserMenuItem = React.forwardRef(
           {subTitle && (
             <SFText
               className={styles.subtitle}
-              type="component-3"
+              type="component-2"
               sfColor="neutral"
             >
               {subTitle}

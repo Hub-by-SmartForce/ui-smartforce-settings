@@ -1,10 +1,9 @@
 import React, { Fragment, MouseEvent } from 'react';
 import styles from './SFTopBarUser.module.scss';
-import { SFIcon } from 'sfui';
+import { SFDivider, SFIcon } from 'sfui';
 import { UserContext } from '../../../Context';
 import UserMenu from './UserMenu/UserMenu';
 import { SFTopBarUserMenuItem } from './SFTopBarUserMenuItem/SFTopBarUserMenuItem';
-import { Divider } from '../../Divider/Divider';
 import { User } from '../../../Models';
 import { Avatar } from '../../Avatar/Avatar';
 import { QRCodeModal } from '../../QRCodeModal/QRCodeModal';
@@ -77,7 +76,7 @@ export const SFTopBarUser = ({
             <SFIcon className={styles.qrIcon} icon="Name-Tag" />
           </SFTopBarUserMenuItem>,
           children,
-          <Divider key="user-menu-divider" className={styles.divider} />
+          <SFDivider key="user-menu-divider" className={styles.divider} />
         ]}
 
         <SFTopBarUserMenuItem

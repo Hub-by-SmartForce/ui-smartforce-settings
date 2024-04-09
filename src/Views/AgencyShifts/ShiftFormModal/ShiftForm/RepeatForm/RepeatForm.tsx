@@ -1,8 +1,7 @@
 import React from 'react';
 import styles from './RepeatForm.module.scss';
 import { ShiftRecurrence } from '../../../../../Models';
-import { SFNumericField, SFSelect } from 'sfui';
-import { Divider } from '../../../../../Components/Divider/Divider';
+import { SFDivider, SFNumericField, SFSelect } from 'sfui';
 import { DayPicker } from './DayPicker/DayPicker';
 
 export interface RepeatFormProps {
@@ -23,7 +22,7 @@ export const RepeatForm = ({
         disabled
       />
 
-      <Divider />
+      <SFDivider />
 
       <div className={styles.inner}>
         <SFSelect

@@ -1,12 +1,11 @@
 import React from 'react';
-import { SFButton, SFSearch, SFSpinner } from 'sfui';
+import { SFButton, SFDivider, SFSearch, SFSpinner } from 'sfui';
 import styles from './AgencyAreas.module.scss';
 import { SettingsContentRender } from '../SettingsContentRender';
 import { AgencyAreasModal } from './AgencyAreasModal/AgencyAreasModal';
 import { AgencyAreasList } from './AgencyAreasList/AgencyAreasList';
 import { AgencyAreasDeleteDialog } from './AgencyAreasDeleteDialog/AgencyAreasDeleteDialog';
 import { ViewAreaModal } from './ViewAreaModal/ViewAreaModal';
-import { Divider } from '../../Components/Divider/Divider';
 import { Area } from '../../Models';
 import { AreasContext } from '../../Context';
 import { getAreas } from '../../Services';
@@ -136,7 +135,7 @@ export const AgencyAreas = ({
                   />
                 </div>
               )}
-              <Divider size={2} />
+              <SFDivider size={2} />
               {isLoading && (
                 <div className={styles.container}>
                   <SFSpinner />

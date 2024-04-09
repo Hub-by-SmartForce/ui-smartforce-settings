@@ -1,7 +1,6 @@
 import React, { Fragment, useState } from 'react';
 import styles from './ListManagment.module.scss';
-import { SFButton, SFSearch, SFSpinner, SFText } from 'sfui';
-import { Divider } from '../Divider/Divider';
+import { SFButton, SFDivider, SFSearch, SFSpinner, SFText } from 'sfui';
 import { NoResults } from './NoResults/NoResults';
 import { List } from './List/List';
 import { ListManagmentMenuOption } from './List/ListItem/ListItem';
@@ -72,7 +71,7 @@ export const ListManagment = <T,>(
         )}
 
         <div className={styles.divider}>
-          <Divider size={2} />
+          <SFDivider size={2} />
         </div>
       </div>
 

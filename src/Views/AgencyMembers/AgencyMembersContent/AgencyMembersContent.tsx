@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useRef, useState } from 'react';
 import styles from './AgencyMembersContent.module.scss';
-import { SFButton, SFSearch } from 'sfui';
+import { SFButton, SFDivider, SFSearch } from 'sfui';
 import { AddMembersModal } from './AddMembersModal/AddMembersModal';
 import { MemberList } from './MemberList/MemberList';
 import { SubscriptionContext, UserContext } from '../../../Context';
@@ -23,7 +23,6 @@ import {
   addMembers,
   getSubscriptions
 } from '../../../Services';
-import { Divider } from '../../../Components/Divider/Divider';
 import { ApiContext } from '../../../Context';
 
 const PAGE_SIZE = 10;
@@ -281,7 +280,7 @@ export const AgencyMembersContent = ({
           onChange={onSearchMembers}
         />
       </div>
-      <Divider size={2} />
+      <SFDivider size={2} />
 
       <MemberList
         members={members}

@@ -2,9 +2,8 @@ import React from 'react';
 import styles from './ShiftInfoModal.module.scss';
 import moment from 'moment';
 import { Avatar, PanelModal } from '../../../Components';
-import { Divider } from '../../../Components/Divider/Divider';
 import { Member, SettingsError, Shift, ShiftMember } from '../../../Models';
-import { SFPeopleOption, SFSpinner, SFText } from 'sfui';
+import { SFDivider, SFPeopleOption, SFSpinner, SFText } from 'sfui';
 import {
   formatArrayToString,
   getRecurrenceString,
@@ -206,12 +205,12 @@ export const ShiftInfoModal = ({
               <ShiftInfoModalItem icon="User-1" text={shift.supervisor.name} />
             )}
           </div>
-          <Divider />
+          <SFDivider />
           <div>
             <ShiftInfoModalItem icon="Users" text="Minimum Staffing" />
             <ProgressBar value={participants.length} peak={shift.min_staff} />
           </div>
-          <Divider />
+          <SFDivider />
           <ListManagment<ShiftMember>
             actionButtonLabel="Add Members"
             emptyMessage="There are no members yet."

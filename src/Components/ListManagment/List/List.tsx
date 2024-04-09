@@ -1,7 +1,6 @@
 import React from 'react';
-import { SFCollapse } from 'sfui';
+import { SFCollapse, SFDivider } from 'sfui';
 import { TransitionGroup } from 'react-transition-group';
-import { Divider } from '../../Divider/Divider';
 import { ListItem, ListManagmentMenuOption } from './ListItem/ListItem';
 
 export interface ListProps<T> {
@@ -30,7 +29,7 @@ export const List = <T,>({
             renderItem={renderItem}
             onClick={() => onClick && onClick(item)}
           />
-          {index < list.length - 1 && <Divider size={1} />}
+          {index < list.length - 1 && <SFDivider />}
         </SFCollapse>
       ))}
     </TransitionGroup>

@@ -1,7 +1,6 @@
 import React, { Fragment, useState } from 'react';
 import styles from './GroupInfoMembers.module.scss';
-import { SFButton, SFScrollable, SFSearch, SFText } from 'sfui';
-import { Divider } from '../../../../Components/Divider/Divider';
+import { SFButton, SFDivider, SFScrollable, SFSearch, SFText } from 'sfui';
 import { GroupMember, Member, SettingsError } from '../../../../Models';
 import { MemberList } from './MemberList/MemberList';
 import { ApiContext } from '../../../../Context';
@@ -117,7 +116,7 @@ export const GroupInfoMembers = ({
         </div>
       )}
 
-      <Divider size={2} />
+      <SFDivider size={2} />
 
       {isEmpty && (
         <SFText className={styles.emptyMsg} type="component-2">

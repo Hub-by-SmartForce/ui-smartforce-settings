@@ -9,7 +9,8 @@ import {
 } from '../../Services';
 import {
   AGENCY_NOTIFICATIONS_EMAIL_UPDATE,
-  COLORADO_STATE
+  COLORADO_STATE,
+  VIRGINIA_STATE
 } from '../../Constants';
 import { RecipientsField } from './RecipientsField/RecipientsField';
 import { Loader } from '../../Components';
@@ -191,7 +192,8 @@ export const AgencyMessaging = ({
     <Fragment>
       {!isLoading && (
         <div className={styles.agencyMessaging}>
-          {customer?.state_name === COLORADO_STATE && (
+          {(customer?.state_name === COLORADO_STATE ||
+            customer?.state_name === VIRGINIA_STATE) && (
             <RecipientsField
               label="Agency’s monthly reports"
               disabled={!canUpdateRecipients}

@@ -1,0 +1,22 @@
+@import '~sfui/dist/Styles/SFColors/SFColors.module.scss';
+
+.navIndicatorItem {
+  width: 8px;
+  height: 8px;
+  border-radius: 10px;
+  background-color: $sf-grey-200;
+
+  &.selected {
+    background-color: $sf-blue-main-light;
+  }
+}
+
+:global(.nightMode) {
+  .navIndicatorItem {
+    background-color: $sf-grey-600;
+
+    &.selected {
+      background-color: $sf-blue-main-dark;
+    }
+  }
+}

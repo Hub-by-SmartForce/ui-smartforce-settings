@@ -1,0 +1,10 @@
+.toursCarrouselModalFooter {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+
+  .rightActions {
+    display: flex;
+    gap: 8px;
+  }
+}

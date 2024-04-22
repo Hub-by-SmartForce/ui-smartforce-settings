@@ -4,6 +4,8 @@ import { Tour } from './models';
 export type TourContextState = {
   tour: Tour | undefined;
   step: number;
+  isFeatureReminderOpen: boolean;
+  setIsFeatureReminderOpen: (value: boolean) => void;
   onStart: (tour: Tour) => void;
   onClose: () => void;
   onEnd: () => void;
@@ -14,6 +16,8 @@ export type TourContextState = {
 const contextDefaultValues: TourContextState = {
   tour: undefined,
   step: 0,
+  isFeatureReminderOpen: false,
+  setIsFeatureReminderOpen: () => {},
   onStart: () => {},
   onClose: () => {},
   onEnd: () => {},
@@ -27,6 +31,8 @@ export const TourContext =
 export const TourProvider: FC = ({ children }) => {
   const [tour, setTour] = useState<Tour | undefined>();
   const [step, setStep] = useState<number>(-1);
+  const [isFeatureReminderOpen, setIsFeatureReminderOpen] =
+    useState<boolean>(false);
 
   const onStart = (tour: Tour) => {
     setTour(tour);
@@ -40,6 +46,7 @@ export const TourProvider: FC = ({ children }) => {
   const onEnd = () => {
     setTour(undefined);
     setStep(-1);
+    setIsFeatureReminderOpen(true);
   };
 
   const onBack = () => setStep((s) => s - 1);
@@ -50,6 +57,8 @@ export const TourProvider: FC = ({ children }) => {
       value={{
         tour,
         step,
+        isFeatureReminderOpen,
+        setIsFeatureReminderOpen,
         onStart,
         onClose,
         onEnd,

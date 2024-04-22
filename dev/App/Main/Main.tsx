@@ -33,6 +33,10 @@ export const Main = (): React.ReactElement<{}> => {
   const { setCustomer } = React.useContext(CustomerContext);
   const { setSubscriptions } = React.useContext(SubscriptionContext);
   const { setTimezones } = React.useContext(TimezonesContext);
+  const [selectedSectionName, setSelectedSectionName] = React.useState<
+    string | undefined
+  >();
+
   const isBigScreen: boolean = useSFMediaQuery(LARGE_SCREEN);
 
   const onSettingsError = (e: SettingsError) => console.error(e);
@@ -99,10 +103,11 @@ export const Main = (): React.ReactElement<{}> => {
             stripeApiKey={
               'pk_test_51MEZItJHbTAgxqXa6dzvaI4SubteHn7zemB9uj6hXqltKSoEAPKvBRlMeHvn06fR03vqKFkegkmH0QWdkPrpbuGe00CkvRGgxb'
             }
-            selectedSectionName="my-profile"
+            selectedSectionName={selectedSectionName}
             onError={onSettingsError}
             onHome={onHome}
             onUpgrade={onUpgrade}
+            onSectionChange={(name) => setSelectedSectionName(name)}
           />
         </div>
       )}

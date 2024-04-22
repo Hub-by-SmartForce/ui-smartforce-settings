@@ -1,13 +1,14 @@
 import React, { useEffect, useState } from 'react';
 import styles from './ToursCarrouselModal.module.scss';
-import { SFDialog, SFDialogProps, SFDivider } from 'sfui';
+import { SFDialog, SFDivider } from 'sfui';
 import { NavIndicator } from './NavIndicator/NavIndicator';
 import { ToursCarrouselModalFooter } from './ToursCarrouselModalFooter/ToursCarrouselModalFooter';
 import { TourInfo } from './TourInfo/TourInfo';
 import { Tour } from '../../models';
 import { YouTubeEmbed } from '../../../../Components/YouTubeEmbed/YouTubeEmbed';
 
-export interface ToursCarrouselModalProps extends Pick<SFDialogProps, 'open'> {
+export interface ToursCarrouselModalProps {
+  open: boolean;
   tours: Tour[];
   onClose: () => void;
   onStart: (tour: Tour) => void;
@@ -29,7 +30,10 @@ export const ToursCarrouselModal = (
   const onNext = () => setSelected((s) => s + 1);
 
   return (
-    <SFDialog {...props} PaperProps={{ className: styles.toursCarrouselModal }}>
+    <SFDialog
+      open={props.open}
+      PaperProps={{ className: styles.toursCarrouselModal }}
+    >
       <div className={styles.media}>
         <YouTubeEmbed title={tourSelected.title} src={tourSelected.link} />
       </div>

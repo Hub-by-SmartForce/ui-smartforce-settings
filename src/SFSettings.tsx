@@ -1,4 +1,4 @@
-import React, { Fragment } from 'react';
+import React, { Fragment, useEffect } from 'react';
 import styles from './SFSettings.module.scss';
 import { SFPaper, SFScrollable } from 'sfui';
 import SectionCard from './Components/SectionCard/SectionCard';
@@ -59,6 +59,7 @@ export interface SFSettingsProps {
   onError: (e: SettingsError) => void;
   onHome: () => void;
   onUpgrade: (product: string) => void;
+  onSectionChange: (name: string) => void;
 }
 
 export interface SectionItemValue {
@@ -84,7 +85,8 @@ export const SFSettings = ({
   product,
   onError,
   onUpgrade,
-  onHome
+  onHome,
+  onSectionChange
 }: SFSettingsProps): React.ReactElement<SFSettingsProps> => {
   const { isPhone } = React.useContext(MediaContext);
   const { user } = React.useContext(UserContext);
@@ -419,13 +421,19 @@ export const SFSettings = ({
     selectedSection: SectionCardValue,
     subsectionIndex?: number
   ) => {
-    setSelectedSection(selectedSection);
+    onSectionChange(selectedSection.name);
 
     if (subsectionIndex !== undefined) {
       setSelectedSubSection(subsectionIndex);
       setIsPanelOpen(true);
     }
   };
+
+  useEffect(() => {
+    setSelectedSection(
+      sectionCards[routeSectionSelected !== -1 ? routeSectionSelected : 0]
+    );
+  }, [routeSectionSelected]);
 
   React.useEffect(() => {
     // Opens the panel with the selected section if routeSection is selected

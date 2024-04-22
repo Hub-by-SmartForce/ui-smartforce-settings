@@ -11,24 +11,24 @@ export interface TourTooltipProps
   extends TourTooltipContentProps,
     Pick<SFTooltipProps, 'placement'> {
   children: React.ReactNode;
-  tour: string;
+  tourId: number;
   preventOverflow?: boolean;
   width?: 'auto' | 'fit';
 }
 
 export const TourTooltip = ({
   children,
-  tour,
+  tourId,
   preventOverflow = false,
   width = 'auto',
   placement,
   ...props
 }: TourTooltipProps): React.ReactElement<TourTooltipProps> => {
-  const { onEnd } = useContext(TourContext);
-  const [refTooltipElement, isTooltipOpen] = useTourTooltip(tour, props.step);
+  const { onClose } = useContext(TourContext);
+  const [refTooltipElement, isTooltipOpen] = useTourTooltip(tourId, props.step);
 
   useEffect(() => {
-    return () => onEnd();
+    return () => onClose();
   }, []);
 
   return (

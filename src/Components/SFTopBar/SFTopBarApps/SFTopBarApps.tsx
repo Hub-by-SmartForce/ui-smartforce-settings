@@ -1,5 +1,4 @@
-import React, { Fragment, MouseEventHandler } from 'react';
-import { SFIconButton } from 'sfui';
+import React, { Fragment } from 'react';
 import { AppsPopover } from './AppsPopover/AppsPopover';
 
 export const SFTopBarApps = (): React.ReactElement<{}> => {
@@ -7,9 +6,9 @@ export const SFTopBarApps = (): React.ReactElement<{}> => {
     null
   );
 
-  const onClick: MouseEventHandler<HTMLButtonElement> = (event): void => {
-    setAnchorEl(event.currentTarget);
-  };
+  // const onClick: MouseEventHandler<HTMLButtonElement> = (event): void => {
+  //   setAnchorEl(event.currentTarget);
+  // };
 
   const onClose = (): void => setAnchorEl(null);
 
@@ -17,12 +16,12 @@ export const SFTopBarApps = (): React.ReactElement<{}> => {
     <Fragment>
       <AppsPopover anchorEl={anchorEl} onClose={onClose} />
 
-      <SFIconButton
+      {/* <SFIconButton
         sfIcon="Bento"
         iconSize={20}
         buttonSize={34}
         onClick={onClick}
-      />
+      /> */}
     </Fragment>
   );
 };

@@ -15,6 +15,7 @@ const getOptionSelected = (o: SFPeopleOption, v: SFPeopleOption): boolean => {
 };
 
 export interface MemberPickerProps {
+  disabled?: boolean;
   baseUrl: string;
   label: string;
   value: SFPeopleOption | undefined;
@@ -23,6 +24,7 @@ export interface MemberPickerProps {
 }
 
 export const MemberPicker = ({
+  disabled = false,
   baseUrl,
   label,
   value,
@@ -43,6 +45,7 @@ export const MemberPicker = ({
   return (
     <SFPeoplePicker
       isAsync
+      disabled={disabled}
       multiple={false}
       label={label}
       formatUrlQuery={(value: string) =>

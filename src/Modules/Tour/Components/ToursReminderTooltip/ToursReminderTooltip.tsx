@@ -5,12 +5,26 @@ import { ToursReminderContent } from './TourTooltipContent/ToursReminderContent'
 export interface ToursReminderTooltipProps {
   open: boolean;
   children: React.ReactNode;
+  placement?:
+    | 'bottom-end'
+    | 'bottom-start'
+    | 'bottom'
+    | 'left-end'
+    | 'left-start'
+    | 'left'
+    | 'right-end'
+    | 'right-start'
+    | 'right'
+    | 'top-end'
+    | 'top-start'
+    | 'top';
   onGotIt: (checked: boolean) => void;
 }
 
 export const ToursReminderTooltip = ({
   open,
   children,
+  placement = 'right',
   onGotIt
 }: ToursReminderTooltipProps): React.ReactElement<ToursReminderTooltipProps> => {
   const [checked, setChecked] = useState(false);
@@ -23,7 +37,7 @@ export const ToursReminderTooltip = ({
     <SFTooltip
       open={open}
       title=""
-      placement="right"
+      placement={placement}
       content={
         <ToursReminderContent
           checked={checked}

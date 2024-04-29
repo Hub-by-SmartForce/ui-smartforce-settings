@@ -25,10 +25,7 @@ export const ToursReminderContent = (
   return (
     <div
       className={styles.tourTooltipContent}
-      onClick={(e) => {
-        e.preventDefault();
-        e.stopPropagation();
-      }}
+      onClick={(e) => e.stopPropagation()}
     >
       <SFThemeProvider theme={theme}>
         <div className={styles.content}>

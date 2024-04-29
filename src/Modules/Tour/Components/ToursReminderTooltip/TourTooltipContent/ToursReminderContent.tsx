@@ -23,7 +23,13 @@ export const ToursReminderContent = (
   const theme: SFTheme = createSFTheme(themeType === 'day' ? 'night' : 'day');
 
   return (
-    <div className={styles.tourTooltipContent}>
+    <div
+      className={styles.tourTooltipContent}
+      onClick={(e) => {
+        e.preventDefault();
+        e.stopPropagation();
+      }}
+    >
       <SFThemeProvider theme={theme}>
         <div className={styles.content}>
           <div className={styles.text}>

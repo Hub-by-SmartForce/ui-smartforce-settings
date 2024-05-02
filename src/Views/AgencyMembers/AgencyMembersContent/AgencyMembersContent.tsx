@@ -25,6 +25,7 @@ import {
 } from '../../../Services';
 import { Divider } from '../../../Components/Divider/Divider';
 import { ApiContext } from '../../../Context';
+import { TourContext, TourTooltip } from '../../../Modules/Tour';
 
 const PAGE_SIZE = 10;
 
@@ -81,6 +82,7 @@ export const AgencyMembersContent = ({
   onError,
   onHome
 }: AgencyMembersContentProps): React.ReactElement<AgencyMembersContentProps> => {
+  const { onNext: onTourNext, onEnd: onTourEnd } = useContext(TourContext);
   const apiBaseUrl = useContext(ApiContext).settings;
   const { user } = React.useContext(UserContext);
   const { setSubscriptions } = React.useContext(SubscriptionContext);
@@ -229,6 +231,7 @@ export const AgencyMembersContent = ({
 
       setIsSaving(false);
       setIsAddMembersModalOpen(false);
+      onTourEnd();
     } catch (e: any) {
       console.error(`AgencyMembersContent:AddMembers`, e);
       onError(e);
@@ -265,13 +268,25 @@ export const AgencyMembersContent = ({
       />
 
       {showAddMembersButton && (
-        <SFButton
-          variant="outlined"
-          fullWidth
-          onClick={() => setIsAddMembersModalOpen(true)}
+        <TourTooltip
+          title="Invite your agency members"
+          description="You can invite as many officers as your agency needs. Just click the “Add Members” button and follow the steps."
+          step={1}
+          lastStep={3}
+          tourId={1}
+          preventOverflow
         >
-          Add Members
-        </SFButton>
+          <SFButton
+            variant="outlined"
+            fullWidth
+            onClick={() => {
+              setIsAddMembersModalOpen(true);
+              onTourNext();
+            }}
+          >
+            Add Members
+          </SFButton>
+        </TourTooltip>
       )}
 
       <div className={styles.searchUser}>

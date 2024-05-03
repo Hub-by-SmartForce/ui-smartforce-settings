@@ -1,3 +1,4 @@
+import { ChipFieldValueType } from 'sfui';
 import { BLOCK_DOMAINS } from '../Constants';
 
 export const isOfficerIdValid = (officerId: string): boolean => {
@@ -24,3 +25,10 @@ export const isEmailValid = (email: string) => {
 export const isOriValid = (ori: string): boolean => {
   return /^[A-Z0-9]{9}$/.test(ori);
 };
+
+export function isChipListValid(list: ChipFieldValueType[]) {
+  return (
+    list.length > 0 &&
+    list.every((member: ChipFieldValueType) => member.isValid)
+  );
+}

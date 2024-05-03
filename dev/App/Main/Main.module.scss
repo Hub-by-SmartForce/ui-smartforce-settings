@@ -1,4 +1,5 @@
 @import '~sfui/dist/Styles/SFColors/SFColors.module.scss';
+@import '~sfui/dist/Styles/SFMedia/SFMedia.module.scss';
 
 .main {
   display: grid;
@@ -8,6 +9,35 @@
   background-color: $sf-background-light;
   height: 100%;
   box-sizing: border-box;
+
+  .content {
+    .leftPanel {
+      display: none;
+    }
+  }
+}
+
+@media screen and (min-width: $sf-media-sm-width) {
+  .main {
+    .content {
+      display: grid;
+      grid-template-columns: auto minmax(0, 1fr);
+      grid-template-rows: 100%;
+
+      .leftPanel {
+        display: flex;
+        flex-direction: column;
+        gap: 24px;
+        padding: 12px;
+
+        .tours {
+          display: flex;
+          gap: 12px;
+          cursor: pointer;
+        }
+      }
+    }
+  }
 }
 
 :global(.nightMode) {

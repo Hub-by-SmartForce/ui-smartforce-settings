@@ -50,7 +50,12 @@ export const TourProvider: FC = ({ children }) => {
   };
 
   const onBack = () => setStep((s) => s - 1);
-  const onNext = () => setStep((s) => s + 1);
+
+  const onNext = () => {
+    if (step > 0) {
+      setStep((s) => s + 1);
+    }
+  };
 
   return (
     <TourContext.Provider

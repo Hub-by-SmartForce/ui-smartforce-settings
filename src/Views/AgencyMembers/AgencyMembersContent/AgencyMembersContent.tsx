@@ -25,7 +25,7 @@ import {
 } from '../../../Services';
 import { Divider } from '../../../Components/Divider/Divider';
 import { ApiContext } from '../../../Context';
-import { TourContext, TourTooltip } from '../../../Modules/Tour';
+import { TourContext, TourTooltip, useCloseTour } from '../../../Modules/Tour';
 
 const PAGE_SIZE = 10;
 
@@ -82,7 +82,11 @@ export const AgencyMembersContent = ({
   onError,
   onHome
 }: AgencyMembersContentProps): React.ReactElement<AgencyMembersContentProps> => {
-  const { onNext: onTourNext, onEnd: onTourEnd } = useContext(TourContext);
+  const {
+    onNext: onTourNext,
+    onClose: onTourClose,
+    setIsFeatureReminderOpen
+  } = useContext(TourContext);
   const apiBaseUrl = useContext(ApiContext).settings;
   const { user } = React.useContext(UserContext);
   const { setSubscriptions } = React.useContext(SubscriptionContext);
@@ -101,6 +105,8 @@ export const AgencyMembersContent = ({
   const refGetSearchMembers = React.useRef<any>(
     asyncDebounce(memoizedMemberFn(apiBaseUrl, getMembers), 250)
   );
+
+  useCloseTour();
 
   useEffect(() => {
     let subscribed: boolean = true;
@@ -197,7 +203,7 @@ export const AgencyMembersContent = ({
     );
   };
 
-  const onAddMembers = async (members: string[]) => {
+  const onAddMembers = async (members: string[], isTour: boolean) => {
     setIsSaving(true);
     try {
       await addMembers(apiBaseUrl, members);
@@ -231,7 +237,10 @@ export const AgencyMembersContent = ({
 
       setIsSaving(false);
       setIsAddMembersModalOpen(false);
-      onTourEnd();
+
+      if (isTour) {
+        setIsFeatureReminderOpen(true);
+      }
     } catch (e: any) {
       console.error(`AgencyMembersContent:AddMembers`, e);
       onError(e);
@@ -254,16 +263,19 @@ export const AgencyMembersContent = ({
     user?.role?.permissions
   );
 
+  const onModalClose = () => {
+    onClose();
+    onTourClose();
+    setIsAddMembersModalOpen(false);
+  };
+
   return (
     <div className={styles.agencyMembersContent}>
       <AddMembersModal
         isOpen={isAddMembersModalOpen}
         isSaving={isSaving}
         onBack={() => setIsAddMembersModalOpen(false)}
-        onClose={() => {
-          onClose();
-          setIsAddMembersModalOpen(false);
-        }}
+        onClose={onModalClose}
         onAddMembers={onAddMembers}
       />
 

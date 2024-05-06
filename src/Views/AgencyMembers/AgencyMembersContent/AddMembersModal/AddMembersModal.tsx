@@ -12,7 +12,7 @@ import { isChipListValid } from '../../../../Helpers';
 export interface AddMembersModalProps {
   isOpen: boolean;
   isSaving: boolean;
-  onAddMembers: (members: string[]) => void;
+  onAddMembers: (members: string[], isTour: boolean) => void;
   onBack: () => void;
   onClose: () => void;
 }
@@ -24,7 +24,7 @@ export const AddMembersModal = ({
   onBack,
   onClose
 }: AddMembersModalProps): React.ReactElement<AddMembersModalProps> => {
-  const { onNext: onTourNext } = useContext(TourContext);
+  const { tour, onEnd: onEndTour } = useContext(TourContext);
   const [members, setMembers] = useState<ChipFieldValueType[]>([]);
   const [anchor, setAnchor] = React.useState<PanelModalAnchor>('right');
 
@@ -37,8 +37,11 @@ export const AddMembersModal = ({
   }, [isOpen]);
 
   const onAdd = () => {
-    onTourNext();
-    onAddMembers(members.map((value: ChipFieldValueType) => value.value));
+    onEndTour();
+    onAddMembers(
+      members.map((value: ChipFieldValueType) => value.value),
+      !!tour
+    );
   };
 
   return (

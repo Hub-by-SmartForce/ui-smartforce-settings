@@ -1,15 +1,14 @@
-import React, { useContext, useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { SFTooltip, SFTooltipProps } from 'sfui';
 import { useTourTooltip } from '../../hooks';
 import {
   TourTooltipContentProps,
   TourTooltipContent
 } from './TourTooltipContent/TourTooltipContent';
-import { TourContext } from '../../context';
 
 export interface TourTooltipProps
   extends TourTooltipContentProps,
-    Pick<SFTooltipProps, 'placement'> {
+    Pick<SFTooltipProps, 'placement' | 'enterDelay'> {
   children: React.ReactNode;
   tourId: number;
   preventOverflow?: boolean;
@@ -22,18 +21,23 @@ export const TourTooltip = ({
   preventOverflow = false,
   width = 'auto',
   placement,
+  enterDelay,
   ...props
 }: TourTooltipProps): React.ReactElement<TourTooltipProps> => {
-  const { onClose } = useContext(TourContext);
+  const [isOpen, setIsOpen] = useState(false);
   const [refTooltipElement, isTooltipOpen] = useTourTooltip(tourId, props.step);
 
   useEffect(() => {
-    return () => onClose();
-  }, []);
+    if (enterDelay) {
+      setTimeout(() => setIsOpen(true), enterDelay);
+    } else {
+      setIsOpen(true);
+    }
+  }, [enterDelay]);
 
   return (
     <SFTooltip
-      open={isTooltipOpen}
+      open={isOpen && isTooltipOpen}
       title=""
       placement={placement}
       content={<TourTooltipContent {...props} />}

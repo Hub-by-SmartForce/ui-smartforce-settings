@@ -2,14 +2,18 @@ import React, { useContext, useEffect, useRef, useState } from 'react';
 import styles from './AgencyMembersContent.module.scss';
 import { SFButton, SFSearch } from 'sfui';
 import { AddMembersModal } from './AddMembersModal/AddMembersModal';
-import { MemberList } from './MemberList/MemberList';
+import { MemberItem, MemberList } from './MemberList/MemberList';
 import { SubscriptionContext, UserContext } from '../../../Context';
 import { NoMembersResult } from './NoMembersResult/NoMembersResult';
 import {
   AGENCY_SUBSCRIPTION_READ,
   AGENCY_INVITATIONS_CREATE
 } from '../../../Constants';
-import { asyncDebounce, checkPermissions } from '../../../Helpers';
+import {
+  asyncDebounce,
+  checkPermissions,
+  isRoleOfficer
+} from '../../../Helpers';
 import {
   MemberResponse,
   Member,
@@ -71,6 +75,28 @@ const memoizedMemberFn = (
   };
 };
 
+function setFirstOfficer(members: Member[]): MemberItem[] {
+  let result: MemberItem[] = [];
+  let officerFound = false;
+
+  for (let member of members) {
+    let newMember: MemberItem = {
+      ...member,
+      isFirstOfficer: false
+    };
+
+    if (!officerFound && isRoleOfficer(member.role?.id)) {
+      officerFound = true;
+      newMember.isFirstOfficer = true;
+      result = [...result, newMember];
+    } else {
+      result = [...result, newMember];
+    }
+  }
+
+  return result;
+}
+
 export interface AgencyMembersContentProps {
   onClose: () => void;
   onError: (e: SettingsError) => void;
@@ -91,7 +117,7 @@ export const AgencyMembersContent = ({
   const { user } = React.useContext(UserContext);
   const { setSubscriptions } = React.useContext(SubscriptionContext);
 
-  const [members, setMembers] = React.useState<Member[]>([]);
+  const [members, setMembers] = React.useState<MemberItem[]>([]);
   const [searchValue, setSearchValue] = React.useState<string>('');
   const [showLimit, setShowLimit] = React.useState<number>(PAGE_SIZE);
 
@@ -133,7 +159,7 @@ export const AgencyMembersContent = ({
               refSeeMoreUrl.current = response.links.next;
             }
 
-            setMembers(response.data);
+            setMembers(setFirstOfficer(response.data));
             setHasMoreMembers(moreMembers);
             setShowLimit(PAGE_SIZE);
             setIsLoading(false);
@@ -169,7 +195,10 @@ export const AgencyMembersContent = ({
             searchValue
           );
 
-          response.data = [...response.data, ...memberResponse.data];
+          response.data = setFirstOfficer([
+            ...response.data,
+            ...memberResponse.data
+          ]);
           response.links.next = memberResponse.links.next;
         }
         refSeeMoreUrl.current = response.links.next;
@@ -220,7 +249,7 @@ export const AgencyMembersContent = ({
         } else {
           refSeeMoreUrl.current = response.links.next;
         }
-        setMembers(response.data);
+        setMembers(setFirstOfficer(response.data));
         setHasMoreMembers(moreMembers);
         setShowLimit(PAGE_SIZE);
 
@@ -253,7 +282,7 @@ export const AgencyMembersContent = ({
   };
 
   const onUpdateList = (newMembers: Member[]) => {
-    setMembers(newMembers);
+    setMembers(setFirstOfficer(newMembers));
     //Clear cached results to avoid roles inconsistency
     resetSearchFn();
   };

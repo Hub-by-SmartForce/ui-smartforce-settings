@@ -1,4 +1,4 @@
-import React, { useContext, useRef } from 'react';
+import React, { Fragment, useContext, useRef } from 'react';
 import styles from './MemberListItem.module.scss';
 import { SFChip, SFCollapse, SFIconButton, SFMenu, SFMenuItem } from 'sfui';
 import { UserContext } from '../../../../../Context';
@@ -14,13 +14,15 @@ import {
   dispatchCustomEvent,
   isRoleOwner
 } from '../../../../../Helpers';
-import { User, Member, SettingsError } from '../../../../../Models';
+import { User, SettingsError } from '../../../../../Models';
 import { resendInvitation } from '../../../../../Services';
 import { SETTINGS_CUSTOM_EVENT } from '../../../../../Constants';
 import { ApiContext } from '../../../../../Context';
+import { TourContext, TourTooltip } from '../../../../../Modules/Tour';
+import { MemberItem } from '../MemberList';
 
 export interface MemberListItemProps {
-  member: Member;
+  member: MemberItem;
   wasRemoved: boolean;
   onError: (e: SettingsError) => void;
   onClick: () => void;
@@ -38,6 +40,7 @@ export const MemberListItem = ({
   ...props
 }: MemberListItemProps): React.ReactElement<MemberListItemProps> => {
   const apiBaseUrl = useContext(ApiContext).settings;
+  const { onNext: onTourNext, onClose: onTourClose } = useContext(TourContext);
   const user = useContext(UserContext).user as User;
   const [isMenuOpen, setIsMenuOpen] = React.useState<boolean>(false);
   const refAnchorEl = useRef<HTMLDivElement | null>(null);
@@ -49,6 +52,8 @@ export const MemberListItem = ({
 
   const onResendInvitation = async () => {
     setIsMenuOpen(false);
+    onTourClose();
+
     try {
       if (member.email) {
         await resendInvitation(apiBaseUrl, member.email);
@@ -70,6 +75,7 @@ export const MemberListItem = ({
 
   const onRemove = () => {
     setIsMenuOpen(false);
+    onTourClose();
     props.onRemove();
   };
 
@@ -99,17 +105,49 @@ export const MemberListItem = ({
         <SFMenu
           open={isMenuOpen}
           anchorEl={refAnchorEl ? refAnchorEl.current : null}
-          onClose={() => setIsMenuOpen(false)}
+          onClose={() => {
+            onTourClose();
+            setIsMenuOpen(false);
+          }}
         >
-          <SFMenuItem onClick={onClick}>See profile</SFMenuItem>
+          <SFMenuItem
+            onClick={() => {
+              onTourClose();
+              onClick();
+            }}
+          >
+            See profile
+          </SFMenuItem>
           {showResendInvitationItem && (
             <SFMenuItem onClick={onResendInvitation}>
               Resend invitation
             </SFMenuItem>
           )}
-          {showChangeRoleItem && (
+          {showChangeRoleItem && member.isFirstOfficer && (
+            <TourTooltip
+              enterDelay={100}
+              title="Change the role"
+              description='By clicking on the "Change role" option, you will see all the roles that you can select.'
+              step={2}
+              lastStep={3}
+              tourId={2}
+              placement="right"
+            >
+              <SFMenuItem
+                onClick={() => {
+                  onTourNext();
+                  onChangeRole();
+                }}
+              >
+                Change role
+              </SFMenuItem>
+            </TourTooltip>
+          )}
+
+          {showChangeRoleItem && !member.isFirstOfficer && (
             <SFMenuItem onClick={onChangeRole}>Change role</SFMenuItem>
           )}
+
           {showRemoveItem && <SFMenuItem onClick={onRemove}>Remove</SFMenuItem>}
         </SFMenu>
 
@@ -152,11 +190,40 @@ export const MemberListItem = ({
 
         <div className={styles.menu} ref={refAnchorEl}>
           {showMenu && (
-            <SFIconButton
-              sfIcon="Other"
-              sfSize="medium"
-              onClick={() => setIsMenuOpen(true)}
-            />
+            <Fragment>
+              {member.isFirstOfficer && (
+                <TourTooltip
+                  title="Add managers to your agency"
+                  description="You can add as many managers as your agency needs. Just click on the 3 ellipses next to the name of the officer you want to make a manager."
+                  step={1}
+                  lastStep={3}
+                  tourId={2}
+                  preventOverflow
+                  placement="top-end"
+                >
+                  <SFIconButton
+                    className={styles.menuButton}
+                    sfIcon="Other"
+                    sfSize="medium"
+                    onClick={() => {
+                      setIsMenuOpen(true);
+                      onTourNext();
+                    }}
+                  />
+                </TourTooltip>
+              )}
+
+              {!member.isFirstOfficer && (
+                <SFIconButton
+                  className={styles.menuButton}
+                  sfIcon="Other"
+                  sfSize="medium"
+                  onClick={() => {
+                    setIsMenuOpen(true);
+                  }}
+                />
+              )}
+            </Fragment>
           )}
         </div>
       </div>

@@ -37,6 +37,7 @@ import {
   dispatchCustomEvent,
   isRoleOwner
 } from '../../../../Helpers';
+import { TourContext } from '../../../../Modules/Tour';
 
 const filterRoles = (
   customerRoles: MemberRole[],
@@ -47,8 +48,12 @@ const filterRoles = (
   );
 };
 
+export interface MemberItem extends Member {
+  isFirstOfficer?: boolean;
+}
+
 export interface MemberListProps {
-  members: Member[];
+  members: MemberItem[];
   limit: number;
   isLoading?: boolean;
   onClose: () => void;
@@ -67,6 +72,8 @@ export const MemberList = ({
   onUpdate
 }: MemberListProps): React.ReactElement<MemberListProps> => {
   const apiBaseUrl = useContext(ApiContext).settings;
+  const { onClose: onTourClose, setIsFeatureReminderOpen } =
+    useContext(TourContext);
   const { user, setUser } = useContext(UserContext);
   const { customer, setCustomer } = useContext(CustomerContext);
   const { setSubscriptions } = React.useContext(SubscriptionContext);
@@ -122,7 +129,11 @@ export const MemberList = ({
     onUpdate(newMembers);
   };
 
-  const onChangeRole = async (member: Member, newRole: MemberRole) => {
+  const onChangeRole = async (
+    member: Member,
+    newRole: MemberRole,
+    isTour: boolean
+  ) => {
     const memberRole = member.role as MemberRole;
     const isDowngrade = newRole.priority > memberRole.priority;
 
@@ -145,6 +156,10 @@ export const MemberList = ({
           message: 'The role change was saved.'
         });
       }
+    }
+
+    if (isTour) {
+      setIsFeatureReminderOpen(true);
     }
   };
 
@@ -294,7 +309,10 @@ export const MemberList = ({
         roles={rolesAvailable}
         isSaving={isSaving}
         onSave={onChangeRole}
-        onBack={() => setIsChangeRoleModalOpen(false)}
+        onBack={() => {
+          onTourClose();
+          setIsChangeRoleModalOpen(false);
+        }}
         onClose={() => {
           onClose();
           setIsChangeRoleModalOpen(false);

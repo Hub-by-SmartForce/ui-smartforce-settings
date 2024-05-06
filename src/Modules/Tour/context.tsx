@@ -40,13 +40,15 @@ export const TourProvider: FC = ({ children }) => {
   };
 
   const onClose = () => {
-    setStep(0);
+    // Check if tour it's active
+    if (step > 0) {
+      setStep(0);
+    }
   };
 
   const onEnd = () => {
     setTour(undefined);
     setStep(-1);
-    setIsFeatureReminderOpen(true);
   };
 
   const onBack = () => setStep((s) => s - 1);

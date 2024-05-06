@@ -22,3 +22,11 @@ export function useIsTourResumeOpen() {
   const { tour, step } = useContext(TourContext);
   return !!tour && step === 0;
 }
+
+export function useCloseTour() {
+  const onClose = useContext(TourContext).onClose;
+
+  useEffect(() => {
+    return () => onClose();
+  }, []);
+}

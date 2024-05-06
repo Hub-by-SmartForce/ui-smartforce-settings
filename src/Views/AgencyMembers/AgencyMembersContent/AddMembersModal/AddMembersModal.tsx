@@ -37,7 +37,10 @@ export const AddMembersModal = ({
   }, [isOpen]);
 
   const onAdd = () => {
-    onEndTour();
+    if (tourStatus === 'active') {
+      onEndTour();
+    }
+
     onAddMembers(
       members.map((value: ChipFieldValueType) => value.value),
       tourStatus === 'active'

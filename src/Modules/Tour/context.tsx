@@ -53,11 +53,9 @@ export const TourProvider: FC = ({ children }) => {
   };
 
   const onEnd = () => {
-    if (status === 'active') {
-      setTour(undefined);
-      setStep(-1);
-      setStatus(undefined);
-    }
+    setTour(undefined);
+    setStep(-1);
+    setStatus(undefined);
   };
 
   const onBack = () => setStep((s) => s - 1);

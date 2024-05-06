@@ -80,19 +80,20 @@ function setFirstOfficer(members: Member[]): MemberItem[] {
   let officerFound = false;
 
   for (let member of members) {
+    let newMember: MemberItem = {
+      ...member,
+      isFirstOfficer: false
+    };
+
     if (!officerFound && isRoleOfficer(member.role?.id)) {
       officerFound = true;
-      result = [
-        ...result,
-        {
-          ...member,
-          isFirstOfficer: true
-        }
-      ];
+      newMember.isFirstOfficer = true;
+      result = [...result, newMember];
     } else {
-      result = [...result, member];
+      result = [...result, newMember];
     }
   }
+
   return result;
 }
 

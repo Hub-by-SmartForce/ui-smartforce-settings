@@ -24,7 +24,7 @@ export const AddMembersModal = ({
   onBack,
   onClose
 }: AddMembersModalProps): React.ReactElement<AddMembersModalProps> => {
-  const { tour, onEnd: onEndTour } = useContext(TourContext);
+  const { status: tourStatus, onEnd: onEndTour } = useContext(TourContext);
   const [members, setMembers] = useState<ChipFieldValueType[]>([]);
   const [anchor, setAnchor] = React.useState<PanelModalAnchor>('right');
 
@@ -40,7 +40,7 @@ export const AddMembersModal = ({
     onEndTour();
     onAddMembers(
       members.map((value: ChipFieldValueType) => value.value),
-      !!tour
+      tourStatus === 'active'
     );
   };
 

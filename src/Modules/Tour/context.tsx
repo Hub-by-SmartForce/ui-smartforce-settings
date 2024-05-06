@@ -1,9 +1,12 @@
 import React, { FC, useState } from 'react';
 import { Tour } from './models';
 
+export type TourStatus = 'active' | 'paused';
+
 export type TourContextState = {
   tour: Tour | undefined;
   step: number;
+  status: TourStatus | undefined;
   isFeatureReminderOpen: boolean;
   setIsFeatureReminderOpen: (value: boolean) => void;
   onStart: (tour: Tour) => void;
@@ -16,6 +19,7 @@ export type TourContextState = {
 const contextDefaultValues: TourContextState = {
   tour: undefined,
   step: 0,
+  status: undefined,
   isFeatureReminderOpen: false,
   setIsFeatureReminderOpen: () => {},
   onStart: () => {},
@@ -31,30 +35,35 @@ export const TourContext =
 export const TourProvider: FC = ({ children }) => {
   const [tour, setTour] = useState<Tour | undefined>();
   const [step, setStep] = useState<number>(-1);
+  const [status, setStatus] = useState<TourStatus | undefined>();
   const [isFeatureReminderOpen, setIsFeatureReminderOpen] =
     useState<boolean>(false);
 
   const onStart = (tour: Tour) => {
     setTour(tour);
     setStep(1);
+    setStatus('active');
   };
 
   const onClose = () => {
-    // Check if tour it's active
-    if (step > 0) {
+    if (status === 'active') {
       setStep(0);
+      setStatus('paused');
     }
   };
 
   const onEnd = () => {
-    setTour(undefined);
-    setStep(-1);
+    if (status === 'active') {
+      setTour(undefined);
+      setStep(-1);
+      setStatus(undefined);
+    }
   };
 
   const onBack = () => setStep((s) => s - 1);
 
   const onNext = () => {
-    if (step > 0) {
+    if (status === 'active') {
       setStep((s) => s + 1);
     }
   };
@@ -64,6 +73,7 @@ export const TourProvider: FC = ({ children }) => {
       value={{
         tour,
         step,
+        status,
         isFeatureReminderOpen,
         setIsFeatureReminderOpen,
         onStart,

@@ -12,6 +12,7 @@ import { ThemeTypeContext } from '../../../../../Context';
 import { TourContext } from '../../../context';
 
 export interface TourTooltipContentProps {
+  tourId: number;
   title: string;
   description: string;
   step: number;
@@ -37,7 +38,11 @@ export const TourTooltipContent = (
             <SFText type="component-tooltip-text">{props.description}</SFText>
           </div>
 
-          <SFIconButton sfIcon="Close" sfSize="small" onClick={onTourClose} />
+          <SFIconButton
+            sfIcon="Close"
+            sfSize="small"
+            onClick={() => onTourClose([props.tourId])}
+          />
         </div>
 
         <div className={styles.footer}>

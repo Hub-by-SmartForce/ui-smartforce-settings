@@ -52,7 +52,7 @@ export const MemberListItem = ({
 
   const onResendInvitation = async () => {
     setIsMenuOpen(false);
-    onTourClose();
+    onTourClose([2]);
 
     try {
       if (member.email) {
@@ -75,7 +75,7 @@ export const MemberListItem = ({
 
   const onRemove = () => {
     setIsMenuOpen(false);
-    onTourClose();
+    onTourClose([2]);
     props.onRemove();
   };
 
@@ -106,13 +106,13 @@ export const MemberListItem = ({
           open={isMenuOpen}
           anchorEl={refAnchorEl ? refAnchorEl.current : null}
           onClose={() => {
-            onTourClose();
+            onTourClose([2]);
             setIsMenuOpen(false);
           }}
         >
           <SFMenuItem
             onClick={() => {
-              onTourClose();
+              onTourClose([2]);
               onClick();
             }}
           >

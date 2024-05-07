@@ -1,0 +1,9 @@
+@import '~sfui/dist/Styles/SFMedia/SFMedia.module.scss';
+
+@media screen and (min-width: $sf-media-sm-width) {
+  .tourTooltip {
+    &.fit {
+      width: fit-content;
+    }
+  }
+}

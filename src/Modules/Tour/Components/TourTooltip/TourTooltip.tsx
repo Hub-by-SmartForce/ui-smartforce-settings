@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import styles from './TourTooltip.module.scss';
 import { SFTooltip, SFTooltipProps } from 'sfui';
 import { useTourTooltip } from '../../hooks';
 import {
@@ -10,14 +11,12 @@ export interface TourTooltipProps
   extends TourTooltipContentProps,
     Pick<SFTooltipProps, 'placement' | 'enterDelay'> {
   children: React.ReactNode;
-  tourId: number;
   preventOverflow?: boolean;
   width?: 'auto' | 'fit';
 }
 
 export const TourTooltip = ({
   children,
-  tourId,
   preventOverflow = false,
   width = 'auto',
   placement,
@@ -25,7 +24,10 @@ export const TourTooltip = ({
   ...props
 }: TourTooltipProps): React.ReactElement<TourTooltipProps> => {
   const [isOpen, setIsOpen] = useState(false);
-  const [refTooltipElement, isTooltipOpen] = useTourTooltip(tourId, props.step);
+  const [refTooltipElement, isTooltipOpen] = useTourTooltip(
+    props.tourId,
+    props.step
+  );
 
   useEffect(() => {
     if (enterDelay) {
@@ -55,8 +57,8 @@ export const TourTooltip = ({
       }
     >
       <div
+        className={`${styles.tourTooltip} ${width === 'fit' ? styles.fit : ''}`}
         ref={refTooltipElement}
-        style={width === 'fit' ? { width: 'fit-content' } : {}}
       >
         {children}
       </div>

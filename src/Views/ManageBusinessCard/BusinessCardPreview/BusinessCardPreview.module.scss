@@ -15,42 +15,45 @@
     padding: 16px;
   }
 
-  .mediaType {
+  .toggleMedia {
     display: flex;
-    width: fit-content;
-    margin: 0 auto;
-    gap: 24px;
-    padding: 24px;
-    background-color: $sf-grey-800;
-    border-radius: 2px 2px 0 0;
+    justify-content: center;
 
-    .icon {
-      @media (hover: hover) {
-        &:hover {
-          background-color: rgba($sf-grey-500, 0.3);
+    .toggleMediaButtons {
+      display: flex;
+      gap: 24px;
+      padding: 24px;
+      background-color: $sf-grey-800;
+      border-radius: 2px 2px 0 0;
+
+      .icon {
+        @media (hover: hover) {
+          &:hover {
+            background-color: rgba($sf-grey-500, 0.3);
+          }
+        }
+
+        &:active {
+          background-color: rgba($sf-grey-500, 0.2);
+
+          svg {
+            path {
+              fill: $sf-grey-100 !important;
+            }
+          }
         }
       }
 
-      &:active {
-        background-color: rgba($sf-grey-500, 0.2);
-
+      .active {
         svg {
           path {
             fill: $sf-grey-100 !important;
           }
         }
-      }
-    }
 
-    .active {
-      svg {
-        path {
-          fill: $sf-grey-100 !important;
+        &:focus {
+          background-color: unset;
         }
-      }
-
-      &:focus {
-        background-color: unset;
       }
     }
   }
@@ -66,7 +69,7 @@
   .businessCardPreview {
     background-color: $sf-background-dark;
 
-    .mediaType {
+    .toggleMediaButtons {
       background-color: $sf-grey-200;
 
       .icon {

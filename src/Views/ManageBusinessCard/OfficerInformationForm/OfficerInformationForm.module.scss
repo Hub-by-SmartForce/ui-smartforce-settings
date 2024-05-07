@@ -1,0 +1,11 @@
+.officerInformationForm {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+
+  .title {
+    margin: 0px;
+    font-weight: 500;
+    padding-right: 70px;
+  }
+}

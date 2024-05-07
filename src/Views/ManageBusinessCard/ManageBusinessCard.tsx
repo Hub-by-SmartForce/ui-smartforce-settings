@@ -1,4 +1,4 @@
-import React, { Fragment } from 'react';
+import React, { Fragment, useContext } from 'react';
 import styles from './ManageBusinessCard.module.scss';
 import { BusinessCard } from 'business-card-component';
 import { SettingsContentRender } from '../SettingsContentRender';
@@ -9,7 +9,6 @@ import {
   CustomerContext,
   ThemeTypeContext
 } from '../../Context';
-import { BusinessCardSwitchForm } from './BusinessCardSwitchForm/BusinessSwitchForm';
 import { BusinessCardPreview } from './BusinessCardPreview/BusinessCardPreview';
 import { ApiContext } from '../../Context';
 import { saveBusinessCardSettings } from '../../Services';
@@ -26,49 +25,9 @@ import {
 } from '../../Models';
 import { SETTINGS_CUSTOM_EVENT } from '../../Constants';
 import { Divider } from '../../Components/Divider/Divider';
-
-const OFFICER_DISABLED_LIST: string[] = ['show_name', 'show_officer_id'];
-const AGENCY_DISABLED_LIST: string[] = [
-  'show_name',
-  'show_state',
-  'show_phone'
-];
-
-const getOfficerEmptyFields = (user: User): string[] => {
-  const emptyFields: string[] = [];
-
-  if (!user.email) {
-    emptyFields.push('show_email');
-  }
-
-  if (!user.phone) {
-    emptyFields.push('show_phone');
-  }
-
-  if (!user.avatar_url) {
-    emptyFields.push('show_photo');
-  }
-
-  return emptyFields;
-};
-
-const getAgencyEmptyFields = (customer: Customer): string[] => {
-  const emptyFields: string[] = [];
-
-  if (!customer.email) {
-    emptyFields.push('show_email');
-  }
-
-  if (!customer.website) {
-    emptyFields.push('show_website');
-  }
-
-  if (!customer.badge) {
-    emptyFields.push('show_photo');
-  }
-
-  return emptyFields;
-};
+import { AgencyInformationForm } from './AgencyInformationForm/AgencyInformationForm';
+import { OfficerInformationForm } from './OfficerInformationForm/OfficerInformationForm';
+import { TourContext, TourTooltip, useCloseTour } from '../../Modules/Tour';
 
 export interface ManageBusinessCardProps {
   onClose: () => void;
@@ -87,6 +46,14 @@ export const ManageBusinessCard = ({
   const businessCardSettings = React.useContext(UserContext)
     .businessCardSettings as BusinessCardSettings;
   const { setBusinessCardSettings } = React.useContext(UserContext);
+  const {
+    step: tourStep,
+    status: tourStatus,
+    onNext: onTourNext,
+    onEnd: onTourEnd,
+    onClose: onTourClose,
+    setIsFeatureReminderOpen
+  } = useContext(TourContext);
 
   const [switchData, setSwitchData] =
     React.useState<BusinessCardSettings>(businessCardSettings);
@@ -95,7 +62,12 @@ export const ManageBusinessCard = ({
   const [isLoading, setIsLoading] = React.useState<boolean>(false);
   const isButtonDisabled: boolean = isSaveDisabled || isLoading;
 
+  useCloseTour([4]);
+
   const onDiscard = () => {
+    if (tourStep === 4 || tourStep === 2) {
+      onTourClose([4]);
+    }
     setIsSaveDisabled(true);
     setSwitchData(businessCardSettings);
   };
@@ -111,6 +83,10 @@ export const ManageBusinessCard = ({
 
     setIsSaveDisabled(isEqualObject(businessCardSettings, newValues));
     setSwitchData(newValues);
+
+    if (tourStep === 1) {
+      onTourNext();
+    }
   };
 
   const onAgencyChange = (name: string, value: boolean) => {
@@ -121,10 +97,20 @@ export const ManageBusinessCard = ({
 
     setIsSaveDisabled(isEqualObject(businessCardSettings, newValues));
     setSwitchData(newValues);
+
+    if (tourStep === 1) {
+      onTourNext();
+    }
   };
 
   const onSaveSettings = async () => {
     setIsLoading(true);
+
+    if (tourStep === 4) {
+      onTourEnd();
+    } else if (tourStep === 2) {
+      onTourClose([4]);
+    }
 
     try {
       const response: BusinessCardSettings = await saveBusinessCardSettings(
@@ -137,12 +123,26 @@ export const ManageBusinessCard = ({
       dispatchCustomEvent(SETTINGS_CUSTOM_EVENT, {
         message: 'Your changes was saved successfully.'
       });
+
+      if (tourStatus === 'active') {
+        setIsFeatureReminderOpen(true);
+      }
     } catch (e: any) {
       setIsLoading(false);
       setIsSaveDisabled(true);
       console.error('ManageBusinessCard::Update', e);
       onError(e);
     }
+  };
+
+  const onPreview = () => {
+    if (tourStep === 2) {
+      onTourNext();
+    } else {
+      onTourClose([4]);
+    }
+
+    setIsPreviewOpen(true);
   };
 
   return (
@@ -160,33 +160,43 @@ export const ManageBusinessCard = ({
                     </h5>
                   )}
                 </div>
-                <BusinessCardSwitchForm
-                  title="Officer Information"
-                  disabledList={OFFICER_DISABLED_LIST}
-                  hiddenList={getOfficerEmptyFields(user)}
-                  values={switchData.officer_information}
+
+                <OfficerInformationForm
+                  user={user}
+                  value={switchData.officer_information}
                   onChange={onOfficerChange}
                 />
+
                 <Divider />
-                <BusinessCardSwitchForm
-                  title="Agency Information"
-                  disabledList={AGENCY_DISABLED_LIST}
-                  hiddenList={getAgencyEmptyFields(customer)}
-                  values={switchData.agency_information}
+
+                <AgencyInformationForm
+                  customer={customer}
+                  value={switchData.agency_information}
                   onChange={onAgencyChange}
                 />
 
                 <div>
-                  <SFButton
-                    size={isPhone ? 'large' : 'medium'}
-                    fullWidth={isPhone}
-                    variant="outlined"
-                    sfColor="blue"
-                    onClick={() => setIsPreviewOpen(true)}
+                  <TourTooltip
+                    title="Preview your business card"
+                    description="To see what your business card will look like, you can click on the “Business Card Preview” button."
+                    step={2}
+                    lastStep={4}
+                    tourId={4}
+                    placement="top-start"
+                    width="fit"
                   >
-                    Preview Business Card
-                  </SFButton>
+                    <SFButton
+                      size={isPhone ? 'large' : 'medium'}
+                      fullWidth={isPhone}
+                      variant="outlined"
+                      sfColor="blue"
+                      onClick={onPreview}
+                    >
+                      Preview Business Card
+                    </SFButton>
+                  </TourTooltip>
                 </div>
+
                 {!isPhone && (
                   <div className={styles.footer}>
                     <SFButton
@@ -199,14 +209,23 @@ export const ManageBusinessCard = ({
                       Discard
                     </SFButton>
 
-                    <SFButton
-                      disabled={isSaveDisabled}
-                      size="medium"
-                      isLoading={isLoading}
-                      onClick={onSaveSettings}
+                    <TourTooltip
+                      title="Save your setup"
+                      description='Once you are happy with the information displayed on your business card, you must click "Save" to save your settings.'
+                      step={4}
+                      lastStep={4}
+                      tourId={4}
+                      placement="top-end"
                     >
-                      Save
-                    </SFButton>
+                      <SFButton
+                        disabled={isSaveDisabled}
+                        size="medium"
+                        isLoading={isLoading}
+                        onClick={onSaveSettings}
+                      >
+                        Save
+                      </SFButton>
+                    </TourTooltip>
                   </div>
                 )}
               </SFScrollable>

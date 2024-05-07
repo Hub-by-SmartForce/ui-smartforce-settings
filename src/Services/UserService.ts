@@ -255,11 +255,15 @@ export async function saveTourAction(
   action: string,
   circuit: number,
   step?: number
-): Promise<TourActionBody> {
+): Promise<void> {
   const url: string = `${baseUrl}/users/me/setting/tour/${app}/${action}`;
-  return apiPost<TourActionBody, TourActionBody>(
-    url,
-    { circuit, step },
-    getUserSession().access_token
-  );
+  try {
+    apiPost<TourActionBody, TourActionBody>(
+      url,
+      { circuit, step },
+      getUserSession().access_token
+    );
+  } catch (e) {
+    console.error('Save Tour action error:', e);
+  }
 }

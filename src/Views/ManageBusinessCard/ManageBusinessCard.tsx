@@ -21,7 +21,8 @@ import {
   BusinessCardSettings,
   Customer,
   User,
-  SettingsError
+  SettingsError,
+  UserSettings
 } from '../../Models';
 import { SETTINGS_CUSTOM_EVENT } from '../../Constants';
 import { Divider } from '../../Components/Divider/Divider';
@@ -43,9 +44,10 @@ export const ManageBusinessCard = ({
   const { themeType } = React.useContext(ThemeTypeContext);
   const user = React.useContext(UserContext).user as User;
   const customer = React.useContext(CustomerContext).customer as Customer;
-  const businessCardSettings = React.useContext(UserContext)
-    .businessCardSettings as BusinessCardSettings;
-  const { setBusinessCardSettings } = React.useContext(UserContext);
+  const businessCardSettings = (
+    React.useContext(UserContext).userSettings as UserSettings
+  ).business_card;
+  const { setUserSettings } = React.useContext(UserContext);
   const {
     step: tourStep,
     status: tourStatus,
@@ -117,7 +119,21 @@ export const ManageBusinessCard = ({
         apiBaseUrl,
         switchData
       );
-      setBusinessCardSettings(response);
+
+      setUserSettings((settings) => {
+        if (settings) {
+          return {
+            ...settings,
+            business_card: response
+          };
+        } else {
+          return {
+            tours: [],
+            business_card: response
+          };
+        }
+      });
+
       setIsLoading(false);
       setIsSaveDisabled(true);
       dispatchCustomEvent(SETTINGS_CUSTOM_EVENT, {

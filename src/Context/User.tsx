@@ -1,14 +1,14 @@
 import React, { FC } from 'react';
-import { BusinessCardSettings, User } from '../Models';
+import { User, UserSettings } from '../Models';
 
 export type UserContextState = {
   user: User | undefined;
   setUser: React.Dispatch<React.SetStateAction<User | undefined>>;
   isOnboarding: boolean;
   setIsOnboarding: React.Dispatch<React.SetStateAction<boolean>>;
-  businessCardSettings: BusinessCardSettings | undefined;
-  setBusinessCardSettings: React.Dispatch<
-    React.SetStateAction<BusinessCardSettings | undefined>
+  userSettings: UserSettings | undefined;
+  setUserSettings: React.Dispatch<
+    React.SetStateAction<UserSettings | undefined>
   >;
 };
 
@@ -17,8 +17,8 @@ const contextDefaultValues: UserContextState = {
   setUser: () => {},
   isOnboarding: false,
   setIsOnboarding: () => {},
-  businessCardSettings: undefined,
-  setBusinessCardSettings: () => {}
+  userSettings: undefined,
+  setUserSettings: () => {}
 };
 
 export const UserContext =
@@ -27,8 +27,7 @@ export const UserContext =
 export const UserProvider: FC = ({ children }) => {
   const [user, setUser] = React.useState<User>();
   const [isOnboarding, setIsOnboarding] = React.useState<boolean>(false);
-  const [businessCardSettings, setBusinessCardSettings] =
-    React.useState<BusinessCardSettings>();
+  const [userSettings, setUserSettings] = React.useState<UserSettings>();
 
   return (
     <UserContext.Provider
@@ -37,8 +36,8 @@ export const UserProvider: FC = ({ children }) => {
         setUser,
         isOnboarding,
         setIsOnboarding,
-        businessCardSettings,
-        setBusinessCardSettings
+        userSettings,
+        setUserSettings
       }}
     >
       {children}

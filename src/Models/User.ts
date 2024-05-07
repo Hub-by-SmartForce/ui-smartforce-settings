@@ -69,3 +69,14 @@ export interface BusinessCardSettings {
     show_photo: boolean;
   };
 }
+
+export interface TourSettings {
+  app: string;
+  show_again: boolean;
+  circuit: number | null;
+}
+
+export interface UserSettings {
+  business_card: BusinessCardSettings;
+  tours: TourSettings[];
+}

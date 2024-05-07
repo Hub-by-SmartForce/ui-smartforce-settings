@@ -239,13 +239,13 @@ export async function toggleExtraJobs(
   baseUrl: string,
   enabled: boolean
 ): Promise<UserExtraJobs> {
-  const url: string = `${baseUrl}/users/me/settings/tour/{app}/{action}`;
+  const url: string = `${baseUrl}/users/me/extra-jobs`;
 
   return apiPatch(url, { enabled }, getUserSession().access_token);
 }
 
 export async function hideTours(baseUrl: string, app: string): Promise<void> {
-  const url: string = `${baseUrl}/users/me/setting/tour/${app}/hide`;
+  const url: string = `${baseUrl}/users/me/settings/tour/${app}/hide`;
   return apiPost(url, {}, getUserSession().access_token);
 }
 

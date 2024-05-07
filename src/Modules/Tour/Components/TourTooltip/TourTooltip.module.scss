@@ -1,5 +1,22 @@
 @import '~sfui/dist/Styles/SFMedia/SFMedia.module.scss';
 
+.popperArrow {
+  &[x-placement='bottom-start'],
+  &[x-placement='top-start'] {
+    .arrow {
+      left: 12px !important;
+    }
+  }
+
+  &[x-placement='bottom-end'],
+  &[x-placement='top-end'] {
+    .arrow {
+      right: 12px !important;
+      left: auto !important;
+    }
+  }
+}
+
 @media screen and (min-width: $sf-media-sm-width) {
   .tourTooltip {
     &.fit {

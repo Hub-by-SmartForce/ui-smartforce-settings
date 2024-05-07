@@ -39,6 +39,10 @@ export const TourTooltip = ({
 
   return (
     <SFTooltip
+      classes={{
+        arrow: styles.arrow,
+        popperArrow: styles.popperArrow
+      }}
       open={isOpen && isTooltipOpen}
       title=""
       placement={placement}

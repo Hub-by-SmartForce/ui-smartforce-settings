@@ -1,0 +1,10 @@
+.agencyInformationForm {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+
+  > h3 {
+    margin: 0px;
+    font-weight: 500;
+  }
+}

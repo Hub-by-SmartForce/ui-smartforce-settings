@@ -24,8 +24,7 @@ import {
   ToursCarrouselModal,
   Tour,
   TourResumeTab,
-  TourContext,
-  useIsTourResumeOpen
+  TourContext
 } from '../../../src';
 import { SFIcon, SFSpinner, SFText, useSFMediaQuery } from 'sfui';
 import { BASE_URL } from '../App';
@@ -122,6 +121,9 @@ export const Main = (): React.ReactElement<{}> => {
     if (tour.id === 1 || tour.id === 2) {
       setSelectedSectionName('agency');
       onTourStart(tour);
+    } else if (tour.id === 4) {
+      setSelectedSectionName('business_card');
+      onTourStart(tour);
     }
   };
 
@@ -129,16 +131,17 @@ export const Main = (): React.ReactElement<{}> => {
     onStartTour(activeTour as Tour);
   };
 
-  const isTourResumeOpen = useIsTourResumeOpen();
+  const onShowTours = () => {
+    onTourEnd();
+    setIsToursCarrouselOpen(true);
+  };
 
   return (
     <React.Fragment>
       {isLoading && <SFSpinner />}
       {!isLoading && (
         <Fragment>
-          {isTourResumeOpen && (
-            <TourResumeTab onExit={onExitTourResume} onResume={onResumeTour} />
-          )}
+          <TourResumeTab onExit={onExitTourResume} onResume={onResumeTour} />
 
           <ToursCarrouselModal
             tours={TOURS}
@@ -163,10 +166,7 @@ export const Main = (): React.ReactElement<{}> => {
                   open={isFeatureReminderOpen}
                   onGotIt={onGotIt}
                 >
-                  <div
-                    className={styles.tours}
-                    onClick={() => setIsToursCarrouselOpen(true)}
-                  >
+                  <div className={styles.tours} onClick={onShowTours}>
                     <SFIcon icon="Circle-Star" />
                     <SFText type="component-1" sfColor="neutral">
                       Feature Tours

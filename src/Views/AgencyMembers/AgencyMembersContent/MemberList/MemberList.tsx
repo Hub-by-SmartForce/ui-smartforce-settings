@@ -310,7 +310,7 @@ export const MemberList = ({
         isSaving={isSaving}
         onSave={onChangeRole}
         onBack={() => {
-          onTourClose();
+          onTourClose([2]);
           setIsChangeRoleModalOpen(false);
         }}
         onClose={() => {

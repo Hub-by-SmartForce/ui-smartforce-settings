@@ -18,15 +18,10 @@ export function useTourTooltip(
   return [refElement, isOpen];
 }
 
-export function useIsTourResumeOpen() {
-  const { tour, step } = useContext(TourContext);
-  return !!tour && step === 0;
-}
-
-export function useCloseTour() {
+export function useCloseTour(tourIds: number[]) {
   const onClose = useContext(TourContext).onClose;
 
   useEffect(() => {
-    return () => onClose();
+    return () => onClose(tourIds);
   }, []);
 }

@@ -132,7 +132,7 @@ export const AgencyMembersContent = ({
     asyncDebounce(memoizedMemberFn(apiBaseUrl, getMembers), 250)
   );
 
-  useCloseTour();
+  useCloseTour([1, 2, 3]);
 
   useEffect(() => {
     let subscribed: boolean = true;
@@ -294,7 +294,7 @@ export const AgencyMembersContent = ({
 
   const onModalClose = () => {
     onClose();
-    onTourClose();
+    onTourClose([1]);
     setIsAddMembersModalOpen(false);
   };
 

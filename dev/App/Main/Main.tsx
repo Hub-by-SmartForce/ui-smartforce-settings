@@ -167,7 +167,7 @@ export const Main = (): React.ReactElement<{}> => {
                   onGotIt={onGotIt}
                 >
                   <div className={styles.tours} onClick={onShowTours}>
-                    <SFIcon icon="Circle-Star" />
+                    <SFIcon icon="Rectangle-Star" />
                     <SFText type="component-1" sfColor="neutral">
                       Feature Tours
                     </SFText>

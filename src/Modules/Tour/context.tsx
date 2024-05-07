@@ -1,4 +1,4 @@
-import React, { FC, useReducer } from 'react';
+import React, { FC, useCallback, useReducer } from 'react';
 import { Tour } from './models';
 
 export type TourStatus = 'active' | 'paused';
@@ -157,7 +157,7 @@ export const TourProvider: FC = ({ children }) => {
   const [state, dispatch] = useReducer(reducer, getInitialState());
 
   const onStart = (tour: Tour) => dispatch({ type: 'start', payload: tour });
-  const onEnd = () => dispatch({ type: 'end' });
+  const onEnd = useCallback(() => dispatch({ type: 'end' }), []);
 
   const onClose = (tourIds: number[]) =>
     dispatch({ type: 'close', payload: tourIds });

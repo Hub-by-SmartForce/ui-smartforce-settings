@@ -5,12 +5,11 @@ import {
   SettingsError,
   getUser,
   Area,
-  BusinessCardSettings,
   Customer,
   Subscription,
   User,
   getAreas,
-  getBusinessCardSettings,
+  getUserSettings,
   getCustomer,
   getSubscriptions,
   AreasContext,
@@ -24,7 +23,8 @@ import {
   ToursCarrouselModal,
   Tour,
   TourResumeTab,
-  TourContext
+  TourContext,
+  UserSettings
 } from '../../../src';
 import { SFIcon, SFSpinner, SFText, useSFMediaQuery } from 'sfui';
 import { BASE_URL } from '../App';
@@ -40,7 +40,7 @@ export const Main = (): React.ReactElement<{}> => {
     isFeatureReminderOpen,
     setIsFeatureReminderOpen
   } = useContext(TourContext);
-  const { setUser, setBusinessCardSettings } = useContext(UserContext);
+  const { setUser, setUserSettings } = useContext(UserContext);
   const { setAreas } = useContext(AreasContext);
   const { setCustomer } = useContext(CustomerContext);
   const { setSubscriptions } = useContext(SubscriptionContext);
@@ -72,9 +72,8 @@ export const Main = (): React.ReactElement<{}> => {
         setCustomer(customerData);
 
         if (customerData.status === 'Active') {
-          const businessCardSettings: BusinessCardSettings =
-            await getBusinessCardSettings(BASE_URL);
-          setBusinessCardSettings(businessCardSettings);
+          const userSettings: UserSettings = await getUserSettings(BASE_URL);
+          setUserSettings(userSettings);
 
           const subscriptions: Subscription[] = await getSubscriptions(
             BASE_URL

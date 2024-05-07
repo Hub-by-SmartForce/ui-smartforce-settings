@@ -138,7 +138,7 @@ export const ContactQRCode = ({
   ...props
 }: ContactQRCodeProps): React.ReactElement<ContactQRCodeProps> => {
   const { customer } = React.useContext(CustomerContext);
-  const { businessCardSettings } = React.useContext(UserContext);
+  const { userSettings } = React.useContext(UserContext);
 
   return (
     <QRCode
@@ -147,7 +147,7 @@ export const ContactQRCode = ({
         baseUrl,
         user,
         customer,
-        businessCardSettings,
+        userSettings?.business_card,
         props.notes,
         props.incidentNumber,
         props.eventIdentifier

@@ -239,7 +239,7 @@ export async function toggleExtraJobs(
   baseUrl: string,
   enabled: boolean
 ): Promise<UserExtraJobs> {
-  const url: string = `${baseUrl}/users/me/setting/tour/{app}/{action}`;
+  const url: string = `${baseUrl}/users/me/settings/tour/{app}/{action}`;
 
   return apiPatch(url, { enabled }, getUserSession().access_token);
 }
@@ -256,7 +256,7 @@ export async function saveTourAction(
   circuit: number,
   step?: number
 ): Promise<void> {
-  const url: string = `${baseUrl}/users/me/setting/tour/${app}/${action}`;
+  const url: string = `${baseUrl}/users/me/settings/tour/${app}/${action}`;
   try {
     apiPost<TourActionBody, TourActionBody>(
       url,

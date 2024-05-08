@@ -6,6 +6,7 @@ export type TourStatus = 'active' | 'paused';
 export type TourContextState = {
   tour: Tour | undefined;
   step: number;
+  isReminderAvailable: boolean;
   isFeatureReminderOpen: boolean;
 };
 
@@ -37,6 +38,10 @@ type SetReminderAction = {
   payload: boolean;
 };
 
+type DisableReminderAction = {
+  type: 'disable_reminder';
+};
+
 type CloseAction = {
   type: 'close';
   payload: number[];
@@ -45,6 +50,7 @@ type CloseAction = {
 type TourContextAction =
   | CloseAction
   | SetReminderAction
+  | DisableReminderAction
   | StartAction
   | EndAction
   | BackAction
@@ -114,6 +120,13 @@ function reducer(
         isFeatureReminderOpen: action.payload
       };
     }
+
+    case 'disable_reminder': {
+      return {
+        ...state,
+        isReminderAvailable: false
+      };
+    }
   }
 
   return state;
@@ -123,13 +136,16 @@ function getInitialState() {
   return {
     tour: undefined,
     step: -1,
+    isReminderAvailable: true,
     isFeatureReminderOpen: false
   };
 }
 
-export interface TourContextProps extends TourContextState {
+export interface TourContextProps
+  extends Omit<TourContextState, 'isReminderAvailable'> {
   status: TourStatus | undefined;
   setIsFeatureReminderOpen: (value: boolean) => void;
+  onDisableReminder: () => void;
   onStart: (tour: Tour) => void;
   onClose: (tourIds: number[]) => void;
   onEnd: () => void;
@@ -143,6 +159,7 @@ const contextDefaultValues: TourContextProps = {
   isFeatureReminderOpen: false,
   status: undefined,
   setIsFeatureReminderOpen: () => {},
+  onDisableReminder: () => {},
   onStart: () => {},
   onClose: () => {},
   onEnd: () => {},
@@ -156,26 +173,44 @@ export const TourContext =
 export const TourProvider: FC = ({ children }) => {
   const [state, dispatch] = useReducer(reducer, getInitialState());
 
-  const onStart = (tour: Tour) => dispatch({ type: 'start', payload: tour });
+  const onStart = useCallback(
+    (tour: Tour) => dispatch({ type: 'start', payload: tour }),
+    []
+  );
+
   const onEnd = useCallback(() => dispatch({ type: 'end' }), []);
 
-  const onClose = (tourIds: number[]) =>
-    dispatch({ type: 'close', payload: tourIds });
+  const onClose = useCallback(
+    (tourIds: number[]) => dispatch({ type: 'close', payload: tourIds }),
+    []
+  );
 
-  const onBack = () => dispatch({ type: 'back' });
-  const onNext = () => dispatch({ type: 'next' });
+  const onBack = useCallback(() => dispatch({ type: 'back' }), []);
+  const onNext = useCallback(() => dispatch({ type: 'next' }), []);
 
-  const setIsFeatureReminderOpen = (payload: boolean) =>
-    dispatch({ type: 'set_reminder', payload });
+  const setIsFeatureReminderOpen = useCallback(
+    (payload: boolean) => dispatch({ type: 'set_reminder', payload }),
+    []
+  );
+
+  const onDisableReminder = useCallback(
+    () => dispatch({ type: 'disable_reminder' }),
+    []
+  );
 
   const status = getStatus(state);
+  const isFeatureReminderOpen =
+    state.isReminderAvailable && state.isFeatureReminderOpen;
 
   return (
     <TourContext.Provider
       value={{
-        ...state,
+        tour: state.tour,
+        step: state.step,
+        isFeatureReminderOpen,
         status,
         setIsFeatureReminderOpen,
+        onDisableReminder,
         onStart,
         onClose,
         onEnd,

@@ -24,7 +24,8 @@ import {
   Tour,
   TourResumeTab,
   TourContext,
-  UserSettings
+  UserSettings,
+  hideTours
 } from '../../../src';
 import { SFIcon, SFSpinner, SFText, useSFMediaQuery } from 'sfui';
 import { BASE_URL } from '../App';
@@ -38,7 +39,8 @@ export const Main = (): React.ReactElement<{}> => {
     onEnd: onTourEnd,
     tour: activeTour,
     isFeatureReminderOpen,
-    setIsFeatureReminderOpen
+    setIsFeatureReminderOpen,
+    onDisableReminder
   } = useContext(TourContext);
   const { setUser, setUserSettings } = useContext(UserContext);
   const { setAreas } = useContext(AreasContext);
@@ -97,9 +99,14 @@ export const Main = (): React.ReactElement<{}> => {
 
   const onMenuButtonClick = () => console.log('Open menu');
 
-  const onGotIt = (checked: boolean) => {
+  const onGotIt = async (checked: boolean) => {
     if (checked) {
-      console.log("Save don't show again status");
+      try {
+        hideTours(BASE_URL, 'cc');
+        onDisableReminder();
+      } catch (e) {
+        console.error(e);
+      }
     }
     setIsFeatureReminderOpen(false);
   };

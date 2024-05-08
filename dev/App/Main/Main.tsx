@@ -124,7 +124,7 @@ export const Main = (): React.ReactElement<{}> => {
   const onStartTour = (tour: Tour) => {
     setIsToursCarrouselOpen(false);
 
-    if (tour.id === 1 || tour.id === 2) {
+    if (tour.id === 1 || tour.id === 2 || tour.id === 3) {
       setSelectedSectionName('agency');
       onTourStart(tour);
     } else if (tour.id === 4) {

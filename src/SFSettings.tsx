@@ -39,6 +39,7 @@ import { getApiBaseUrl, getAppBaseUrl } from './Helpers/application';
 import { AgencyShifts } from './Views/AgencyShifts/AgencyShifts';
 import { AgencyEvents } from './Views/AgencyEvents/AgencyEvents';
 import { ApiContext } from './Context/Api';
+import { InnerView } from './Components/InnerViews/InnerView/InnerView';
 
 const onGetStarted = (env: AppEnv, product: ApplicationProduct) => {
   window.open(getAppBaseUrl(env, product), '_blank');
@@ -485,9 +486,10 @@ export const SFSettings = ({
               isLoading={isPanelLoading}
               onClose={() => setIsPanelOpen(false)}
             >
-              <InnerViews
-                views={[selectedSection.items[selectedSubSection]]}
-                isBusinessCard={isBusinessCardSelected}
+              <InnerView
+                view={selectedSection.items[selectedSubSection]}
+                hideHeader={isBusinessCardSelected}
+                isPhone
               />
             </SettingsPanel>
           </Fragment>

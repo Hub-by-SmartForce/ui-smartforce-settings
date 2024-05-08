@@ -1,98 +1,26 @@
-@import '~sfui/dist/Styles/SFColors/SFColors.module.scss';
 @import '~sfui/dist/Styles/SFMedia/SFMedia.module.scss';
 
-.innerView {
+.innerViews {
   height: 100%;
-  display: grid;
+  display: flex;
+  flex-direction: column;
   gap: 24px;
-
-  .view {
-    min-height: 0;
-    display: grid;
-    width: 100%;
-    grid-template-rows: auto minmax(0, 1fr);
-    gap: 24px;
-    border-bottom: 1px solid $sf-grey-100;
-
-    .textContainer {
-      padding: 0 16px;
-      display: flex;
-      flex-direction: column;
-      gap: 6px;
-
-      .title {
-        margin: 0;
-        line-height: 28px;
-      }
-
-      .description {
-        font-weight: 400;
-        color: $sf-grey-600;
-        margin: 0;
-      }
-    }
-
-    &:nth-last-child(1) {
-      border-bottom: none;
-      padding-bottom: 0px;
-    }
-  }
-
-  &.isBusinessCard {
-    .view {
-      grid-template-rows: minmax(0, 1fr);
-    }
-  }
 }
 
-:global(.nightMode) {
-  .innerView {
-    .view {
-      border-color: $sf-grey-700;
-
-      .textContainer {
-        .description {
-          color: $sf-grey-400;
-        }
-      }
-    }
-  }
-}
 @media screen and (min-width: $sf-media-sm-width) {
-  .innerView {
+  .innerViews {
     height: auto;
-
-    .view {
-      max-width: 392px;
-      display: flex;
-      flex-direction: column;
-      padding-bottom: 24px;
-
-      .textContainer {
-        padding: 0;
-      }
-    }
-  }
-}
-
-@media screen and (min-width: $sf-media-md-width) {
-  .innerView {
-    .view {
-      max-width: 659px;
-    }
   }
 }
 
 @media screen and (min-width: $sf-media-xl-width) {
-  .innerView {
-    .view {
-      gap: 12px;
-    }
-
+  .innerViews {
     &.isBusinessCard {
       height: 100%;
+      display: grid;
+      grid-template-rows: minmax(0, 1fr);
 
-      .view {
+      .innerView {
         max-width: unset;
       }
     }

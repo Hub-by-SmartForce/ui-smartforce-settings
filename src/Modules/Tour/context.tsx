@@ -16,6 +16,11 @@ function getStatus(state: TourContextState): TourStatus | undefined {
   return;
 }
 
+type InitPausedAction = {
+  type: 'init_paused';
+  payload: Tour;
+};
+
 type StartAction = {
   type: 'start';
   payload: Tour;
@@ -52,6 +57,7 @@ type TourContextAction =
   | SetReminderAction
   | DisableReminderAction
   | StartAction
+  | InitPausedAction
   | EndAction
   | BackAction
   | NextAction;
@@ -63,6 +69,21 @@ function reducer(
   const { type } = action;
 
   switch (type) {
+    case 'init_paused': {
+      return {
+        ...state,
+        tour: action.payload,
+        step: 0
+      };
+    }
+
+    case 'start': {
+      return {
+        ...state,
+        tour: action.payload,
+        step: 1
+      };
+    }
     case 'start': {
       return {
         ...state,
@@ -146,6 +167,7 @@ export interface TourContextProps
   status: TourStatus | undefined;
   setIsFeatureReminderOpen: (value: boolean) => void;
   onDisableReminder: () => void;
+  onInitPaused: (tour: Tour) => void;
   onStart: (tour: Tour) => void;
   onClose: (tourIds: number[]) => void;
   onEnd: () => void;
@@ -160,6 +182,7 @@ const contextDefaultValues: TourContextProps = {
   status: undefined,
   setIsFeatureReminderOpen: () => {},
   onDisableReminder: () => {},
+  onInitPaused: () => {},
   onStart: () => {},
   onClose: () => {},
   onEnd: () => {},
@@ -172,6 +195,11 @@ export const TourContext =
 
 export const TourProvider: FC = ({ children }) => {
   const [state, dispatch] = useReducer(reducer, getInitialState());
+
+  const onInitPaused = useCallback(
+    (tour: Tour) => dispatch({ type: 'init_paused', payload: tour }),
+    []
+  );
 
   const onStart = useCallback(
     (tour: Tour) => dispatch({ type: 'start', payload: tour }),
@@ -211,6 +239,7 @@ export const TourProvider: FC = ({ children }) => {
         status,
         setIsFeatureReminderOpen,
         onDisableReminder,
+        onInitPaused,
         onStart,
         onClose,
         onEnd,

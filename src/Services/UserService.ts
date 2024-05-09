@@ -1,14 +1,22 @@
-import { apiGet, apiPatch } from '../Helpers';
+import { apiGet, apiPatch, apiPost } from '../Helpers';
 import { isUserInvitationAlreadyAccepted } from '../Helpers/errors';
 import {
   BusinessCardSettings,
   User,
   UserExtraJobs,
-  UserGroup
+  UserGroup,
+  UserSettings
 } from '../Models';
 import { getUserSession } from './AuthService';
 
 const LS_INVITATION_KEY = 'Smartforce.UserInvitation';
+
+export interface TourActionBody {
+  circuit: number;
+  step?: number;
+}
+
+export type TourActionType = 'start' | 'pause' | 'resume' | 'finish' | 'exit';
 
 export const getUser = (baseUrl: string): Promise<User> => {
   const url: string = `${baseUrl}/users/me`;
@@ -197,11 +205,9 @@ export async function getUserGroups(
   return [];
 }
 
-export async function getBusinessCardSettings(
-  baseUrl: string
-): Promise<BusinessCardSettings> {
-  const url = `${baseUrl}/users/me/settings/business-card`;
-  return apiGet<BusinessCardSettings>(url, getUserSession().access_token);
+export async function getUserSettings(baseUrl: string): Promise<UserSettings> {
+  const url = `${baseUrl}/users/me/settings`;
+  return apiGet<UserSettings>(url, getUserSession().access_token);
 }
 
 export async function saveBusinessCardSettings(
@@ -238,4 +244,28 @@ export async function toggleExtraJobs(
   const url: string = `${baseUrl}/users/me/extra-jobs`;
 
   return apiPatch(url, { enabled }, getUserSession().access_token);
+}
+
+export async function hideTours(baseUrl: string, app: string): Promise<void> {
+  const url: string = `${baseUrl}/users/me/settings/tour/${app}/hide`;
+  return apiPost(url, {}, getUserSession().access_token);
+}
+
+export async function saveTourAction(
+  baseUrl: string,
+  app: string,
+  action: TourActionType,
+  circuit: number,
+  step?: number
+): Promise<void> {
+  const url: string = `${baseUrl}/users/me/settings/tour/${app}/${action}`;
+  try {
+    apiPost<TourActionBody, TourActionBody>(
+      url,
+      { circuit, step },
+      getUserSession().access_token
+    );
+  } catch (e) {
+    console.error('Save Tour action error:', e);
+  }
 }

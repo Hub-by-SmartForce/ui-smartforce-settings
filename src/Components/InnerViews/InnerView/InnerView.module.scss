@@ -1,0 +1,76 @@
+@import '~sfui/dist/Styles/SFColors/SFColors.module.scss';
+@import '~sfui/dist/Styles/SFMedia/SFMedia.module.scss';
+
+.innerView {
+  height: 100%;
+  width: 100%;
+  display: grid;
+  grid-template-rows: auto minmax(0, 1fr);
+  gap: 24px;
+  border-bottom: 1px solid $sf-grey-100;
+
+  &.hideHeader {
+    grid-template-rows: minmax(0, 1fr);
+  }
+
+  .textContainer {
+    padding: 0 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+
+    .title {
+      margin: 0;
+      line-height: 28px;
+    }
+
+    .description {
+      font-weight: 400;
+      color: $sf-grey-600;
+      margin: 0;
+    }
+  }
+
+  &:nth-last-child(1) {
+    border-bottom: none;
+    padding-bottom: 0px;
+  }
+}
+
+@media screen and (min-width: $sf-media-sm-width) {
+  .innerView {
+    height: auto;
+    max-width: 392px;
+    display: flex;
+    flex-direction: column;
+    padding-bottom: 24px;
+
+    .textContainer {
+      padding: 0;
+    }
+  }
+}
+
+@media screen and (min-width: $sf-media-md-width) {
+  .innerView {
+    max-width: 659px;
+  }
+}
+
+@media screen and (min-width: $sf-media-xl-width) {
+  .innerView {
+    gap: 12px;
+  }
+}
+
+:global(.nightMode) {
+  .innerView {
+    border-color: $sf-grey-700;
+
+    .textContainer {
+      .description {
+        color: $sf-grey-400;
+      }
+    }
+  }
+}

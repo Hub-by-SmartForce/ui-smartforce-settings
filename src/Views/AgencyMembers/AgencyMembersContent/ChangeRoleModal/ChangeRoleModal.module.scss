@@ -1,0 +1,32 @@
+@import '~sfui/dist/Styles/SFMedia/SFMedia.module.scss';
+
+div.changeRoleModal {
+  div.content {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+
+    .dialogTitle {
+      display: none;
+    }
+  }
+}
+
+@media screen and (min-width: $sf-media-sm-width) {
+  div.changeRoleModal {
+    div.dialogContainer {
+      grid-template-rows: minmax(0, 1fr) auto !important;
+
+      > div:first-of-type {
+        display: none;
+      }
+    }
+
+    div.content {
+      .dialogTitle {
+        display: block;
+        padding-right: 55px;
+      }
+    }
+  }
+}

@@ -1,16 +1,15 @@
-import React from 'react';
+import React, { Fragment, useContext, useEffect, useState } from 'react';
 import styles from './Main.module.scss';
 import {
   SFSettings,
   SettingsError,
   getUser,
   Area,
-  BusinessCardSettings,
   Customer,
   Subscription,
   User,
   getAreas,
-  getBusinessCardSettings,
+  getUserSettings,
   getCustomer,
   getSubscriptions,
   AreasContext,
@@ -19,27 +18,52 @@ import {
   UserContext,
   TimezonesContext,
   SFTopBar,
-  LARGE_SCREEN
+  LARGE_SCREEN,
+  ToursReminderTooltip,
+  ToursCarrouselModal,
+  Tour,
+  TourResumeTab,
+  TourContext,
+  UserSettings,
+  hideTours,
+  useSaveTourAction
 } from '../../../src';
-import { SFSpinner, useSFMediaQuery } from 'sfui';
+import { SFIcon, SFSpinner, SFText, useSFMediaQuery } from 'sfui';
 import { BASE_URL } from '../App';
 import { getTimezones } from '../../../src/Services/TimezoneService';
 import { logout } from '../../../src/Services/AuthService';
+import { TOURS } from '../tours';
 
 export const Main = (): React.ReactElement<{}> => {
-  const [isLoading, setIsLoading] = React.useState<boolean>(true);
-  const { setUser, setBusinessCardSettings } = React.useContext(UserContext);
-  const { setAreas } = React.useContext(AreasContext);
-  const { setCustomer } = React.useContext(CustomerContext);
-  const { setSubscriptions } = React.useContext(SubscriptionContext);
-  const { setTimezones } = React.useContext(TimezonesContext);
+  const {
+    onStart: onTourStart,
+    onEnd: onTourEnd,
+    onClose: onTourClose,
+    tour: activeTour,
+    isFeatureReminderOpen,
+    setIsFeatureReminderOpen,
+    onDisableReminder,
+    onInitPaused
+  } = useContext(TourContext);
+  const { setUser, setUserSettings } = useContext(UserContext);
+  const { setAreas } = useContext(AreasContext);
+  const { setCustomer } = useContext(CustomerContext);
+  const { setSubscriptions } = useContext(SubscriptionContext);
+  const { setTimezones } = useContext(TimezonesContext);
   const isBigScreen: boolean = useSFMediaQuery(LARGE_SCREEN);
+
+  const [selectedSectionName, setSelectedSectionName] = useState<
+    string | undefined
+  >();
+  const [isLoading, setIsLoading] = useState<boolean>(true);
+  const [isToursCarrouselOpen, setIsToursCarrouselOpen] =
+    useState<boolean>(false);
 
   const onSettingsError = (e: SettingsError) => console.error(e);
   const onHome = () => console.log('onHome');
   const onUpgrade = () => console.log('onUpgrade');
 
-  React.useEffect(() => {
+  useEffect(() => {
     const init = async () => {
       setIsLoading(true);
       const userData: User = await getUser(BASE_URL);
@@ -53,9 +77,19 @@ export const Main = (): React.ReactElement<{}> => {
         setCustomer(customerData);
 
         if (customerData.status === 'Active') {
-          const businessCardSettings: BusinessCardSettings =
-            await getBusinessCardSettings(BASE_URL);
-          setBusinessCardSettings(businessCardSettings);
+          const userSettings: UserSettings = await getUserSettings(BASE_URL);
+          setUserSettings(userSettings);
+
+          const tourSettings = userSettings.tours.find((t) => t.app === 'cc');
+
+          if (tourSettings?.circuit) {
+            const pausedTour = TOURS.find(
+              (t) => t.id === tourSettings?.circuit
+            );
+            if (pausedTour) {
+              onInitPaused(pausedTour);
+            }
+          }
 
           const subscriptions: Subscription[] = await getSubscriptions(
             BASE_URL
@@ -79,32 +113,105 @@ export const Main = (): React.ReactElement<{}> => {
 
   const onMenuButtonClick = () => console.log('Open menu');
 
+  const onGotIt = async (checked: boolean) => {
+    if (checked) {
+      try {
+        hideTours(BASE_URL, 'cc');
+        onDisableReminder();
+      } catch (e) {
+        console.error(e);
+      }
+    }
+    setIsFeatureReminderOpen(false);
+  };
+
+  const onCloseTourCarrousel = () => {
+    setIsFeatureReminderOpen(true);
+    setIsToursCarrouselOpen(false);
+  };
+
+  const onExitTourResume = () => {
+    setIsFeatureReminderOpen(true);
+    onTourEnd();
+  };
+
+  const onStartTour = (tour: Tour) => {
+    setIsToursCarrouselOpen(false);
+
+    if (tour.id === 1 || tour.id === 2 || tour.id === 3) {
+      setSelectedSectionName('agency');
+      onTourStart(tour);
+    } else if (tour.id === 4) {
+      setSelectedSectionName('business_card');
+      onTourStart(tour);
+    }
+  };
+
+  const onResumeTour = () => {
+    onStartTour(activeTour as Tour);
+  };
+
+  const onShowTours = () => {
+    onTourClose();
+    setIsToursCarrouselOpen(true);
+  };
+
+  useSaveTourAction(BASE_URL, 'cc');
+
   return (
     <React.Fragment>
       {isLoading && <SFSpinner />}
       {!isLoading && (
-        <div className={styles.main}>
-          <SFTopBar
-            enviroment="local"
-            product="cc"
-            siteTitle="Settings"
-            isBottomTitleVisible={!isBigScreen}
-            onLogout={onLogout}
-            onMenuButtonClick={onMenuButtonClick}
+        <Fragment>
+          <TourResumeTab onExit={onExitTourResume} onResume={onResumeTour} />
+
+          <ToursCarrouselModal
+            tours={TOURS}
+            open={isToursCarrouselOpen}
+            onClose={onCloseTourCarrousel}
+            onStart={(tour) => onStartTour(tour)}
           />
 
-          <SFSettings
-            product="cc"
-            enviroment="local"
-            stripeApiKey={
-              'pk_test_51MEZItJHbTAgxqXa6dzvaI4SubteHn7zemB9uj6hXqltKSoEAPKvBRlMeHvn06fR03vqKFkegkmH0QWdkPrpbuGe00CkvRGgxb'
-            }
-            selectedSectionName="my-profile"
-            onError={onSettingsError}
-            onHome={onHome}
-            onUpgrade={onUpgrade}
-          />
-        </div>
+          <div className={styles.main}>
+            <SFTopBar
+              enviroment="local"
+              product="cc"
+              siteTitle="Settings"
+              isBottomTitleVisible={!isBigScreen}
+              onLogout={onLogout}
+              onMenuButtonClick={onMenuButtonClick}
+            />
+
+            <div className={styles.content}>
+              <div className={styles.leftPanel}>
+                <ToursReminderTooltip
+                  open={isFeatureReminderOpen}
+                  onGotIt={onGotIt}
+                >
+                  <div className={styles.tours} onClick={onShowTours}>
+                    <SFIcon icon="Rectangle-Star" />
+                    <SFText type="component-1" sfColor="neutral">
+                      Feature Tours
+                    </SFText>
+                  </div>
+                </ToursReminderTooltip>
+              </div>
+
+              <SFSettings
+                product="cc"
+                enviroment="local"
+                stripeApiKey={
+                  'pk_test_51MEZItJHbTAgxqXa6dzvaI4SubteHn7zemB9uj6hXqltKSoEAPKvBRlMeHvn06fR03vqKFkegkmH0QWdkPrpbuGe00CkvRGgxb'
+                }
+                selectedSectionName={selectedSectionName}
+                onError={onSettingsError}
+                onHome={onHome}
+                onUpgrade={onUpgrade}
+                onSectionChange={(name) => setSelectedSectionName(name)}
+              />
+            </div>
+          </div>
+        </Fragment>
       )}
     </React.Fragment>
   );

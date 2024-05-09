@@ -1,0 +1,45 @@
+@import '~sfui/dist/Styles/SFColors/SFColors.module.scss';
+@import '~sfui/dist/Styles/SFMedia/SFMedia.module.scss';
+
+.tourResumeTab {
+  display: none;
+}
+
+@media screen and (min-width: $sf-media-sm-width) {
+  .tourResumeTab {
+    background-color: $sf-grey-800;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 370px;
+    padding: 24px 36px 24px 36px;
+    border-radius: 20px 20px 0px 0px;
+    box-sizing: border-box;
+
+    position: fixed;
+    z-index: 2;
+    right: 50%;
+    bottom: 0;
+    margin-right: -185px;
+
+    > h4 {
+      margin: 0;
+      color: $sf-grey-50;
+    }
+
+    .actions {
+      display: flex;
+      gap: 12px;
+    }
+  }
+}
+
+:global(.nightMode) {
+  .tourResumeTab {
+    > h4 {
+      color: $sf-grey-900;
+    }
+
+    background-color: $sf-grey-200;
+  }
+}

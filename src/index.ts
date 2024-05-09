@@ -5,5 +5,6 @@ export * from './Helpers';
 export * from './Models';
 export * from './Services';
 export * from './Hooks';
+export * from './Modules/Tour';
 export type { SFSettingsProps } from './SFSettings';
 export { SFSettings } from './SFSettings';

@@ -5,6 +5,10 @@ import { SFTopBarUser } from './SFTopBarUser/SFTopBarUser';
 import { SFLogo } from '../SFLogo/SFLogo';
 import { SFTopBarApps } from './SFTopBarApps/SFTopBarApps';
 import { AppEnv, ApplicationProduct } from '../../Models';
+import {
+  ToursReminderTooltip,
+  ToursReminderTooltipProps
+} from '../../Modules/Tour';
 
 interface SFTopBarEnvContextProps {
   enviroment: AppEnv;
@@ -26,6 +30,7 @@ export interface SFTopBarProps {
   isBottomTitleVisible?: boolean;
   actions?: React.ReactNode;
   userMenuItems?: React.ReactNode;
+  featureReminderProps?: Omit<ToursReminderTooltipProps, 'children'>;
   onLogout: () => void;
   onMenuButtonClick: () => void;
 }
@@ -40,9 +45,12 @@ export const SFTopBar = ({
   isBottomTitleVisible = true,
   actions,
   userMenuItems,
+  featureReminderProps,
   onLogout,
   onMenuButtonClick
 }: SFTopBarProps): React.ReactElement<SFTopBarProps> => {
+  const onGotIt = (value: boolean) => featureReminderProps?.onGotIt(value);
+
   return (
     <SFTopBarEnvContext.Provider value={{ enviroment, product }}>
       <div
@@ -53,11 +61,18 @@ export const SFTopBar = ({
         <div className={styles.topContent}>
           {!isMinimal && (
             <div className={styles.menu}>
-              <SFIconButton
-                sfSize="medium"
-                sfIcon="Menu-1"
-                onClick={() => onMenuButtonClick()}
-              />
+              <ToursReminderTooltip
+                open={!!featureReminderProps?.open}
+                placement="bottom-start"
+                onGotIt={onGotIt}
+              >
+                <SFIconButton
+                  sfSize="medium"
+                  sfIcon="Menu-1"
+                  onClick={() => onMenuButtonClick()}
+                />
+              </ToursReminderTooltip>
+
               <SFLogo />
             </div>
           )}

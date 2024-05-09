@@ -7,7 +7,6 @@ import SettingsPanel from './Components/SettingsPanel/SettingsPanel';
 import Themes from './Views/Appearance/Themes/Themes';
 import SectionMenu from './Components/SectionMenu/SectionMenu';
 import InnerViews from './Components/InnerViews/InnerViews';
-import { AgencyBilling } from './Views/AgencyBilling/AgencyBilling';
 import { ChangePassword } from './Views/ChangePassword/ChangePassword';
 import { MyProfile } from './Views/MyProfile/MyProfile';
 import { AgencyInformation } from './Views/AgencyInformation/AgencyInformation';
@@ -40,6 +39,7 @@ import { AgencyShifts } from './Views/AgencyShifts/AgencyShifts';
 import { AgencyEvents } from './Views/AgencyEvents/AgencyEvents';
 import { ApiContext } from './Context/Api';
 import { InnerView } from './Components/InnerViews/InnerView/InnerView';
+import { AgencyBillingRender } from './Views/AgencyBilling/AgencyBillingRender';
 
 const onGetStarted = (env: AppEnv, product: ApplicationProduct) => {
   window.open(getAppBaseUrl(env, product), '_blank');
@@ -210,7 +210,7 @@ export const SFSettings = ({
         name: 'billing',
         description: 'Only the agency owner can manage the billing plan.',
         component: (
-          <AgencyBilling
+          <AgencyBillingRender
             product={product}
             canUpdate={checkPermissions(
               AGENCY_SUBSCRIPTION_UPDATE,

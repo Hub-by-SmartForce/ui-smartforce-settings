@@ -1,9 +1,19 @@
+@import '~sfui/dist/Styles/SFMedia/SFMedia.module.scss';
+
 .addMembersModal {
   .actions {
-    display: flex;
-    justify-content: flex-end;
-    gap: 8px;
-    padding-top: 24px;
-    box-sizing: border-box;
+    display: none;
+  }
+}
+
+@media screen and (min-width: $sf-media-sm-width) {
+  .addMembersModal {
+    .actions {
+      display: flex;
+      justify-content: flex-end;
+      gap: 8px;
+      padding-top: 24px;
+      box-sizing: border-box;
+    }
   }
 }

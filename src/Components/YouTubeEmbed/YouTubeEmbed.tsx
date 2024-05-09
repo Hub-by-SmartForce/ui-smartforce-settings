@@ -13,7 +13,7 @@ export const YouTubeEmbed = ({
   src
 }: YouTubeEmbedProps): React.ReactElement<YouTubeEmbedProps> => {
   return (
-    <div className={`${styles.youTubeEmbed} ${className}`}>
+    <div key={src} className={`${styles.youTubeEmbed} ${className}`}>
       <iframe
         src={`${src}?&modestbranding=1&rel=0`}
         frameBorder="0"

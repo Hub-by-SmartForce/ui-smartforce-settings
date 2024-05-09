@@ -449,6 +449,7 @@ export const SFSettings = ({
   return (
     <ApiContext.Provider
       value={{
+        product,
         settings: getApiBaseUrl(enviroment),
         shifts: `${getAppBaseUrl(enviroment, 'shift')}api`
       }}

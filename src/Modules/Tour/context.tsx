@@ -49,7 +49,7 @@ type DisableReminderAction = {
 
 type CloseAction = {
   type: 'close';
-  payload: number[];
+  payload?: number[];
 };
 
 type TourContextAction =
@@ -84,13 +84,6 @@ function reducer(
         step: 1
       };
     }
-    case 'start': {
-      return {
-        ...state,
-        tour: action.payload,
-        step: 1
-      };
-    }
 
     case 'end': {
       return {
@@ -103,7 +96,7 @@ function reducer(
     case 'close': {
       if (
         state.tour &&
-        action.payload.includes(state.tour?.id) &&
+        (!action.payload || action.payload.includes(state.tour?.id)) &&
         state.step > 0
       ) {
         return {
@@ -169,7 +162,7 @@ export interface TourContextProps
   onDisableReminder: () => void;
   onInitPaused: (tour: Tour) => void;
   onStart: (tour: Tour) => void;
-  onClose: (tourIds: number[]) => void;
+  onClose: (tourIds?: number[]) => void;
   onEnd: () => void;
   onBack: () => void;
   onNext: () => void;
@@ -209,7 +202,7 @@ export const TourProvider: FC = ({ children }) => {
   const onEnd = useCallback(() => dispatch({ type: 'end' }), []);
 
   const onClose = useCallback(
-    (tourIds: number[]) => dispatch({ type: 'close', payload: tourIds }),
+    (tourIds?: number[]) => dispatch({ type: 'close', payload: tourIds }),
     []
   );
 

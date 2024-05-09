@@ -16,6 +16,8 @@ export interface TourActionBody {
   step?: number;
 }
 
+export type TourActionType = 'start' | 'pause' | 'resume' | 'finish' | 'exit';
+
 export const getUser = (baseUrl: string): Promise<User> => {
   const url: string = `${baseUrl}/users/me`;
 
@@ -252,7 +254,7 @@ export async function hideTours(baseUrl: string, app: string): Promise<void> {
 export async function saveTourAction(
   baseUrl: string,
   app: string,
-  action: string,
+  action: TourActionType,
   circuit: number,
   step?: number
 ): Promise<void> {

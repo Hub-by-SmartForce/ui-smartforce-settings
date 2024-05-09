@@ -25,7 +25,8 @@ import {
   TourResumeTab,
   TourContext,
   UserSettings,
-  hideTours
+  hideTours,
+  useSaveTourAction
 } from '../../../src';
 import { SFIcon, SFSpinner, SFText, useSFMediaQuery } from 'sfui';
 import { BASE_URL } from '../App';
@@ -37,10 +38,12 @@ export const Main = (): React.ReactElement<{}> => {
   const {
     onStart: onTourStart,
     onEnd: onTourEnd,
+    onClose: onTourClose,
     tour: activeTour,
     isFeatureReminderOpen,
     setIsFeatureReminderOpen,
-    onDisableReminder
+    onDisableReminder,
+    onInitPaused
   } = useContext(TourContext);
   const { setUser, setUserSettings } = useContext(UserContext);
   const { setAreas } = useContext(AreasContext);
@@ -76,6 +79,17 @@ export const Main = (): React.ReactElement<{}> => {
         if (customerData.status === 'Active') {
           const userSettings: UserSettings = await getUserSettings(BASE_URL);
           setUserSettings(userSettings);
+
+          const tourSettings = userSettings.tours.find((t) => t.app === 'cc');
+
+          if (tourSettings?.circuit) {
+            const pausedTour = TOURS.find(
+              (t) => t.id === tourSettings?.circuit
+            );
+            if (pausedTour) {
+              onInitPaused(pausedTour);
+            }
+          }
 
           const subscriptions: Subscription[] = await getSubscriptions(
             BASE_URL
@@ -138,9 +152,11 @@ export const Main = (): React.ReactElement<{}> => {
   };
 
   const onShowTours = () => {
-    onTourEnd();
+    onTourClose();
     setIsToursCarrouselOpen(true);
   };
+
+  useSaveTourAction(BASE_URL, 'cc');
 
   return (
     <React.Fragment>
@@ -153,7 +169,7 @@ export const Main = (): React.ReactElement<{}> => {
             tours={TOURS}
             open={isToursCarrouselOpen}
             onClose={onCloseTourCarrousel}
-            onStart={onStartTour}
+            onStart={(tour) => onStartTour(tour)}
           />
 
           <div className={styles.main}>

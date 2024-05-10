@@ -56,6 +56,7 @@ export const AgencyMembersForm = ({
           step={2}
           lastStep={3}
           tourId={1}
+          topZIndex
         >
           <SFChipListInput
             label="E-mail"

@@ -85,6 +85,7 @@ export const AddMembersModal = ({
             tourId={1}
             width="fit"
             placement="top-end"
+            topZIndex
           >
             <SFButton
               isLoading={isSaving}

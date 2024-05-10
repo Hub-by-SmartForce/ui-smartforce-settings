@@ -102,6 +102,7 @@ export const ChangeRoleModal = ({
           tourId={2}
           placement="right"
           width="fit"
+          topZIndex
         >
           <SFText className={styles.dialogTitle} type="component-title">
             Change Role

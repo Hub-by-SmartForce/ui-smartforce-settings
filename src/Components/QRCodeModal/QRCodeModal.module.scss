@@ -1,6 +1,10 @@
 @import '~sfui/dist/Styles/SFColors/SFColors.module.scss';
 @import '~sfui/dist/Styles/SFMedia/SFMedia.module.scss';
 
+.dialog {
+  z-index: 1510 !important;
+}
+
 .qrCodeModal {
   padding: 36px;
   display: flex;

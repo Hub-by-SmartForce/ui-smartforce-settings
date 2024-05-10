@@ -51,6 +51,7 @@ export const QRCodeModal = ({
 
   return (
     <SFDialog
+      className={styles.dialog}
       PaperProps={{ style: { overflowY: 'unset' } }}
       open={isOpen}
       onClose={onClose}

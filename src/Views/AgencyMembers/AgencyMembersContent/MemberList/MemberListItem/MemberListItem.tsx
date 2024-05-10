@@ -206,7 +206,7 @@ export const MemberListItem = ({
                     sfSize="medium"
                     onClick={() => {
                       setIsMenuOpen(true);
-                      onTourNext({ tourId: 2, step: 2 });
+                      onTourNext({ tourId: 2, step: 1 });
                     }}
                   />
                 </TourTooltip>

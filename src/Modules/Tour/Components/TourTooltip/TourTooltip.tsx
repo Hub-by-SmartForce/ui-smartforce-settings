@@ -13,6 +13,7 @@ export interface TourTooltipProps
   children: React.ReactNode;
   preventOverflow?: boolean;
   width?: 'auto' | 'fit';
+  topZIndex?: boolean;
 }
 
 export const TourTooltip = ({
@@ -21,6 +22,7 @@ export const TourTooltip = ({
   width = 'auto',
   placement,
   enterDelay,
+  topZIndex = false,
   ...props
 }: TourTooltipProps): React.ReactElement<TourTooltipProps> => {
   const [isOpen, setIsOpen] = useState(false);
@@ -41,7 +43,9 @@ export const TourTooltip = ({
     <SFTooltip
       classes={{
         arrow: styles.arrow,
-        popperArrow: styles.popperArrow
+        popperArrow: `${styles.popperArrow} ${
+          topZIndex ? styles.topZIndex : ''
+        }`
       }}
       open={isOpen && isTooltipOpen}
       title=""

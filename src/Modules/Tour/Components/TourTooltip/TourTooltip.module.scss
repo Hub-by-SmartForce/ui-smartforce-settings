@@ -1,6 +1,12 @@
 @import '~sfui/dist/Styles/SFMedia/SFMedia.module.scss';
 
 .popperArrow {
+  z-index: 1299;
+
+  &.topZIndex {
+    z-index: 1500;
+  }
+
   &[x-placement='bottom-start'],
   &[x-placement='top-start'] {
     .arrow {

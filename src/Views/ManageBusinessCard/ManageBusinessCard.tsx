@@ -86,9 +86,7 @@ export const ManageBusinessCard = ({
     setIsSaveDisabled(isEqualObject(businessCardSettings, newValues));
     setSwitchData(newValues);
 
-    if (tourStep === 1) {
-      onTourNext();
-    }
+    onTourNext({ tourId: 4, step: 1 });
   };
 
   const onAgencyChange = (name: string, value: boolean) => {
@@ -100,9 +98,7 @@ export const ManageBusinessCard = ({
     setIsSaveDisabled(isEqualObject(businessCardSettings, newValues));
     setSwitchData(newValues);
 
-    if (tourStep === 1) {
-      onTourNext();
-    }
+    onTourNext({ tourId: 4, step: 1 });
   };
 
   const onSaveSettings = async () => {
@@ -152,9 +148,9 @@ export const ManageBusinessCard = ({
   };
 
   const onPreview = () => {
-    if (tourStep === 2) {
-      onTourNext();
-    } else {
+    onTourNext({ tourId: 4, step: 2 });
+
+    if (tourStep !== 2) {
       onTourClose([4]);
     }
 
@@ -167,7 +163,10 @@ export const ManageBusinessCard = ({
         renderContent={() => (
           <Fragment>
             <div className={styles.scrollableContainer}>
-              <SFScrollable containerClassName={styles.content}>
+              <SFScrollable
+                className={styles.scrollable}
+                containerClassName={styles.content}
+              >
                 <div className={styles.textContainer}>
                   <h2 className={styles.title}>My Business Card</h2>
                   {!isPhone && (
@@ -200,6 +199,7 @@ export const ManageBusinessCard = ({
                     tourId={4}
                     placement="top-start"
                     width="fit"
+                    preventOverflow
                   >
                     <SFButton
                       size={isPhone ? 'large' : 'medium'}

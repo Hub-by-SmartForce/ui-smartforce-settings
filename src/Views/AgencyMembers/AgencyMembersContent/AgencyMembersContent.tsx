@@ -322,7 +322,7 @@ export const AgencyMembersContent = ({
             fullWidth
             onClick={() => {
               setIsAddMembersModalOpen(true);
-              onTourNext();
+              onTourNext({ tourId: 1, step: 1 });
             }}
           >
             Add Members

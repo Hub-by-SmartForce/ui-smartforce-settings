@@ -29,7 +29,7 @@ export const AgencyMembersForm = ({
   const onChipsChange = (members: ChipFieldValueType[]) => {
     if (refPristine.current && isChipListValid(members)) {
       refPristine.current = false;
-      onTourNext();
+      onTourNext({ tourId: 1, step: 2 });
     }
 
     onChange(members);

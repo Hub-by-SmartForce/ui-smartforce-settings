@@ -28,7 +28,7 @@ export const BusinessCardPreview = ({
 }: BusinessCardPreviewProps): React.ReactElement<BusinessCardPreviewProps> => {
   const { themeType } = React.useContext(ThemeTypeContext);
   const { isPhone } = React.useContext(MediaContext);
-  const { step: tourStep, onNext: onTourNext } = useContext(TourContext);
+  const { onNext: onTourNext } = useContext(TourContext);
 
   const [mediaType, setMediaType] =
     React.useState<BusinessCardMediaType>('mobile');
@@ -37,9 +37,7 @@ export const BusinessCardPreview = ({
   const isMediaMobile: boolean = mediaType === 'mobile';
 
   const onBackButton = () => {
-    if (tourStep === 3) {
-      onTourNext();
-    }
+    onTourNext({ tourId: 4, step: 3 });
     setMediaType('mobile');
     onBack();
   };

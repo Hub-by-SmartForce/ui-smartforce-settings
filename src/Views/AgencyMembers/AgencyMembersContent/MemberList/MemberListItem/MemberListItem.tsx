@@ -68,6 +68,12 @@ export const MemberListItem = ({
     }
   };
 
+  const onSeeProfile = () => {
+    setIsMenuOpen(false);
+    onTourClose([2]);
+    onClick();
+  };
+
   const onChangeRole = () => {
     setIsMenuOpen(false);
     props.onChangeRole();
@@ -110,14 +116,7 @@ export const MemberListItem = ({
             setIsMenuOpen(false);
           }}
         >
-          <SFMenuItem
-            onClick={() => {
-              onTourClose([2]);
-              onClick();
-            }}
-          >
-            See profile
-          </SFMenuItem>
+          <SFMenuItem onClick={onSeeProfile}>See profile</SFMenuItem>
           {showResendInvitationItem && (
             <SFMenuItem onClick={onResendInvitation}>
               Resend invitation

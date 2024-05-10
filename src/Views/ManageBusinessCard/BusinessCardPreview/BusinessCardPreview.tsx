@@ -99,6 +99,7 @@ export const BusinessCardPreview = ({
               lastStep={4}
               tourId={4}
               placement="right"
+              topZIndex
             >
               <div className={styles.toggleMediaButtons}>
                 <SFIconButton

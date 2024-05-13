@@ -32,10 +32,12 @@ type EndAction = {
 
 type BackAction = {
   type: 'back';
+  payload?: TourNavOptions;
 };
 
 type NextAction = {
   type: 'next';
+  payload?: TourNavOptions;
 };
 
 type SetReminderAction = {
@@ -109,7 +111,13 @@ function reducer(
     }
 
     case 'back': {
-      if (state.step > 0) {
+      const options: TourNavOptions | undefined = action.payload;
+
+      if (
+        state.step > 0 &&
+        (!options ||
+          (state.tour?.id === options.tourId && state.step === options.step))
+      ) {
         return {
           ...state,
           step: state.step - 1
@@ -119,7 +127,13 @@ function reducer(
     }
 
     case 'next': {
-      if (state.step > 0) {
+      const options: TourNavOptions | undefined = action.payload;
+
+      if (
+        state.step > 0 &&
+        (!options ||
+          (state.tour?.id === options.tourId && state.step === options.step))
+      ) {
         return {
           ...state,
           step: state.step + 1
@@ -155,6 +169,11 @@ function getInitialState() {
   };
 }
 
+export interface TourNavOptions {
+  tourId: number;
+  step: number;
+}
+
 export interface TourContextProps
   extends Omit<TourContextState, 'isReminderAvailable'> {
   status: TourStatus | undefined;
@@ -164,8 +183,8 @@ export interface TourContextProps
   onStart: (tour: Tour) => void;
   onClose: (tourIds?: number[]) => void;
   onEnd: () => void;
-  onBack: () => void;
-  onNext: () => void;
+  onBack: (options?: TourNavOptions) => void;
+  onNext: (options?: TourNavOptions) => void;
 }
 
 const contextDefaultValues: TourContextProps = {
@@ -206,8 +225,15 @@ export const TourProvider: FC = ({ children }) => {
     []
   );
 
-  const onBack = useCallback(() => dispatch({ type: 'back' }), []);
-  const onNext = useCallback(() => dispatch({ type: 'next' }), []);
+  const onBack = useCallback(
+    (options?: TourNavOptions) => dispatch({ type: 'back', payload: options }),
+    []
+  );
+
+  const onNext = useCallback(
+    (options?: TourNavOptions) => dispatch({ type: 'next', payload: options }),
+    []
+  );
 
   const setIsFeatureReminderOpen = useCallback(
     (payload: boolean) => dispatch({ type: 'set_reminder', payload }),

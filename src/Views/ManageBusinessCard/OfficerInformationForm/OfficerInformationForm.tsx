@@ -62,7 +62,6 @@ export const OfficerInformationForm = ({
         tourId={4}
         placement="right"
         width="fit"
-        preventOverflow
       >
         <h3 className={styles.title}>Officer Information</h3>
       </TourTooltip>

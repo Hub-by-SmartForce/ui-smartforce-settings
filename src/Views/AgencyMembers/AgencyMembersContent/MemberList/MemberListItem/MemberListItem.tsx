@@ -134,7 +134,7 @@ export const MemberListItem = ({
             >
               <SFMenuItem
                 onClick={() => {
-                  onTourNext();
+                  onTourNext({ tourId: 2, step: 2 });
                   onChangeRole();
                 }}
               >
@@ -206,7 +206,7 @@ export const MemberListItem = ({
                     sfSize="medium"
                     onClick={() => {
                       setIsMenuOpen(true);
-                      onTourNext();
+                      onTourNext({ tourId: 2, step: 1 });
                     }}
                   />
                 </TourTooltip>

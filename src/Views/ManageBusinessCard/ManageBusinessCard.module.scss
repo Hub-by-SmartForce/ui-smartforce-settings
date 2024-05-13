@@ -69,10 +69,20 @@
 @media screen and (min-width: $sf-media-sm-width) {
   .manageBusinessCard {
     padding: 0;
+  }
+}
 
+@media screen and (max-width: (($sf-media-xl-width)-1)) {
+  .manageBusinessCard {
     .scrollableContainer {
-      .content {
-        padding-right: 12px;
+      .scrollable {
+        height: auto;
+
+        .content {
+          height: auto;
+          overflow: unset;
+          padding-right: 12px;
+        }
       }
     }
   }

@@ -17,6 +17,8 @@ import { ApiContext } from '../../Context';
 import { ListManagment } from '../../Components/ListManagment/ListManagment';
 import { AgencyGroupsItem } from './AgencyGroupsItem/AgencyGroupsItem';
 import { DeleteConfirmNameModal } from '../../Components/DeleteConfirmNameModal/DeleteConfirmNameModal';
+import { SFButton } from 'sfui';
+import { TourContext, TourTooltip } from '../../Modules/Tour';
 
 function sortGroups(groups: Group[]): Group[] {
   return groups.sort((a: Group, b: Group): number => {
@@ -61,6 +63,7 @@ export const AgencyGroups = ({
 }: AgencyGroupsProps): React.ReactElement<AgencyGroupsProps> => {
   const apiBaseUrl = useContext(ApiContext).settings;
   const { user, setUser } = useContext(UserContext);
+  const { onNext: onTourNext } = useContext(TourContext);
   const [isCreateModalOpen, setIsCreateModalOpen] = useState<boolean>(false);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState<boolean>(false);
   const [isEditModalOpen, setIsEditModalOpen] = useState<boolean>(false);
@@ -178,6 +181,11 @@ export const AgencyGroups = ({
     }
   };
 
+  const onCreate = () => {
+    onTourNext({ tourId: 5, step: 1 });
+    setIsCreateModalOpen(true);
+  };
+
   return (
     <SettingsContentRender
       renderContent={() => (
@@ -245,13 +253,26 @@ export const AgencyGroups = ({
           />
 
           <ListManagment<Group>
-            actionButtonLabel="Create Group"
+            renderCreateButton={(props) => (
+              <TourTooltip
+                title="Create your group here"
+                description="You can create as many groups as your agency needs. Just click the “Create Group” button and follow the steps."
+                step={1}
+                lastStep={5}
+                tourId={5}
+                preventOverflow
+                placement="bottom"
+              >
+                <SFButton {...props} onClick={onCreate}>
+                  Create Group
+                </SFButton>
+              </TourTooltip>
+            )}
             emptyMessage="There are no groups created yet."
             label="Group"
             list={groups}
             isLoading={isLoading}
             filter={getFilteredGroups}
-            onCreate={() => setIsCreateModalOpen(true)}
             onClick={onView}
             options={[
               {

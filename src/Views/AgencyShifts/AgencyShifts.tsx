@@ -22,6 +22,7 @@ import { ShiftHistoryModal } from './ShiftHistoryModal/ShiftHistoryModal';
 import { DeleteConfirmNameModal } from '../../Components/DeleteConfirmNameModal/DeleteConfirmNameModal';
 import { dispatchCustomEvent } from '../../Helpers';
 import { SETTINGS_CUSTOM_EVENT } from '../../Constants';
+import { SFButton } from 'sfui';
 
 function sortShifts(shifts: ShiftListItem[]): ShiftListItem[] {
   return shifts.sort((a: ShiftListItem, b: ShiftListItem): number => {
@@ -244,13 +245,16 @@ export const AgencyShifts = ({
           />
 
           <ListManagment<ShiftListItem>
-            actionButtonLabel="Create Shift"
+            renderCreateButton={(props) => (
+              <SFButton {...props} onClick={onCreate}>
+                Create Shift
+              </SFButton>
+            )}
             emptyMessage="There are no shifts created yet."
             label="Shift"
             list={shifts}
             isLoading={isLoading}
             filter={getFilteredShifts}
-            onCreate={onCreate}
             onClick={onInfo}
             options={[
               {

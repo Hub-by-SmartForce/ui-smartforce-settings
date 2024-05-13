@@ -24,5 +24,11 @@ export const TOURS: Tour[] = [
     title: 'Bussines Card',
     description: 'Personalize your digital business card.',
     link: 'https://www.youtube.com/embed/A_T2h-sbQcs'
+  },
+  {
+    id: 5,
+    title: 'Create Groups',
+    description: "Shape your agency's groups.",
+    link: 'https://www.youtube.com/embed/A_T2h-sbQcs'
   }
 ];

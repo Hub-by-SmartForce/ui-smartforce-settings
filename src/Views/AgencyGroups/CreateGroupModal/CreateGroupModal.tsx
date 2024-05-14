@@ -97,7 +97,7 @@ export const CreateGroupModal = ({
 
     if (refPristine.current && !isFormInvalid(newGroup, newError)) {
       refPristine.current = false;
-      onTourNext({ tourId: 5, step: 2 });
+      onTourNext({ tourId: 9, step: 2 });
     }
 
     if (
@@ -106,7 +106,7 @@ export const CreateGroupModal = ({
       newGroup.members?.length > 0
     ) {
       refIsMembersPristine.current = false;
-      onTourNext({ tourId: 5, step: 3 });
+      onTourNext({ tourId: 9, step: 3 });
     }
 
     setError(newError);

@@ -182,7 +182,7 @@ export const AgencyGroups = ({
   };
 
   const onCreate = () => {
-    onTourNext({ tourId: 5, step: 1 });
+    onTourNext({ tourId: 9, step: 1 });
     setIsCreateModalOpen(true);
   };
 

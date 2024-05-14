@@ -65,7 +65,7 @@ export const CreateGroupForm = ({
   const onChangeAvatar = (avatar: Blob) => {
     if (refPristine.current) {
       refPristine.current = false;
-      onTourNext({ tourId: 5, step: 4 });
+      onTourNext({ tourId: 9, step: 4 });
     }
     onChange({ ...value, avatar: avatar });
   };

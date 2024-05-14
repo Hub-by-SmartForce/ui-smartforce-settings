@@ -40,7 +40,11 @@
       gap: 6px;
     }
 
-    &.withTitle {
+    &.withOnlyTitle {
+      grid-template-rows: auto minmax(0, 1fr);
+    }
+
+    &.withTitleAndFooter {
       grid-template-rows: auto minmax(0, 1fr) auto;
     }
   }

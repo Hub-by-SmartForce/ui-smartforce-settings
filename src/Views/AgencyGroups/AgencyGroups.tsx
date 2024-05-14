@@ -63,7 +63,7 @@ export const AgencyGroups = ({
 }: AgencyGroupsProps): React.ReactElement<AgencyGroupsProps> => {
   const apiBaseUrl = useContext(ApiContext).settings;
   const { user, setUser } = useContext(UserContext);
-  const { onNext: onTourNext } = useContext(TourContext);
+  const { onNext: onTourNext, onClose: onTourClose } = useContext(TourContext);
   const [isCreateModalOpen, setIsCreateModalOpen] = useState<boolean>(false);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState<boolean>(false);
   const [isEditModalOpen, setIsEditModalOpen] = useState<boolean>(false);
@@ -139,11 +139,13 @@ export const AgencyGroups = ({
   };
 
   const onView = (group: Group) => {
+    onTourClose([9]);
     setSelected(group);
     setIsInfoModalOpen(true);
   };
 
   const onEdit = (group: Group) => {
+    onTourClose([9]);
     setSelected(group);
     setIsEditModalOpen(true);
   };
@@ -153,11 +155,13 @@ export const AgencyGroups = ({
   };
 
   const onViewHistory = (group: Group) => {
+    onTourClose([9]);
     setSelected(group);
     setIsViewHistoryModalOpen(true);
   };
 
   const onOpenDeleteModal = async (group: Group) => {
+    onTourClose([9]);
     setSelected(group);
     setIsDeleteModalOpen(true);
   };

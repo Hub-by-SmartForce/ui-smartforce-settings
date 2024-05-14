@@ -63,6 +63,7 @@ export const CreateGroupModal = ({
   const {
     status: tourStatus,
     onNext: onTourNext,
+    onClose: onTourClose,
     onEnd: onTourEnd,
     setIsFeatureReminderOpen
   } = useContext(TourContext);
@@ -84,6 +85,13 @@ export const CreateGroupModal = ({
   }, [isOpen]);
 
   const onDiscard = () => {
+    onTourClose([
+      { tourId: 9, step: 2 },
+      { tourId: 9, step: 3 },
+      { tourId: 9, step: 4 },
+      { tourId: 9, step: 5 }
+    ]);
+
     setValue(initValue);
     setError(initError);
     onBack();

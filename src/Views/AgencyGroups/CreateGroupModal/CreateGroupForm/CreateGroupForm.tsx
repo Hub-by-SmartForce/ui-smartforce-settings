@@ -70,6 +70,10 @@ export const CreateGroupForm = ({
     onChange({ ...value, avatar: avatar });
   };
 
+  const onClickUpload = () => {
+    onTourNext({ tourId: 9, step: 4 });
+  };
+
   return (
     <div className={styles.createGroupForm}>
       <SFTextField
@@ -119,7 +123,7 @@ export const CreateGroupForm = ({
           step={3}
           lastStep={5}
           tourId={9}
-          placement="bottom"
+          placement="right"
           topZIndex
         >
           <SFPeoplePicker
@@ -155,6 +159,7 @@ export const CreateGroupForm = ({
         <ImageUpload
           label="Upload Photo"
           value={value.avatar}
+          onClick={onClickUpload}
           onChange={onChangeAvatar}
         />
       </TourTooltip>

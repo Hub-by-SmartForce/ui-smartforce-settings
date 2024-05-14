@@ -60,7 +60,12 @@ export const CreateGroupModal = ({
 }: CreateGroupModalProps): React.ReactElement<CreateGroupModalProps> => {
   const apiBaseUrl = useContext(ApiContext).settings;
   const { user, setUser } = useContext(UserContext);
-  const { onNext: onTourNext } = useContext(TourContext);
+  const {
+    status: tourStatus,
+    onNext: onTourNext,
+    onEnd: onTourEnd,
+    setIsFeatureReminderOpen
+  } = useContext(TourContext);
   const [value, setValue] = useState<GroupFormValue>(initValue);
   const [error, setError] = useState<CreateGroupError>(initError);
   const [isSaving, setIsSaving] = useState<boolean>(false);
@@ -114,6 +119,7 @@ export const CreateGroupModal = ({
   };
 
   const onCreate = async () => {
+    onTourEnd();
     setIsSaving(true);
 
     try {
@@ -147,6 +153,11 @@ export const CreateGroupModal = ({
       });
 
       setIsSaving(false);
+
+      if (tourStatus === 'active') {
+        setIsFeatureReminderOpen(true);
+      }
+
       props.onCreate();
       onBack();
     } catch (e: any) {

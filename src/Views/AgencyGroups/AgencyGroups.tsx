@@ -18,7 +18,7 @@ import { ListManagment } from '../../Components/ListManagment/ListManagment';
 import { AgencyGroupsItem } from './AgencyGroupsItem/AgencyGroupsItem';
 import { DeleteConfirmNameModal } from '../../Components/DeleteConfirmNameModal/DeleteConfirmNameModal';
 import { SFButton } from 'sfui';
-import { TourContext, TourTooltip } from '../../Modules/Tour';
+import { TourContext, TourTooltip, useCloseTour } from '../../Modules/Tour';
 
 function sortGroups(groups: Group[]): Group[] {
   return groups.sort((a: Group, b: Group): number => {
@@ -74,6 +74,8 @@ export const AgencyGroups = ({
   const [groups, setGroups] = useState<Group[]>([]);
   const [selected, setSelected] = useState<Group | undefined>();
   const [isDeleting, setIsDeleting] = useState<boolean>(false);
+
+  useCloseTour([9]);
 
   useEffect(() => {
     let isSubscribed: boolean = true;

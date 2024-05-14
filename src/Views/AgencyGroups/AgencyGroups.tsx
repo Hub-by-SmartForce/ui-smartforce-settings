@@ -259,7 +259,7 @@ export const AgencyGroups = ({
                 description="You can create as many groups as your agency needs. Just click the “Create Group” button and follow the steps."
                 step={1}
                 lastStep={5}
-                tourId={5}
+                tourId={9}
                 preventOverflow
                 placement="bottom"
               >

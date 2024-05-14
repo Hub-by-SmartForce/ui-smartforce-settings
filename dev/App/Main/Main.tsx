@@ -142,7 +142,7 @@ export const Main = (): React.ReactElement<{}> => {
       setSelectedSectionName('agency');
     } else if (tour.id === 4) {
       setSelectedSectionName('business_card');
-    } else if (tour.id === 5) {
+    } else if (tour.id === 9) {
       setSelectedSectionName('groups');
     } else return;
 

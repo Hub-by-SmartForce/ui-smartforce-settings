@@ -92,7 +92,7 @@ export const CreateGroupForm = ({
         description="Type the group name and acronym. Take into consideration the maximum number of characters that each field has."
         step={2}
         lastStep={5}
-        tourId={5}
+        tourId={9}
         placement="bottom"
         topZIndex
       >
@@ -118,7 +118,7 @@ export const CreateGroupForm = ({
           description="Type the first few characters of the name of the member you need to add and select them from the suggested active users."
           step={3}
           lastStep={5}
-          tourId={5}
+          tourId={9}
           placement="bottom"
           topZIndex
         >
@@ -147,7 +147,7 @@ export const CreateGroupForm = ({
         description="Choose an image that represents the group you need to create."
         step={4}
         lastStep={5}
-        tourId={5}
+        tourId={9}
         placement="right"
         topZIndex
         width="fit"

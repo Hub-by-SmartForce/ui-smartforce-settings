@@ -199,7 +199,7 @@ export const CreateGroupModal = ({
             description='By clicking the "Create Group" button will create the group in your agency. You can delete the group at any time.'
             step={5}
             lastStep={5}
-            tourId={5}
+            tourId={9}
             width="fit"
             placement="top-end"
             topZIndex

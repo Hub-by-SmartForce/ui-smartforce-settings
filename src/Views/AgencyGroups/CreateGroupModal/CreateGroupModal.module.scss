@@ -1,0 +1,19 @@
+@import '~sfui/dist/Styles/SFMedia/SFMedia.module.scss';
+
+.createGroupModal {
+  .actions {
+    display: none;
+  }
+}
+
+@media screen and (min-width: $sf-media-sm-width) {
+  .createGroupModal {
+    .actions {
+      display: flex;
+      justify-content: flex-end;
+      gap: 8px;
+      padding-top: 24px;
+      box-sizing: border-box;
+    }
+  }
+}

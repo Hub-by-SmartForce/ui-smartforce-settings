@@ -1,9 +1,10 @@
-import React, { useContext, useMemo } from 'react';
+import React, { useContext, useMemo, useRef } from 'react';
 import styles from './CreateGroupForm.module.scss';
 import { SFPeopleOption, SFPeoplePicker, SFTextField } from 'sfui';
 import { getUserSession } from '../../../../Services';
 import { ImageUpload } from '../../../../Components/ImageUpload/ImageUpload';
 import { ApiContext } from '../../../../Context';
+import { TourContext, TourTooltip } from '../../../../Modules/Tour';
 
 const formatOption = (option: any): SFPeopleOption => {
   return {
@@ -39,6 +40,8 @@ export const CreateGroupForm = ({
   onChange
 }: CreateGroupFormProps): React.ReactElement<CreateGroupFormProps> => {
   const apiBaseUrl = useContext(ApiContext).settings;
+  const { onNext: onTourNext } = useContext(TourContext);
+  const refPristine = useRef<boolean>(true);
 
   const nameHelper = error.name
     ? 'This name is already taken.'
@@ -59,6 +62,14 @@ export const CreateGroupForm = ({
     []
   );
 
+  const onChangeAvatar = (avatar: Blob) => {
+    if (refPristine.current) {
+      refPristine.current = false;
+      onTourNext({ tourId: 5, step: 4 });
+    }
+    onChange({ ...value, avatar: avatar });
+  };
+
   return (
     <div className={styles.createGroupForm}>
       <SFTextField
@@ -76,46 +87,77 @@ export const CreateGroupForm = ({
         }
       />
 
-      <SFTextField
-        label="Acronym"
-        required
-        error={error.acronym}
-        inputProps={{ maxLength: 3 }}
-        helperText={acronymHelper}
-        value={value.acronym}
-        onChange={(event) =>
-          onChange({
-            ...value,
-            acronym: event.target.value
-          })
-        }
-      />
-
-      {isNew && (
-        <SFPeoplePicker
-          multiple
-          label="Members"
-          isAsync
-          formatUrlQuery={(value: string) =>
-            `${apiBaseUrl}/agencies/me/users?active_only=True&name=${value}`
-          }
-          formatOption={formatOption}
-          fetchInit={fetchInit}
-          value={value.members as SFPeopleOption[]}
-          onChange={(newMembers: SFPeopleOption[]) =>
+      <TourTooltip
+        title="Complete the fields"
+        description="Type the group name and acronym. Take into consideration the maximum number of characters that each field has."
+        step={2}
+        lastStep={5}
+        tourId={5}
+        placement="bottom"
+        topZIndex
+      >
+        <SFTextField
+          label="Acronym"
+          required
+          error={error.acronym}
+          inputProps={{ maxLength: 3 }}
+          helperText={acronymHelper}
+          value={value.acronym}
+          onChange={(event) =>
             onChange({
               ...value,
-              members: newMembers
+              acronym: event.target.value
             })
           }
         />
+      </TourTooltip>
+
+      {isNew && (
+        <TourTooltip
+          title="Add members"
+          description="Type the first few characters of the name of the member you need to add and select them from the suggested active users."
+          step={3}
+          lastStep={5}
+          tourId={5}
+          placement="bottom"
+          topZIndex
+        >
+          <SFPeoplePicker
+            multiple
+            label="Members"
+            isAsync
+            formatUrlQuery={(value: string) =>
+              `${apiBaseUrl}/agencies/me/users?active_only=True&name=${value}`
+            }
+            formatOption={formatOption}
+            fetchInit={fetchInit}
+            value={value.members as SFPeopleOption[]}
+            onChange={(newMembers: SFPeopleOption[]) =>
+              onChange({
+                ...value,
+                members: newMembers
+              })
+            }
+          />
+        </TourTooltip>
       )}
 
-      <ImageUpload
-        label="Upload Photo"
-        value={value.avatar}
-        onChange={(avatar: Blob) => onChange({ ...value, avatar: avatar })}
-      />
+      <TourTooltip
+        title="Upload a group image "
+        description="Choose an image that represents the group you need to create."
+        step={4}
+        lastStep={5}
+        tourId={5}
+        placement="right"
+        topZIndex
+        width="fit"
+      >
+        <ImageUpload
+          label="Upload Photo"
+          value={value.avatar}
+          onChange={onChangeAvatar}
+        />
+      </TourTooltip>
     </div>
   );
 };

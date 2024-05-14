@@ -1,6 +1,11 @@
 @import '~sfui/dist/Styles/SFColors/SFColors.module.scss';
 
+.popper {
+  z-index: 1301;
+}
+
 .areaPolygonEdit {
+  height: 100%;
   position: relative;
 
   .undoButton {

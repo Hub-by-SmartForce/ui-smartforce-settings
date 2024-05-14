@@ -140,11 +140,15 @@ export const Main = (): React.ReactElement<{}> => {
 
     if (tour.id === 1 || tour.id === 2 || tour.id === 3) {
       setSelectedSectionName('agency');
-      onTourStart(tour);
     } else if (tour.id === 4) {
       setSelectedSectionName('business_card');
-      onTourStart(tour);
+    } else if (tour.id === 5) {
+      setSelectedSectionName('areas');
+    } else {
+      return;
     }
+
+    onTourStart(tour);
   };
 
   const onResumeTour = () => {

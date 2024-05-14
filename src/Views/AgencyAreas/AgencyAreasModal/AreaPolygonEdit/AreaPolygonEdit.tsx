@@ -22,6 +22,7 @@ import {
   getPolygonStyles,
   isEqualObject
 } from '../../../../Helpers';
+import { TourContext, TourTooltip } from '../../../../Modules/Tour';
 
 export interface AreaPolygonEditProps {
   area?: Area;
@@ -36,6 +37,7 @@ export const AreaPolygonEdit = ({
   const statesList = useContext(StatesListConfigContext).statesList;
   const areas = useContext(AreasContext).areas;
   const { themeType } = useContext(ThemeTypeContext);
+  const { tour, onNext: onTourNext } = useContext(TourContext);
 
   const [defaultPaths, setDefaultPaths] = useState<google.maps.LatLngLiteral[]>(
     []
@@ -50,6 +52,8 @@ export const AreaPolygonEdit = ({
   }, [area, customer, statesList]);
 
   const onUndo = () => {
+    onTourNext({ tourId: 5, step: 4 });
+
     if (area && area.paths.length > 0) {
       setDefaultPaths([...area.paths]);
       onChange(area.paths);
@@ -80,17 +84,42 @@ export const AreaPolygonEdit = ({
     [defaultPaths]
   );
 
+  const isTour: boolean = tour?.id === 5;
+
   return (
     <div className={styles.areaPolygonEdit}>
-      <SFTooltip
-        title="Restore area"
-        // set z-index greater than dialog z-index
-        PopperProps={{ style: { zIndex: 1301 } }}
-      >
-        <div className={styles.undoButton} onClick={onUndo}>
-          <SFIcon icon="Reload" size={30} />
-        </div>
-      </SFTooltip>
+      {isTour && (
+        <TourTooltip
+          title="Restore the area"
+          description='By clicking the "Restore" button, the form will return to its initial state.'
+          step={4}
+          lastStep={5}
+          tourId={5}
+          topZIndex
+          placement="bottom-start"
+          style={{
+            marginTop: '76px',
+            marginLeft: '27px'
+          }}
+        >
+          <div className={styles.undoButton} onClick={onUndo}>
+            <SFIcon icon="Reload" size={30} />
+          </div>
+        </TourTooltip>
+      )}
+
+      {!isTour && (
+        <SFTooltip
+          classes={{
+            popper: styles.popper
+          }}
+          title="Restore area"
+        >
+          <div className={styles.undoButton} onClick={onUndo}>
+            <SFIcon icon="Reload" size={30} />
+          </div>
+        </SFTooltip>
+      )}
 
       <GoogleMap bounds={bounds}>
         <Polygon

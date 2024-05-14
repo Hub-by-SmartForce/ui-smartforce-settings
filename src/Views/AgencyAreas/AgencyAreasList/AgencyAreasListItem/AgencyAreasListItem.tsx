@@ -27,6 +27,11 @@ export const AgencyAreasListItem = ({
 
   const onMenuClose = () => setMenuAnchorElement(undefined);
 
+  const onSeeInfo = () => {
+    onClick();
+    onMenuClose();
+  };
+
   const onAreaEdit = () => {
     onEdit();
     onMenuClose();
@@ -65,7 +70,7 @@ export const AgencyAreasListItem = ({
           anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
           transformOrigin={{ vertical: 'top', horizontal: 'right' }}
         >
-          <SFMenuItem onClick={onClick}>See area information</SFMenuItem>
+          <SFMenuItem onClick={onSeeInfo}>See area information</SFMenuItem>
           <SFMenuItem onClick={onAreaEdit}>Edit Area</SFMenuItem>
           <SFMenuItem onClick={onAreaDelete}>Delete</SFMenuItem>
         </SFMenu>

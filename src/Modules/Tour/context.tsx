@@ -1,6 +1,25 @@
 import React, { FC, useCallback, useReducer } from 'react';
 import { Tour } from './models';
 
+function checkCanClose(
+  tourId: number,
+  step: number,
+  options?: (TourStepOptions | number)[]
+): boolean {
+  if (!options) return true;
+  else {
+    const findOption = options.find((option) => {
+      if (typeof option === 'number') {
+        return tourId === option;
+      } else {
+        return tourId === option.tourId && step === option.step;
+      }
+    });
+
+    return !!findOption;
+  }
+}
+
 export type TourStatus = 'active' | 'paused';
 
 export type TourContextState = {
@@ -32,12 +51,12 @@ type EndAction = {
 
 type BackAction = {
   type: 'back';
-  payload?: TourNavOptions;
+  payload?: TourStepOptions;
 };
 
 type NextAction = {
   type: 'next';
-  payload?: TourNavOptions;
+  payload?: TourStepOptions;
 };
 
 type SetReminderAction = {
@@ -51,7 +70,7 @@ type DisableReminderAction = {
 
 type CloseAction = {
   type: 'close';
-  payload?: number[];
+  payload?: (TourStepOptions | number)[];
 };
 
 type TourContextAction =
@@ -98,8 +117,8 @@ function reducer(
     case 'close': {
       if (
         state.tour &&
-        (!action.payload || action.payload.includes(state.tour?.id)) &&
-        state.step > 0
+        state.step > 0 &&
+        checkCanClose(state.tour.id, state.step, action.payload)
       ) {
         return {
           ...state,
@@ -111,7 +130,7 @@ function reducer(
     }
 
     case 'back': {
-      const options: TourNavOptions | undefined = action.payload;
+      const options: TourStepOptions | undefined = action.payload;
 
       if (
         state.step > 0 &&
@@ -127,7 +146,7 @@ function reducer(
     }
 
     case 'next': {
-      const options: TourNavOptions | undefined = action.payload;
+      const options: TourStepOptions | undefined = action.payload;
 
       if (
         state.step > 0 &&
@@ -169,7 +188,7 @@ function getInitialState() {
   };
 }
 
-export interface TourNavOptions {
+export interface TourStepOptions {
   tourId: number;
   step: number;
 }
@@ -181,10 +200,10 @@ export interface TourContextProps
   onDisableReminder: () => void;
   onInitPaused: (tour: Tour) => void;
   onStart: (tour: Tour) => void;
-  onClose: (tourIds?: number[]) => void;
+  onClose: (options?: (TourStepOptions | number)[]) => void;
   onEnd: () => void;
-  onBack: (options?: TourNavOptions) => void;
-  onNext: (options?: TourNavOptions) => void;
+  onBack: (options?: TourStepOptions) => void;
+  onNext: (options?: TourStepOptions) => void;
 }
 
 const contextDefaultValues: TourContextProps = {
@@ -221,17 +240,18 @@ export const TourProvider: FC = ({ children }) => {
   const onEnd = useCallback(() => dispatch({ type: 'end' }), []);
 
   const onClose = useCallback(
-    (tourIds?: number[]) => dispatch({ type: 'close', payload: tourIds }),
+    (options?: (TourStepOptions | number)[]) =>
+      dispatch({ type: 'close', payload: options }),
     []
   );
 
   const onBack = useCallback(
-    (options?: TourNavOptions) => dispatch({ type: 'back', payload: options }),
+    (options?: TourStepOptions) => dispatch({ type: 'back', payload: options }),
     []
   );
 
   const onNext = useCallback(
-    (options?: TourNavOptions) => dispatch({ type: 'next', payload: options }),
+    (options?: TourStepOptions) => dispatch({ type: 'next', payload: options }),
     []
   );
 

@@ -30,24 +30,26 @@ export const Login = ({
 
   return (
     <div className={styles.login} onKeyUp={onKeyUp}>
-      <SFTextField
-        label="E-mail"
-        type="email"
-        value={value.email}
-        autoFocus
-        onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-          setValue((v) => ({ ...v, email: e.target.value.toLowerCase() }))
-        }
-      />
+      <form>
+        <SFTextField
+          label="E-mail"
+          type="email"
+          value={value.email}
+          autoFocus
+          onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+            setValue((v) => ({ ...v, email: e.target.value.toLowerCase() }))
+          }
+        />
 
-      <SFTextField
-        label="Password"
-        type="password"
-        value={value.password}
-        onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-          setValue((v) => ({ ...v, password: e.target.value }))
-        }
-      />
+        <SFTextField
+          label="Password"
+          type="password"
+          value={value.password}
+          onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+            setValue((v) => ({ ...v, password: e.target.value }))
+          }
+        />
+      </form>
 
       <SFButton disabled={disabled} onClick={() => onLogin(value)}>
         Log in

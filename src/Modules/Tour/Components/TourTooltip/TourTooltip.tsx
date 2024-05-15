@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { CSSProperties, useEffect, useState } from 'react';
 import styles from './TourTooltip.module.scss';
 import { SFTooltip, SFTooltipProps } from 'sfui';
 import { useTourTooltip } from '../../hooks';
@@ -14,6 +14,7 @@ export interface TourTooltipProps
   preventOverflow?: boolean;
   width?: 'auto' | 'fit';
   topZIndex?: boolean;
+  style?: CSSProperties;
 }
 
 export const TourTooltip = ({
@@ -51,18 +52,17 @@ export const TourTooltip = ({
       title=""
       placement={placement}
       content={<TourTooltipContent {...props} />}
-      PopperProps={
-        preventOverflow
+      PopperProps={{
+        style: props.style,
+        modifiers: preventOverflow
           ? {
-              modifiers: {
-                preventOverflow: {
-                  enabled: true,
-                  boundariesElement: 'scrollParent'
-                }
+              preventOverflow: {
+                enabled: true,
+                boundariesElement: 'scrollParent'
               }
             }
           : {}
-      }
+      }}
     >
       <div
         className={`${styles.tourTooltip} ${width === 'fit' ? styles.fit : ''}`}

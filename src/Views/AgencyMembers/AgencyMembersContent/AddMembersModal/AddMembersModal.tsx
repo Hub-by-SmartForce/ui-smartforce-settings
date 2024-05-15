@@ -52,6 +52,13 @@ export const AddMembersModal = ({
       anchor={anchor}
       isOpen={isOpen}
       title="Add Members"
+      actionButton={{
+        label: isSaving ? 'Adding' : 'Add Members',
+        isLoading: isSaving,
+        disabled: !isMemberListValid,
+        onClick: onAdd,
+        visible: 'drawer'
+      }}
       onBack={onBack}
       onClose={() => {
         setAnchor('bottom');

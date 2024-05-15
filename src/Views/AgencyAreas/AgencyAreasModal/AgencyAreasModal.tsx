@@ -239,6 +239,13 @@ export const AgencyAreasModal = ({
       title={`${area ? 'Edit' : 'Create'} Area`}
       isOpen={isOpen}
       onBack={onBack}
+      actionButton={{
+        label: area ? 'Save Changes' : 'Create Area',
+        isLoading: isSaving,
+        disabled: isSaveDisabled(formValue, formErrors, polygonPaths, area),
+        onClick: area ? onEditArea : onCreateArea,
+        visible: 'drawer'
+      }}
       onClose={() => {
         setAnchor('bottom');
         onClose();

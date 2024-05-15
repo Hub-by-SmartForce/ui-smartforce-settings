@@ -28,7 +28,10 @@ export const PanelModalDialog = ({
   subTitle,
   onClose
 }: PanelModalDialogProps): React.ReactElement<PanelModalDialogProps> => {
-  const showFooter = !!dialogCloseButton || !!actionButton || !!altActionButton;
+  const showFooter =
+    !!dialogCloseButton ||
+    (!!actionButton && actionButton.visible !== 'drawer') ||
+    !!altActionButton;
 
   return (
     <SFDialog
@@ -86,11 +89,13 @@ export const PanelModalDialog = ({
               </SFButton>
             )}
 
-            {actionButton && (
-              <SFButton {...actionButton} size="large">
-                {actionButton.label}
-              </SFButton>
-            )}
+            {actionButton &&
+              (actionButton.visible === 'all' ||
+                actionButton.visible === 'dialog') && (
+                <SFButton {...actionButton} size="large">
+                  {actionButton.label}
+                </SFButton>
+              )}
           </div>
         )}
       </div>

@@ -67,19 +67,21 @@ export const PanelModalDrawer = ({
         {children}
       </SFScrollable>
 
-      {actionButton && (
-        <div className={styles.footer}>
-          <SFButton fullWidth {...actionButton}>
-            {actionButton.label}
-          </SFButton>
-
-          {altActionButton && (
-            <SFButton fullWidth {...altActionButton}>
-              {altActionButton.label}
+      {actionButton &&
+        (actionButton.visible === 'all' ||
+          actionButton.visible === 'drawer') && (
+          <div className={styles.footer}>
+            <SFButton fullWidth {...actionButton}>
+              {actionButton.label}
             </SFButton>
-          )}
-        </div>
-      )}
+
+            {altActionButton && (
+              <SFButton fullWidth {...altActionButton}>
+                {altActionButton.label}
+              </SFButton>
+            )}
+          </div>
+        )}
     </SFDrawer>
   );
 };

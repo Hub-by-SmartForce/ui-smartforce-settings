@@ -188,6 +188,13 @@ export const CreateGroupModal = ({
       anchor={anchor}
       isOpen={isOpen}
       title="Create Group"
+      actionButton={{
+        label: 'Create Group',
+        isLoading: isSaving,
+        disabled: isFormInvalid(value, error),
+        onClick: onCreate,
+        visible: 'drawer'
+      }}
       onBack={onDiscard}
       onClose={() => {
         setAnchor('bottom');

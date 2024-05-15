@@ -21,7 +21,6 @@ export interface ListManagmentProps<T> {
   isLoading: boolean;
   options: ListManagmentMenuOption<T>[];
   filter: (list: T[], filter: string) => T[];
-  onCreate?: () => void;
   onClick?: (item: T) => void;
   renderItem: (item: T) => React.ReactElement;
 }

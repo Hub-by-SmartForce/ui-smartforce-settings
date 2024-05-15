@@ -29,6 +29,6 @@ export const TOURS: Tour[] = [
     id: 9,
     title: 'Create Groups',
     description: "Shape your agency's groups.",
-    link: 'https://www.youtube.com/embed/A_T2h-sbQcs'
+    link: ''
   }
 ];

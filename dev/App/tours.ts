@@ -30,5 +30,11 @@ export const TOURS: Tour[] = [
     title: 'Agency Areas',
     description: 'Define agency areas by dragging and dropping.',
     link: ''
+  },
+  {
+    id: 9,
+    title: 'Create Groups',
+    description: "Shape your agency's groups.",
+    link: ''
   }
 ];

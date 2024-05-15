@@ -144,9 +144,9 @@ export const Main = (): React.ReactElement<{}> => {
       setSelectedSectionName('business_card');
     } else if (tour.id === 5) {
       setSelectedSectionName('areas');
-    } else {
-      return;
-    }
+    } else if (tour.id === 9) {
+      setSelectedSectionName('groups');
+    } else return;
 
     onTourStart(tour);
   };

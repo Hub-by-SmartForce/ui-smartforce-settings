@@ -1,6 +1,6 @@
 import React, { Fragment, useState } from 'react';
 import styles from './ListManagment.module.scss';
-import { SFButton, SFSearch, SFSpinner, SFText } from 'sfui';
+import { SFButton, SFButtonProps, SFSearch, SFSpinner, SFText } from 'sfui';
 import { Divider } from '../Divider/Divider';
 import { NoResults } from './NoResults/NoResults';
 import { List } from './List/List';
@@ -11,8 +11,9 @@ const LIST_LIMIT = 10;
 export { ListManagmentMenuOption };
 
 export interface ListManagmentProps<T> {
-  actionButtonLabel: string;
-  isCreateButtonDisabled?: boolean;
+  renderCreateButton: (
+    props: Partial<SFButtonProps>
+  ) => React.ReactElement<SFButtonProps>;
   showItemMenu?: boolean;
   emptyMessage: string;
   label: string;
@@ -20,7 +21,6 @@ export interface ListManagmentProps<T> {
   isLoading: boolean;
   options: ListManagmentMenuOption<T>[];
   filter: (list: T[], filter: string) => T[];
-  onCreate: () => void;
   onClick?: (item: T) => void;
   renderItem: (item: T) => React.ReactElement;
 }
@@ -50,16 +50,12 @@ export const ListManagment = <T,>(
       <div
         className={`${styles.header} ${isListEmpty ? styles.emptyList : ''}`}
       >
-        <SFButton
-          fullWidth
-          sfColor="blue"
-          disabled={props.isCreateButtonDisabled}
-          variant="outlined"
-          size="medium"
-          onClick={props.onCreate}
-        >
-          {props.actionButtonLabel}
-        </SFButton>
+        {props.renderCreateButton({
+          fullWidth: true,
+          sfColor: 'blue',
+          variant: 'outlined',
+          size: 'medium'
+        })}
 
         {!isListEmpty && (
           <div className={styles.searchField}>

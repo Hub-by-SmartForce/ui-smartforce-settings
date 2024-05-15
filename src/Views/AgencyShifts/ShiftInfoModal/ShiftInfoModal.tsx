@@ -4,7 +4,7 @@ import moment from 'moment';
 import { Avatar, PanelModal } from '../../../Components';
 import { Divider } from '../../../Components/Divider/Divider';
 import { Member, SettingsError, Shift, ShiftMember } from '../../../Models';
-import { SFPeopleOption, SFSpinner, SFText } from 'sfui';
+import { SFButton, SFPeopleOption, SFSpinner, SFText } from 'sfui';
 import {
   formatArrayToString,
   getRecurrenceString,
@@ -213,15 +213,21 @@ export const ShiftInfoModal = ({
           </div>
           <Divider />
           <ListManagment<ShiftMember>
-            actionButtonLabel="Add Members"
+            renderCreateButton={(props) => (
+              <SFButton
+                {...props}
+                disabled={!isActive}
+                onClick={() => setIsAddMembersOpen(true)}
+              >
+                Add Members
+              </SFButton>
+            )}
             emptyMessage="There are no members yet."
             label="Member"
             showItemMenu={isActive}
-            isCreateButtonDisabled={!isActive}
             list={participants}
             isLoading={isLoading}
             filter={filterShiftMembers}
-            onCreate={() => setIsAddMembersOpen(true)}
             onClick={onSeeMemberInformation}
             options={[
               {

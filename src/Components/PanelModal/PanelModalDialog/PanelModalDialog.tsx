@@ -28,6 +28,8 @@ export const PanelModalDialog = ({
   subTitle,
   onClose
 }: PanelModalDialogProps): React.ReactElement<PanelModalDialogProps> => {
+  const showFooter = dialogCloseButton || actionButton || altActionButton;
+
   return (
     <SFDialog
       className={`${styles.panelModalDialog} ${classes?.root ?? ''}`}
@@ -44,7 +46,7 @@ export const PanelModalDialog = ({
       )}
       <div
         className={`${styles.container} ${classes?.container ?? ''} ${
-          title ? styles.withTitle : ''
+          title && showFooter ? styles.withTitle : ''
         }`}
       >
         {title && (
@@ -62,33 +64,35 @@ export const PanelModalDialog = ({
           {children}
         </SFScrollable>
 
-        <div className={styles.footer}>
-          {altActionButton && (
-            <SFButton
-              className={styles.altActionButton}
-              {...altActionButton}
-              size="large"
-            >
-              {altActionButton.label}
-            </SFButton>
-          )}
+        {showFooter && (
+          <div className={styles.footer}>
+            {altActionButton && (
+              <SFButton
+                className={styles.altActionButton}
+                {...altActionButton}
+                size="large"
+              >
+                {altActionButton.label}
+              </SFButton>
+            )}
 
-          {dialogCloseButton && (
-            <SFButton
-              {...dialogCloseButton}
-              size="large"
-              onClick={dialogCloseButton.onClick ?? onClose}
-            >
-              {dialogCloseButton.label}
-            </SFButton>
-          )}
+            {dialogCloseButton && (
+              <SFButton
+                {...dialogCloseButton}
+                size="large"
+                onClick={dialogCloseButton.onClick ?? onClose}
+              >
+                {dialogCloseButton.label}
+              </SFButton>
+            )}
 
-          {actionButton && (
-            <SFButton {...actionButton} size="large">
-              {actionButton.label}
-            </SFButton>
-          )}
-        </div>
+            {actionButton && (
+              <SFButton {...actionButton} size="large">
+                {actionButton.label}
+              </SFButton>
+            )}
+          </div>
+        )}
       </div>
     </SFDialog>
   );

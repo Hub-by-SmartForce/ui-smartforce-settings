@@ -19,7 +19,8 @@ import {
   getUser,
   isLogin,
   login,
-  logout
+  logout,
+  TourProvider
 } from '../../src';
 import { Login, LoginFormValue } from './Login/Login';
 import { Main } from './Main/Main';
@@ -66,29 +67,31 @@ export const App = () => {
 
   return (
     <MediaProvider>
-      <SFThemeProvider theme={theme}>
-        <SFStylesProvider injectFirst>
-          <UserProvider>
-            <TimezonesProvider>
-              <CustomerProvider>
-                <SubscriptionProvider>
-                  <AreasProvider>
-                    <SFPaper className={styles.app}>
-                      {isLoading && <SFSpinner />}
-                      {!isLoading && (
-                        <React.Fragment>
-                          {!isLogged && <Login onLogin={onLogin} />}
-                          {isLogged && <Main />}
-                        </React.Fragment>
-                      )}
-                    </SFPaper>
-                  </AreasProvider>
-                </SubscriptionProvider>
-              </CustomerProvider>
-            </TimezonesProvider>
-          </UserProvider>
-        </SFStylesProvider>
-      </SFThemeProvider>
+      <TourProvider>
+        <SFThemeProvider theme={theme}>
+          <SFStylesProvider injectFirst>
+            <UserProvider>
+              <TimezonesProvider>
+                <CustomerProvider>
+                  <SubscriptionProvider>
+                    <AreasProvider>
+                      <SFPaper className={styles.app}>
+                        {isLoading && <SFSpinner />}
+                        {!isLoading && (
+                          <React.Fragment>
+                            {!isLogged && <Login onLogin={onLogin} />}
+                            {isLogged && <Main />}
+                          </React.Fragment>
+                        )}
+                      </SFPaper>
+                    </AreasProvider>
+                  </SubscriptionProvider>
+                </CustomerProvider>
+              </TimezonesProvider>
+            </UserProvider>
+          </SFStylesProvider>
+        </SFThemeProvider>
+      </TourProvider>
     </MediaProvider>
   );
 };

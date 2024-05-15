@@ -2,14 +2,18 @@ import React, { useContext, useEffect, useRef, useState } from 'react';
 import styles from './AgencyMembersContent.module.scss';
 import { SFButton, SFSearch } from 'sfui';
 import { AddMembersModal } from './AddMembersModal/AddMembersModal';
-import { MemberList } from './MemberList/MemberList';
+import { MemberItem, MemberList } from './MemberList/MemberList';
 import { SubscriptionContext, UserContext } from '../../../Context';
 import { NoMembersResult } from './NoMembersResult/NoMembersResult';
 import {
   AGENCY_SUBSCRIPTION_READ,
   AGENCY_INVITATIONS_CREATE
 } from '../../../Constants';
-import { asyncDebounce, checkPermissions } from '../../../Helpers';
+import {
+  asyncDebounce,
+  checkPermissions,
+  isRoleOfficer
+} from '../../../Helpers';
 import {
   MemberResponse,
   Member,
@@ -25,6 +29,7 @@ import {
 } from '../../../Services';
 import { Divider } from '../../../Components/Divider/Divider';
 import { ApiContext } from '../../../Context';
+import { TourContext, TourTooltip, useCloseTour } from '../../../Modules/Tour';
 
 const PAGE_SIZE = 10;
 
@@ -70,6 +75,28 @@ const memoizedMemberFn = (
   };
 };
 
+function setFirstOfficer(members: Member[]): MemberItem[] {
+  let result: MemberItem[] = [];
+  let officerFound = false;
+
+  for (let member of members) {
+    let newMember: MemberItem = {
+      ...member,
+      isFirstOfficer: false
+    };
+
+    if (!officerFound && isRoleOfficer(member.role?.id)) {
+      officerFound = true;
+      newMember.isFirstOfficer = true;
+      result = [...result, newMember];
+    } else {
+      result = [...result, newMember];
+    }
+  }
+
+  return result;
+}
+
 export interface AgencyMembersContentProps {
   onClose: () => void;
   onError: (e: SettingsError) => void;
@@ -81,11 +108,16 @@ export const AgencyMembersContent = ({
   onError,
   onHome
 }: AgencyMembersContentProps): React.ReactElement<AgencyMembersContentProps> => {
+  const {
+    onNext: onTourNext,
+    onClose: onTourClose,
+    setIsFeatureReminderOpen
+  } = useContext(TourContext);
   const apiBaseUrl = useContext(ApiContext).settings;
   const { user } = React.useContext(UserContext);
   const { setSubscriptions } = React.useContext(SubscriptionContext);
 
-  const [members, setMembers] = React.useState<Member[]>([]);
+  const [members, setMembers] = React.useState<MemberItem[]>([]);
   const [searchValue, setSearchValue] = React.useState<string>('');
   const [showLimit, setShowLimit] = React.useState<number>(PAGE_SIZE);
 
@@ -99,6 +131,8 @@ export const AgencyMembersContent = ({
   const refGetSearchMembers = React.useRef<any>(
     asyncDebounce(memoizedMemberFn(apiBaseUrl, getMembers), 250)
   );
+
+  useCloseTour([1, 2, 3]);
 
   useEffect(() => {
     let subscribed: boolean = true;
@@ -125,7 +159,7 @@ export const AgencyMembersContent = ({
               refSeeMoreUrl.current = response.links.next;
             }
 
-            setMembers(response.data);
+            setMembers(setFirstOfficer(response.data));
             setHasMoreMembers(moreMembers);
             setShowLimit(PAGE_SIZE);
             setIsLoading(false);
@@ -161,7 +195,10 @@ export const AgencyMembersContent = ({
             searchValue
           );
 
-          response.data = [...response.data, ...memberResponse.data];
+          response.data = setFirstOfficer([
+            ...response.data,
+            ...memberResponse.data
+          ]);
           response.links.next = memberResponse.links.next;
         }
         refSeeMoreUrl.current = response.links.next;
@@ -195,7 +232,7 @@ export const AgencyMembersContent = ({
     );
   };
 
-  const onAddMembers = async (members: string[]) => {
+  const onAddMembers = async (members: string[], isTour: boolean) => {
     setIsSaving(true);
     try {
       await addMembers(apiBaseUrl, members);
@@ -212,7 +249,7 @@ export const AgencyMembersContent = ({
         } else {
           refSeeMoreUrl.current = response.links.next;
         }
-        setMembers(response.data);
+        setMembers(setFirstOfficer(response.data));
         setHasMoreMembers(moreMembers);
         setShowLimit(PAGE_SIZE);
 
@@ -229,6 +266,10 @@ export const AgencyMembersContent = ({
 
       setIsSaving(false);
       setIsAddMembersModalOpen(false);
+
+      if (isTour) {
+        setIsFeatureReminderOpen(true);
+      }
     } catch (e: any) {
       console.error(`AgencyMembersContent:AddMembers`, e);
       onError(e);
@@ -241,7 +282,7 @@ export const AgencyMembersContent = ({
   };
 
   const onUpdateList = (newMembers: Member[]) => {
-    setMembers(newMembers);
+    setMembers(setFirstOfficer(newMembers));
     //Clear cached results to avoid roles inconsistency
     resetSearchFn();
   };
@@ -251,27 +292,42 @@ export const AgencyMembersContent = ({
     user?.role?.permissions
   );
 
+  const onModalClose = () => {
+    onClose();
+    onTourClose([1]);
+    setIsAddMembersModalOpen(false);
+  };
+
   return (
     <div className={styles.agencyMembersContent}>
       <AddMembersModal
         isOpen={isAddMembersModalOpen}
         isSaving={isSaving}
         onBack={() => setIsAddMembersModalOpen(false)}
-        onClose={() => {
-          onClose();
-          setIsAddMembersModalOpen(false);
-        }}
+        onClose={onModalClose}
         onAddMembers={onAddMembers}
       />
 
       {showAddMembersButton && (
-        <SFButton
-          variant="outlined"
-          fullWidth
-          onClick={() => setIsAddMembersModalOpen(true)}
+        <TourTooltip
+          title="Invite your agency members"
+          description="You can invite as many officers as your agency needs. Just click the “Add Members” button and follow the steps."
+          step={1}
+          lastStep={3}
+          tourId={1}
+          preventOverflow
         >
-          Add Members
-        </SFButton>
+          <SFButton
+            variant="outlined"
+            fullWidth
+            onClick={() => {
+              setIsAddMembersModalOpen(true);
+              onTourNext({ tourId: 1, step: 1 });
+            }}
+          >
+            Add Members
+          </SFButton>
+        </TourTooltip>
       )}
 
       <div className={styles.searchUser}>

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import styles from './BusinessCardPreview.module.scss';
 import {
   PanelModal,
@@ -11,6 +11,7 @@ import {
 } from 'business-card-component';
 import { SFIconButton, SFScrollable } from 'sfui';
 import { MediaContext, ThemeTypeContext } from '../../../Context';
+import { TourContext, TourTooltip } from '../../../Modules/Tour';
 
 export interface BusinessCardPreviewProps {
   data: BusinessCardData;
@@ -27,6 +28,7 @@ export const BusinessCardPreview = ({
 }: BusinessCardPreviewProps): React.ReactElement<BusinessCardPreviewProps> => {
   const { themeType } = React.useContext(ThemeTypeContext);
   const { isPhone } = React.useContext(MediaContext);
+  const { onNext: onTourNext } = useContext(TourContext);
 
   const [mediaType, setMediaType] =
     React.useState<BusinessCardMediaType>('mobile');
@@ -35,8 +37,15 @@ export const BusinessCardPreview = ({
   const isMediaMobile: boolean = mediaType === 'mobile';
 
   const onBackButton = () => {
+    onTourNext({ tourId: 4, step: 3 });
     setMediaType('mobile');
     onBack();
+  };
+
+  const onMediaChange = (type: BusinessCardMediaType) => {
+    if (mediaType !== type) {
+      setMediaType(type);
+    }
   };
 
   return (
@@ -78,24 +87,37 @@ export const BusinessCardPreview = ({
             mediaType={mediaType}
           />
         </SFScrollable>
+
         {!isPhone && (
-          <div className={styles.mediaType}>
-            <SFIconButton
-              className={`${styles.icon} ${
-                mediaType === 'mobile' ? styles.active : ''
-              }`}
-              sfSize="medium"
-              sfIcon="Smartphone"
-              onClick={() => setMediaType('mobile')}
-            />
-            <SFIconButton
-              className={`${styles.icon} ${
-                mediaType === 'desktop' ? styles.active : ''
-              }`}
-              sfIcon="Computer"
-              sfSize="medium"
-              onClick={() => setMediaType('desktop')}
-            />
+          <div className={styles.toggleMedia}>
+            <TourTooltip
+              title="Responsive business card"
+              description="You can choose between different devices to see how your business card looks on each one."
+              step={3}
+              lastStep={4}
+              tourId={4}
+              placement="right"
+              topZIndex
+            >
+              <div className={styles.toggleMediaButtons}>
+                <SFIconButton
+                  className={`${styles.icon} ${
+                    mediaType === 'mobile' ? styles.active : ''
+                  }`}
+                  sfSize="medium"
+                  sfIcon="Smartphone"
+                  onClick={() => onMediaChange('mobile')}
+                />
+                <SFIconButton
+                  className={`${styles.icon} ${
+                    mediaType === 'desktop' ? styles.active : ''
+                  }`}
+                  sfIcon="Computer"
+                  sfSize="medium"
+                  onClick={() => onMediaChange('desktop')}
+                />
+              </div>
+            </TourTooltip>
           </div>
         )}
       </div>

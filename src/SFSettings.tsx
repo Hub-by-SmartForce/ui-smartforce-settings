@@ -1,4 +1,4 @@
-import React, { Fragment } from 'react';
+import React, { Fragment, useEffect } from 'react';
 import styles from './SFSettings.module.scss';
 import { SFPaper, SFScrollable } from 'sfui';
 import SectionCard from './Components/SectionCard/SectionCard';
@@ -7,7 +7,6 @@ import SettingsPanel from './Components/SettingsPanel/SettingsPanel';
 import Themes from './Views/Appearance/Themes/Themes';
 import SectionMenu from './Components/SectionMenu/SectionMenu';
 import InnerViews from './Components/InnerViews/InnerViews';
-import { AgencyBilling } from './Views/AgencyBilling/AgencyBilling';
 import { ChangePassword } from './Views/ChangePassword/ChangePassword';
 import { MyProfile } from './Views/MyProfile/MyProfile';
 import { AgencyInformation } from './Views/AgencyInformation/AgencyInformation';
@@ -39,6 +38,8 @@ import { getApiBaseUrl, getAppBaseUrl } from './Helpers/application';
 import { AgencyShifts } from './Views/AgencyShifts/AgencyShifts';
 import { AgencyEvents } from './Views/AgencyEvents/AgencyEvents';
 import { ApiContext } from './Context/Api';
+import { InnerView } from './Components/InnerViews/InnerView/InnerView';
+import { AgencyBillingRender } from './Views/AgencyBilling/AgencyBillingRender';
 
 const onGetStarted = (env: AppEnv, product: ApplicationProduct) => {
   window.open(getAppBaseUrl(env, product), '_blank');
@@ -59,6 +60,7 @@ export interface SFSettingsProps {
   onError: (e: SettingsError) => void;
   onHome: () => void;
   onUpgrade: (product: string) => void;
+  onSectionChange: (name: string) => void;
 }
 
 export interface SectionItemValue {
@@ -84,7 +86,8 @@ export const SFSettings = ({
   product,
   onError,
   onUpgrade,
-  onHome
+  onHome,
+  onSectionChange
 }: SFSettingsProps): React.ReactElement<SFSettingsProps> => {
   const { isPhone } = React.useContext(MediaContext);
   const { user } = React.useContext(UserContext);
@@ -207,7 +210,7 @@ export const SFSettings = ({
         name: 'billing',
         description: 'Only the agency owner can manage the billing plan.',
         component: (
-          <AgencyBilling
+          <AgencyBillingRender
             product={product}
             canUpdate={checkPermissions(
               AGENCY_SUBSCRIPTION_UPDATE,
@@ -419,13 +422,19 @@ export const SFSettings = ({
     selectedSection: SectionCardValue,
     subsectionIndex?: number
   ) => {
-    setSelectedSection(selectedSection);
+    onSectionChange(selectedSection.name);
 
     if (subsectionIndex !== undefined) {
       setSelectedSubSection(subsectionIndex);
       setIsPanelOpen(true);
     }
   };
+
+  useEffect(() => {
+    setSelectedSection(
+      sectionCards[routeSectionSelected !== -1 ? routeSectionSelected : 0]
+    );
+  }, [routeSectionSelected]);
 
   React.useEffect(() => {
     // Opens the panel with the selected section if routeSection is selected
@@ -440,6 +449,7 @@ export const SFSettings = ({
   return (
     <ApiContext.Provider
       value={{
+        product,
         settings: getApiBaseUrl(enviroment),
         shifts: `${getAppBaseUrl(enviroment, 'shift')}api`
       }}
@@ -477,9 +487,10 @@ export const SFSettings = ({
               isLoading={isPanelLoading}
               onClose={() => setIsPanelOpen(false)}
             >
-              <InnerViews
-                views={[selectedSection.items[selectedSubSection]]}
-                isBusinessCard={isBusinessCardSelected}
+              <InnerView
+                view={selectedSection.items[selectedSubSection]}
+                hideHeader={isBusinessCardSelected}
+                isPhone
               />
             </SettingsPanel>
           </Fragment>

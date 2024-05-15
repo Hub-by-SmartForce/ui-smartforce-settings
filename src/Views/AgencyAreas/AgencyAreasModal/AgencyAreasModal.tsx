@@ -83,7 +83,13 @@ export const AgencyAreasModal = ({
   onError
 }: AgencyAreasModalProps): React.ReactElement<AgencyAreasModalProps> => {
   const apiBaseUrl = React.useContext(ApiContext).settings;
-  const { onNext: onTourNext, onClose: onTourClose } = useContext(TourContext);
+  const {
+    status: tourStatus,
+    onNext: onTourNext,
+    onClose: onTourClose,
+    onEnd: onTourEnd,
+    setIsFeatureReminderOpen
+  } = useContext(TourContext);
   const [formValue, setFormValue] =
     React.useState<AreaFormValue>(defaultFormValue);
   const [formErrors, setFormErrors] =
@@ -97,6 +103,7 @@ export const AgencyAreasModal = ({
   const refIsPolygonPristine = useRef<boolean>(true);
 
   const onCreateArea = async () => {
+    onTourEnd();
     setIsSaving(true);
 
     try {
@@ -104,6 +111,10 @@ export const AgencyAreasModal = ({
         ...formValue,
         paths: polygonPaths
       });
+
+      if (tourStatus === 'active') {
+        setIsFeatureReminderOpen(true);
+      }
 
       onFinish();
       setIsSaving(false);
@@ -265,7 +276,7 @@ export const AgencyAreasModal = ({
 
           <TourTooltip
             title="Create the area"
-            description='By clicking the "Create Area" button, you will create the area in your agency. You can delete the area at any time.'
+            description='By clicking the "Create Area" button, you will create the area in your agency. You can delete the area at any time. Note that to enable the button you need to move at least one node.'
             step={5}
             lastStep={5}
             tourId={5}

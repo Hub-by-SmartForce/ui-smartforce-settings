@@ -15,12 +15,14 @@ const isValidExtension = (extension: string): boolean => {
 export interface ImageUploadProps {
   label: string;
   value: string | Blob | null | undefined;
+  onClick?: () => void;
   onChange: (value: Blob) => void;
 }
 
 export const ImageUpload = ({
   label,
   value,
+  onClick,
   onChange
 }: ImageUploadProps): React.ReactElement<ImageUploadProps> => {
   const { themeType } = useContext(ThemeTypeContext);
@@ -33,7 +35,8 @@ export const ImageUpload = ({
 
   const refInput = React.useRef<HTMLInputElement | null>(null);
 
-  const onClick = () => {
+  const onClickUpload = () => {
+    onClick && onClick();
     refInput.current?.click();
   };
 
@@ -107,7 +110,7 @@ export const ImageUpload = ({
           size="small"
           sfColor="blue"
           variant="text"
-          onClick={onClick}
+          onClick={onClickUpload}
           fullWidth={false}
         >
           {label}

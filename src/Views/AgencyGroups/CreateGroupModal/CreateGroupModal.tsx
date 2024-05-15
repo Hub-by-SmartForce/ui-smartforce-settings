@@ -1,4 +1,5 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useContext, useEffect, useRef, useState } from 'react';
+import styles from './CreateGroupModal.module.scss';
 import {
   PanelModal,
   PanelModalAnchor
@@ -10,13 +11,14 @@ import {
 } from './CreateGroupForm/CreateGroupForm';
 import { Group, User, SettingsError } from '../../../Models';
 import { saveGroup, saveGroupAvatar } from '../../../Services/GroupService';
-import { HttpStatusCode, SFPeopleOption } from 'sfui';
+import { HttpStatusCode, SFButton, SFPeopleOption } from 'sfui';
 import { removeRepetead } from '../../../Helpers';
 import {
   ERROR_GROUP_ACRONYM_ALREADY_EXISTS,
   ERROR_GROUP_NAME_ALREADY_EXISTS
 } from '../../../Constants';
 import { UserContext, ApiContext } from '../../../Context';
+import { TourContext, TourTooltip } from '../../../Modules/Tour';
 
 const initValue: GroupFormValue = {
   name: '',
@@ -58,19 +60,38 @@ export const CreateGroupModal = ({
 }: CreateGroupModalProps): React.ReactElement<CreateGroupModalProps> => {
   const apiBaseUrl = useContext(ApiContext).settings;
   const { user, setUser } = useContext(UserContext);
+  const {
+    status: tourStatus,
+    onNext: onTourNext,
+    onClose: onTourClose,
+    onEnd: onTourEnd,
+    setIsFeatureReminderOpen
+  } = useContext(TourContext);
   const [value, setValue] = useState<GroupFormValue>(initValue);
   const [error, setError] = useState<CreateGroupError>(initError);
   const [isSaving, setIsSaving] = useState<boolean>(false);
   const [anchor, setAnchor] = React.useState<PanelModalAnchor>('right');
 
+  const refPristine = useRef<boolean>(true);
+  const refIsMembersPristine = useRef<boolean>(true);
+
   useEffect(() => {
     if (isOpen) {
+      refPristine.current = true;
+      refIsMembersPristine.current = true;
       setValue(initValue);
       setError(initError);
     }
   }, [isOpen]);
 
   const onDiscard = () => {
+    onTourClose([
+      { tourId: 9, step: 2 },
+      { tourId: 9, step: 3 },
+      { tourId: 9, step: 4 },
+      { tourId: 9, step: 5 }
+    ]);
+
     setValue(initValue);
     setError(initError);
     onBack();
@@ -87,11 +108,26 @@ export const CreateGroupModal = ({
       newError = { ...newError, acronym: false };
     }
 
+    if (refPristine.current && !isFormInvalid(newGroup, newError)) {
+      refPristine.current = false;
+      onTourNext({ tourId: 9, step: 2 });
+    }
+
+    if (
+      refIsMembersPristine.current &&
+      newGroup.members &&
+      newGroup.members?.length > 0
+    ) {
+      refIsMembersPristine.current = false;
+      onTourNext({ tourId: 9, step: 3 });
+    }
+
     setError(newError);
     setValue(newGroup);
   };
 
   const onCreate = async () => {
+    onTourEnd();
     setIsSaving(true);
 
     try {
@@ -125,6 +161,11 @@ export const CreateGroupModal = ({
       });
 
       setIsSaving(false);
+
+      if (tourStatus === 'active') {
+        setIsFeatureReminderOpen(true);
+      }
+
       props.onCreate();
       onBack();
     } catch (e: any) {
@@ -147,31 +188,52 @@ export const CreateGroupModal = ({
       anchor={anchor}
       isOpen={isOpen}
       title="Create Group"
-      dialogCloseButton={{
-        label: 'Discard',
-        variant: 'text',
-        sfColor: 'grey',
-        disabled: isSaving,
-        onClick: onDiscard
-      }}
-      actionButton={{
-        label: 'Create Group',
-        isLoading: isSaving,
-        disabled: isFormInvalid(value, error),
-        onClick: onCreate
-      }}
       onBack={onDiscard}
       onClose={() => {
         setAnchor('bottom');
         onClose();
       }}
     >
-      <CreateGroupForm
-        isNew
-        error={error}
-        value={value}
-        onChange={onGroupChange}
-      />
+      <div className={styles.createGroupModal}>
+        <CreateGroupForm
+          isNew
+          error={error}
+          value={value}
+          onChange={onGroupChange}
+        />
+
+        <div className={styles.actions}>
+          <SFButton
+            variant="text"
+            sfColor="grey"
+            size="large"
+            disabled={isSaving}
+            onClick={onDiscard}
+          >
+            Discard
+          </SFButton>
+
+          <TourTooltip
+            title="Create the group"
+            description='By clicking the "Create Group" button will create the group in your agency. You can delete the group at any time.'
+            step={5}
+            lastStep={5}
+            tourId={9}
+            width="fit"
+            placement="top-end"
+            topZIndex
+          >
+            <SFButton
+              isLoading={isSaving}
+              disabled={isFormInvalid(value, error)}
+              onClick={onCreate}
+              size="large"
+            >
+              Create Group
+            </SFButton>
+          </TourTooltip>
+        </div>
+      </div>
     </PanelModal>
   );
 };

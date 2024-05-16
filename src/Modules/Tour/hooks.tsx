@@ -1,5 +1,5 @@
 import { RefObject, useContext, useEffect, useRef } from 'react';
-import { TourContext, TourStatus } from './context';
+import { TourContext, TourStatus, TourStepOptions } from './context';
 import { Tour } from './models';
 import { saveTourAction } from '../../Services';
 
@@ -20,7 +20,7 @@ export function useTourTooltip(
   return [refElement, isOpen];
 }
 
-export function useCloseTour(tourIds: number[]) {
+export function useCloseTour(tourIds: (TourStepOptions | number)[]) {
   const onClose = useContext(TourContext).onClose;
 
   useEffect(() => {

@@ -232,6 +232,7 @@ export const ManageBusinessCard = ({
                       lastStep={4}
                       tourId={4}
                       placement="top-end"
+                      preventOverflow
                     >
                       <SFButton
                         disabled={isSaveDisabled}

@@ -48,7 +48,11 @@ export function useSaveTourAction(url: string, app: string) {
         saveTourAction(url, app, 'exit', refLastState.current.tour.id);
       }
 
-      if (tour && tour.id !== refLastState.current?.tour?.id) {
+      if (
+        tour &&
+        tour.id !== refLastState.current?.tour?.id &&
+        status !== 'paused'
+      ) {
         saveTourAction(url, app, 'start', tour.id);
       }
 

@@ -68,8 +68,7 @@ export const PanelModalDrawer = ({
       </SFScrollable>
 
       {actionButton &&
-        (actionButton.visible === 'all' ||
-          actionButton.visible === 'drawer') && (
+        (!actionButton.visible || actionButton.visible === 'drawer') && (
           <div className={styles.footer}>
             <SFButton fullWidth {...actionButton}>
               {actionButton.label}

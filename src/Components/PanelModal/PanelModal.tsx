@@ -14,7 +14,7 @@ export type PanelModalAnchor = 'right' | 'left' | 'top' | 'bottom' | undefined;
 
 export interface PanelModalButtonProps extends SFButtonProps {
   label: string;
-  visible?: 'dialog' | 'drawer' | 'all';
+  visible?: 'dialog' | 'drawer';
 }
 
 export interface PanelModalClasses {

@@ -90,8 +90,7 @@ export const PanelModalDialog = ({
             )}
 
             {actionButton &&
-              (actionButton.visible === 'all' ||
-                actionButton.visible === 'dialog') && (
+              (!actionButton.visible || actionButton.visible === 'dialog') && (
                 <SFButton {...actionButton} size="large">
                   {actionButton.label}
                 </SFButton>

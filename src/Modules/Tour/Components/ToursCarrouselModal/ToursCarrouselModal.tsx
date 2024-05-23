@@ -31,7 +31,7 @@ export const ToursCarrouselModal = (
 
   return (
     <SFDialog
-      open={!!tourSelected && props.open}
+      open={props.tours.length > 0 && props.open}
       PaperProps={{ className: styles.toursCarrouselModal }}
     >
       {!!tourSelected && (

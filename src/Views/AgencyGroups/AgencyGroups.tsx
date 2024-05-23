@@ -1,10 +1,17 @@
 import React, { Fragment, useContext, useEffect, useState } from 'react';
 import { CreateGroupModal } from './CreateGroupModal/CreateGroupModal';
-import { Group, GroupMember, SettingsError, UserGroup } from '../../Models';
+import {
+  Group,
+  GroupHistory,
+  GroupMember,
+  SettingsError,
+  UserGroup
+} from '../../Models';
 import {
   getGroups,
   restoreGroup,
-  deleteGroup
+  deleteGroup,
+  getGroupHistory
 } from '../../Services/GroupService';
 import { SettingsContentRender } from '../SettingsContentRender';
 import { EditGroupModal } from './EditGroupModal/EditGroupModal';
@@ -74,6 +81,8 @@ export const AgencyGroups = ({
   const [groups, setGroups] = useState<Group[]>([]);
   const [selected, setSelected] = useState<Group | undefined>();
   const [isDeleting, setIsDeleting] = useState<boolean>(false);
+  const [groupHistory, setGroupHistory] = useState<GroupHistory[]>([]);
+  const [isLoadingHistory, setIsLoadingHistory] = useState<boolean>(false);
 
   useCloseTour([9]);
 
@@ -154,10 +163,19 @@ export const AgencyGroups = ({
     setGroups(updateGroupInList(groups, groupUpdated));
   };
 
-  const onViewHistory = (group: Group) => {
+  const onViewHistory = async (group: Group) => {
     onTourClose([9]);
-    setSelected(group);
+    setIsLoadingHistory(true);
     setIsViewHistoryModalOpen(true);
+
+    try {
+      const groupHistory = await getGroupHistory(apiBaseUrl, group.id);
+      setGroupHistory(groupHistory);
+      setIsLoadingHistory(false);
+    } catch (e: any) {
+      console.error('Settings::AgencyGroups::getGroupHistory', e);
+      onError(e);
+    }
   };
 
   const onOpenDeleteModal = async (group: Group) => {
@@ -207,33 +225,29 @@ export const AgencyGroups = ({
             onError={onError}
           />
 
-          {selected && (
-            <Fragment>
-              <EditGroupModal
-                group={selected}
-                isOpen={isEditModalOpen}
-                onBack={() => setIsEditModalOpen(false)}
-                onClose={() => {
-                  onClose();
-                  setIsEditModalOpen(false);
-                }}
-                onError={onError}
-                onSave={onUpdate}
-              />
+          <GroupHistoryModal
+            history={groupHistory}
+            isOpen={isViewHistoryModalOpen}
+            isLoading={isLoadingHistory}
+            onBack={() => setIsViewHistoryModalOpen(false)}
+            onClose={() => {
+              onClose();
+              setIsViewHistoryModalOpen(false);
+            }}
+          />
 
-              {selected.status === 'Active' && (
-                <GroupHistoryModal
-                  group={selected}
-                  isOpen={isViewHistoryModalOpen}
-                  onBack={() => setIsViewHistoryModalOpen(false)}
-                  onClose={() => {
-                    onClose();
-                    setIsViewHistoryModalOpen(false);
-                  }}
-                  onError={onError}
-                />
-              )}
-            </Fragment>
+          {selected && (
+            <EditGroupModal
+              group={selected}
+              isOpen={isEditModalOpen}
+              onBack={() => setIsEditModalOpen(false)}
+              onClose={() => {
+                onClose();
+                setIsEditModalOpen(false);
+              }}
+              onError={onError}
+              onSave={onUpdate}
+            />
           )}
 
           <DeleteConfirmNameModal

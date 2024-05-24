@@ -100,6 +100,7 @@ export const ImageCropDialog = ({
 
   return (
     <SFDialog
+      className={styles.dialog}
       PaperProps={{ className: styles.uploadImgDialog }}
       fullScreen={isPhone}
       open={isOpen}

@@ -2,6 +2,7 @@ import React from 'react';
 import styles from './AgencyAreasForm.module.scss';
 import { SFTextField } from 'sfui';
 import { AreaFormValue } from '../../../../Models';
+import { TourTooltip } from '../../../../Modules/Tour';
 
 export interface AgencyAreasFormErrors {
   name: boolean;
@@ -42,19 +43,29 @@ export const AgencyAreasForm = ({
         }
         onChange={(e) => onNameChange(e.target.value)}
       />
-      <SFTextField
-        required
-        label="Acronym"
-        value={value.acronym}
-        error={errors.acronym}
-        inputProps={{ maxLength: 3 }}
-        helperText={
-          errors.acronym
-            ? 'This acronym is already taken.'
-            : `It must be between 1 and 3 characters. E.g. "CC1"`
-        }
-        onChange={(e) => onAcronymChange(e.target.value)}
-      />
+
+      <TourTooltip
+        title="Complete the fields"
+        description="Type the area name and acronym. Please note that the maximum number of characters that each field has."
+        step={2}
+        lastStep={5}
+        tourId={5}
+        topZIndex
+      >
+        <SFTextField
+          required
+          label="Acronym"
+          value={value.acronym}
+          error={errors.acronym}
+          inputProps={{ maxLength: 3 }}
+          helperText={
+            errors.acronym
+              ? 'This acronym is already taken.'
+              : `It must be between 1 and 3 characters. E.g. "CC1"`
+          }
+          onChange={(e) => onAcronymChange(e.target.value)}
+        />
+      </TourTooltip>
     </div>
   );
 };

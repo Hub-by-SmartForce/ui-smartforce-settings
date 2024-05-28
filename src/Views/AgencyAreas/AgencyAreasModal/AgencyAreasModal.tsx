@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react';
+import React, { useCallback, useContext, useRef } from 'react';
 import styles from './AgencyAreasModal.module.scss';
 import {
   PanelModal,
@@ -11,7 +11,7 @@ import {
 import { Area, AreaFormValue } from '../../../Models';
 import { saveArea, updateArea } from '../../../Services';
 import { isEqualObject } from '../../../Helpers';
-import { HttpStatusCode } from 'sfui';
+import { HttpStatusCode, SFButton } from 'sfui';
 import {
   ERROR_AREA_ACRONYM_ALREADY_EXISTS,
   ERROR_AREA_NAME_ALREADY_EXISTS
@@ -19,6 +19,7 @@ import {
 import { AreaPolygonEdit } from './AreaPolygonEdit/AreaPolygonEdit';
 import { SettingsError } from '../../../Models/Error';
 import { ApiContext } from '../../../Context';
+import { TourContext, TourTooltip } from '../../../Modules/Tour';
 
 export interface AgencyAreasModalProps {
   isOpen: boolean;
@@ -82,6 +83,13 @@ export const AgencyAreasModal = ({
   onError
 }: AgencyAreasModalProps): React.ReactElement<AgencyAreasModalProps> => {
   const apiBaseUrl = React.useContext(ApiContext).settings;
+  const {
+    status: tourStatus,
+    onNext: onTourNext,
+    onClose: onTourClose,
+    onEnd: onTourEnd,
+    setIsFeatureReminderOpen
+  } = useContext(TourContext);
   const [formValue, setFormValue] =
     React.useState<AreaFormValue>(defaultFormValue);
   const [formErrors, setFormErrors] =
@@ -91,7 +99,11 @@ export const AgencyAreasModal = ({
     React.useState<google.maps.LatLngLiteral[]>();
   const [anchor, setAnchor] = React.useState<PanelModalAnchor>('right');
 
+  const refIsFormPristine = useRef<boolean>(true);
+  const refIsPolygonPristine = useRef<boolean>(true);
+
   const onCreateArea = async () => {
+    onTourEnd();
     setIsSaving(true);
 
     try {
@@ -99,6 +111,10 @@ export const AgencyAreasModal = ({
         ...formValue,
         paths: polygonPaths
       });
+
+      if (tourStatus === 'active') {
+        setIsFeatureReminderOpen(true);
+      }
 
       onFinish();
       setIsSaving(false);
@@ -158,12 +174,24 @@ export const AgencyAreasModal = ({
       newErrors = { ...newErrors, acronym: false };
     }
 
+    if (
+      refIsFormPristine.current &&
+      formValue.name.length > 0 &&
+      formValue.acronym.length > 0
+    ) {
+      refIsFormPristine.current = false;
+      onTourNext({ tourId: 5, step: 2 });
+    }
+
     setFormErrors(newErrors);
     setFormValue(value);
   };
 
   React.useEffect(() => {
     if (isOpen) {
+      refIsFormPristine.current = true;
+      refIsPolygonPristine.current = true;
+
       setFormErrors(defaultFormErrors);
       if (!area) {
         setFormValue(defaultFormValue);
@@ -177,8 +205,22 @@ export const AgencyAreasModal = ({
 
   // Use callback to prevent re-rendering of AreaPolygonEdit component
   const onPolygonChange = useCallback((paths: google.maps.LatLngLiteral[]) => {
+    if (refIsPolygonPristine.current) {
+      refIsPolygonPristine.current = false;
+      onTourNext({ tourId: 5, step: 3 });
+    }
     setPolygonPaths(paths);
   }, []);
+
+  const onDiscard = () => {
+    onBack();
+    onTourClose([
+      { tourId: 5, step: 2 },
+      { tourId: 5, step: 3 },
+      { tourId: 5, step: 4 },
+      { tourId: 5, step: 5 }
+    ]);
+  };
 
   return (
     <PanelModal
@@ -195,21 +237,15 @@ export const AgencyAreasModal = ({
         }
       }}
       title={`${area ? 'Edit' : 'Create'} Area`}
-      dialogCloseButton={{
-        label: 'Discard',
-        variant: 'text',
-        sfColor: 'grey',
-        disabled: isSaving,
-        onClick: onBack
-      }}
+      isOpen={isOpen}
+      onBack={onBack}
       actionButton={{
         label: area ? 'Save Changes' : 'Create Area',
         isLoading: isSaving,
         disabled: isSaveDisabled(formValue, formErrors, polygonPaths, area),
-        onClick: area ? onEditArea : onCreateArea
+        onClick: area ? onEditArea : onCreateArea,
+        visible: 'drawer'
       }}
-      isOpen={isOpen}
-      onBack={onBack}
       onClose={() => {
         setAnchor('bottom');
         onClose();
@@ -222,7 +258,54 @@ export const AgencyAreasModal = ({
           value={formValue}
         />
 
-        <AreaPolygonEdit area={area} onChange={onPolygonChange} />
+        <TourTooltip
+          title="Draw the area"
+          description="Just drag and drop the nodes (circles) on the figure line. If you need to add more nodes to draw the area, drag and drop the transparent nodes."
+          step={3}
+          lastStep={5}
+          tourId={5}
+          topZIndex
+          placement="top"
+        >
+          <AreaPolygonEdit area={area} onChange={onPolygonChange} />
+        </TourTooltip>
+
+        <div className={styles.actions}>
+          <SFButton
+            variant="text"
+            sfColor="grey"
+            size="large"
+            disabled={isSaving}
+            onClick={onDiscard}
+          >
+            Discard
+          </SFButton>
+
+          <TourTooltip
+            title="Create the area"
+            description='By clicking the "Create Area" button, you will create the area in your agency. You can delete the area at any time. Note that to enable the button you need to move at least one node.'
+            step={5}
+            lastStep={5}
+            tourId={5}
+            width="fit"
+            placement="top-end"
+            topZIndex
+          >
+            <SFButton
+              isLoading={isSaving}
+              disabled={isSaveDisabled(
+                formValue,
+                formErrors,
+                polygonPaths,
+                area
+              )}
+              onClick={area ? onEditArea : onCreateArea}
+              size="large"
+            >
+              {area ? 'Save Changes' : 'Create Area'}
+            </SFButton>
+          </TourTooltip>
+        </div>
       </div>
     </PanelModal>
   );

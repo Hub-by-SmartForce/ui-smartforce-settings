@@ -1,6 +1,10 @@
 @import '~sfui/dist/Styles/SFColors/SFColors.module.scss';
 @import '~sfui/dist/Styles/SFMedia/SFMedia.module.scss';
 
+.dialog {
+  z-index: 1502 !important;
+}
+
 .uploadImgDialog {
   box-sizing: border-box;
   grid-template-rows: 50px 1fr 74px;

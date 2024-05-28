@@ -1,29 +1,21 @@
 import React, { useContext } from 'react';
 import styles from './GroupHistoryModal.module.scss';
 import { SFSpinner, SFTimeline, SFTimelineItem } from 'sfui';
-import {
-  Group,
-  GroupHistory,
-  GroupUser,
-  SettingsError,
-  User
-} from '../../../Models';
+import { GroupHistory, GroupUser, User } from '../../../Models';
 import { formatDateString } from '../../../Helpers';
 import { HistoryTimeLineItem } from '../../../Components/HistoryTimeLineItem/HistoryTimeLineItem';
 import {
   PanelModal,
   PanelModalAnchor
 } from '../../../Components/PanelModal/PanelModal';
-import { getGroupHistory } from '../../../Services/GroupService';
 import { UserContext } from '../../../Context';
-import { ApiContext } from '../../../Context';
 
 export interface GroupHistoryModalProps {
-  group: Group;
+  history: GroupHistory[];
   isOpen: boolean;
+  isLoading: boolean;
   onBack: () => void;
   onClose: () => void;
-  onError: (e: SettingsError) => void;
 }
 
 const getHistoryItemValue = (
@@ -90,36 +82,15 @@ const transformGroupHistoryToTimeLineItems = (
 };
 
 export const GroupHistoryModal = ({
-  group,
+  history,
   isOpen,
+  isLoading,
   onBack,
-  onClose,
-  onError
+  onClose
 }: GroupHistoryModalProps): React.ReactElement<GroupHistoryModalProps> => {
-  const apiBaseUrl = useContext(ApiContext).settings;
   const user = useContext(UserContext).user as User;
-  const [isLoading, setIsLoading] = React.useState<boolean>(false);
-  const [historyItems, setHistoryItems] = React.useState<SFTimelineItem[]>([]);
   const [anchor, setAnchor] = React.useState<PanelModalAnchor>('right');
-
-  React.useEffect(() => {
-    const getHistory = async () => {
-      setIsLoading(true);
-      try {
-        const groupHistory = await getGroupHistory(apiBaseUrl, group.id);
-        setHistoryItems(
-          transformGroupHistoryToTimeLineItems(groupHistory, user)
-        );
-
-        setIsLoading(false);
-      } catch (e: any) {
-        console.error('Settings::AgencyGroups::GroupHistory::Get', e);
-        onError(e);
-      }
-    };
-
-    getHistory();
-  }, [apiBaseUrl, group, user, onError]);
+  const historyItems = transformGroupHistoryToTimeLineItems(history, user);
 
   return (
     <PanelModal

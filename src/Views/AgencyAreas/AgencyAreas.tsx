@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { SFButton, SFSearch, SFSpinner } from 'sfui';
 import styles from './AgencyAreas.module.scss';
 import { SettingsContentRender } from '../SettingsContentRender';
@@ -12,6 +12,7 @@ import { AreasContext } from '../../Context';
 import { getAreas } from '../../Services';
 import { SettingsError } from '../../Models/Error';
 import { ApiContext } from '../../Context';
+import { TourContext, TourTooltip, useCloseTour } from '../../Modules/Tour';
 
 export interface AgencyAreasProps {
   onClose: () => void;
@@ -24,6 +25,7 @@ export const AgencyAreas = ({
 }: AgencyAreasProps): React.ReactElement<AgencyAreasProps> => {
   const apiBaseUrl = React.useContext(ApiContext).settings;
   const { areas, setAreas } = React.useContext(AreasContext);
+  const { onNext: onTourNext, onClose: onTourClose } = useContext(TourContext);
   const [isLoading, setIsLoading] = React.useState<boolean>(false);
   const [searchValue, setSearchValue] = React.useState<string>('');
   const [isAreaModalOpen, setIsAreaModalOpen] = React.useState<boolean>(false);
@@ -32,6 +34,8 @@ export const AgencyAreas = ({
   const [isViewAreaModalOpen, setIsViewAreaModalOpen] =
     React.useState<boolean>(false);
   const [modalValue, setModalValue] = React.useState<Area>();
+
+  useCloseTour([5]);
 
   const onModalOpen = () => {
     setIsAreaModalOpen(true);
@@ -47,6 +51,7 @@ export const AgencyAreas = ({
   };
 
   const onDeleteModalOpen = (deleteArea: Area) => {
+    onTourClose([5]);
     setIsDeleteModalOpen(true);
     setModalValue(deleteArea);
   };
@@ -56,6 +61,7 @@ export const AgencyAreas = ({
   };
 
   const onEditAreaModal = (editArea: Area) => {
+    onTourClose([5]);
     setModalValue(editArea);
     setIsAreaModalOpen(true);
   };
@@ -67,6 +73,7 @@ export const AgencyAreas = ({
   };
 
   const onViewArea = (area: Area) => {
+    onTourClose([5]);
     setModalValue(area);
     setIsViewAreaModalOpen(true);
   };
@@ -82,6 +89,11 @@ export const AgencyAreas = ({
       console.error('Settings::AgencyAreas::GetArea', e);
       onError(e);
     }
+  };
+
+  const onClickCreate = () => {
+    onTourNext({ tourId: 5, step: 1 });
+    onModalOpen();
   };
 
   return (
@@ -118,14 +130,24 @@ export const AgencyAreas = ({
       <SettingsContentRender
         renderContent={() => (
           <div className={styles.agencyAreas}>
-            <SFButton
-              className={styles.createArea}
-              fullWidth
-              variant="outlined"
-              onClick={onModalOpen}
+            <TourTooltip
+              title="Create your area here"
+              description="You can create as many areas as your agency needs. Just click the “Create Area” button and follow the steps."
+              step={1}
+              lastStep={5}
+              tourId={5}
+              preventOverflow
             >
-              Create Area
-            </SFButton>
+              <SFButton
+                className={styles.createArea}
+                fullWidth
+                variant="outlined"
+                onClick={onClickCreate}
+              >
+                Create Area
+              </SFButton>
+            </TourTooltip>
+
             <div className={styles.areasList}>
               {areas.length > 0 && (
                 <div className={styles.search}>

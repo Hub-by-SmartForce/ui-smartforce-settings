@@ -1,10 +1,17 @@
 import React, { Fragment, useContext, useEffect, useState } from 'react';
 import { CreateGroupModal } from './CreateGroupModal/CreateGroupModal';
-import { Group, GroupMember, SettingsError, UserGroup } from '../../Models';
+import {
+  Group,
+  GroupHistory,
+  GroupMember,
+  SettingsError,
+  UserGroup
+} from '../../Models';
 import {
   getGroups,
   restoreGroup,
-  deleteGroup
+  deleteGroup,
+  getGroupHistory
 } from '../../Services/GroupService';
 import { SettingsContentRender } from '../SettingsContentRender';
 import { EditGroupModal } from './EditGroupModal/EditGroupModal';
@@ -17,6 +24,8 @@ import { ApiContext } from '../../Context';
 import { ListManagment } from '../../Components/ListManagment/ListManagment';
 import { AgencyGroupsItem } from './AgencyGroupsItem/AgencyGroupsItem';
 import { DeleteConfirmNameModal } from '../../Components/DeleteConfirmNameModal/DeleteConfirmNameModal';
+import { SFButton } from 'sfui';
+import { TourContext, TourTooltip, useCloseTour } from '../../Modules/Tour';
 
 function sortGroups(groups: Group[]): Group[] {
   return groups.sort((a: Group, b: Group): number => {
@@ -61,6 +70,7 @@ export const AgencyGroups = ({
 }: AgencyGroupsProps): React.ReactElement<AgencyGroupsProps> => {
   const apiBaseUrl = useContext(ApiContext).settings;
   const { user, setUser } = useContext(UserContext);
+  const { onNext: onTourNext, onClose: onTourClose } = useContext(TourContext);
   const [isCreateModalOpen, setIsCreateModalOpen] = useState<boolean>(false);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState<boolean>(false);
   const [isEditModalOpen, setIsEditModalOpen] = useState<boolean>(false);
@@ -71,6 +81,10 @@ export const AgencyGroups = ({
   const [groups, setGroups] = useState<Group[]>([]);
   const [selected, setSelected] = useState<Group | undefined>();
   const [isDeleting, setIsDeleting] = useState<boolean>(false);
+  const [groupHistory, setGroupHistory] = useState<GroupHistory[]>([]);
+  const [isLoadingHistory, setIsLoadingHistory] = useState<boolean>(false);
+
+  useCloseTour([9]);
 
   useEffect(() => {
     let isSubscribed: boolean = true;
@@ -134,11 +148,13 @@ export const AgencyGroups = ({
   };
 
   const onView = (group: Group) => {
+    onTourClose([9]);
     setSelected(group);
     setIsInfoModalOpen(true);
   };
 
   const onEdit = (group: Group) => {
+    onTourClose([9]);
     setSelected(group);
     setIsEditModalOpen(true);
   };
@@ -147,12 +163,23 @@ export const AgencyGroups = ({
     setGroups(updateGroupInList(groups, groupUpdated));
   };
 
-  const onViewHistory = (group: Group) => {
-    setSelected(group);
+  const onViewHistory = async (group: Group) => {
+    onTourClose([9]);
+    setIsLoadingHistory(true);
     setIsViewHistoryModalOpen(true);
+
+    try {
+      const groupHistory = await getGroupHistory(apiBaseUrl, group.id);
+      setGroupHistory(groupHistory);
+      setIsLoadingHistory(false);
+    } catch (e: any) {
+      console.error('Settings::AgencyGroups::getGroupHistory', e);
+      onError(e);
+    }
   };
 
   const onOpenDeleteModal = async (group: Group) => {
+    onTourClose([9]);
     setSelected(group);
     setIsDeleteModalOpen(true);
   };
@@ -178,6 +205,11 @@ export const AgencyGroups = ({
     }
   };
 
+  const onCreate = () => {
+    onTourNext({ tourId: 9, step: 1 });
+    setIsCreateModalOpen(true);
+  };
+
   return (
     <SettingsContentRender
       renderContent={() => (
@@ -193,33 +225,29 @@ export const AgencyGroups = ({
             onError={onError}
           />
 
-          {selected && (
-            <Fragment>
-              <EditGroupModal
-                group={selected}
-                isOpen={isEditModalOpen}
-                onBack={() => setIsEditModalOpen(false)}
-                onClose={() => {
-                  onClose();
-                  setIsEditModalOpen(false);
-                }}
-                onError={onError}
-                onSave={onUpdate}
-              />
+          <GroupHistoryModal
+            history={groupHistory}
+            isOpen={isViewHistoryModalOpen}
+            isLoading={isLoadingHistory}
+            onBack={() => setIsViewHistoryModalOpen(false)}
+            onClose={() => {
+              onClose();
+              setIsViewHistoryModalOpen(false);
+            }}
+          />
 
-              {selected.status === 'Active' && (
-                <GroupHistoryModal
-                  group={selected}
-                  isOpen={isViewHistoryModalOpen}
-                  onBack={() => setIsViewHistoryModalOpen(false)}
-                  onClose={() => {
-                    onClose();
-                    setIsViewHistoryModalOpen(false);
-                  }}
-                  onError={onError}
-                />
-              )}
-            </Fragment>
+          {selected && (
+            <EditGroupModal
+              group={selected}
+              isOpen={isEditModalOpen}
+              onBack={() => setIsEditModalOpen(false)}
+              onClose={() => {
+                onClose();
+                setIsEditModalOpen(false);
+              }}
+              onError={onError}
+              onSave={onUpdate}
+            />
           )}
 
           <DeleteConfirmNameModal
@@ -245,13 +273,26 @@ export const AgencyGroups = ({
           />
 
           <ListManagment<Group>
-            actionButtonLabel="Create Group"
+            renderCreateButton={(props) => (
+              <TourTooltip
+                title="Create your group here"
+                description="You can create as many groups as your agency needs. Just click the “Create Group” button and follow the steps."
+                step={1}
+                lastStep={5}
+                tourId={9}
+                preventOverflow
+                placement="bottom"
+              >
+                <SFButton {...props} onClick={onCreate}>
+                  Create Group
+                </SFButton>
+              </TourTooltip>
+            )}
             emptyMessage="There are no groups created yet."
             label="Group"
             list={groups}
             isLoading={isLoading}
             filter={getFilteredGroups}
-            onCreate={() => setIsCreateModalOpen(true)}
             onClick={onView}
             options={[
               {

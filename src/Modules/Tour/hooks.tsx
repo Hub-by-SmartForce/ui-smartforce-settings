@@ -1,5 +1,5 @@
 import { RefObject, useContext, useEffect, useRef } from 'react';
-import { TourContext, TourStatus } from './context';
+import { TourContext, TourStatus, TourStepOptions } from './context';
 import { Tour } from './models';
 import { saveTourAction } from '../../Services';
 
@@ -20,7 +20,7 @@ export function useTourTooltip(
   return [refElement, isOpen];
 }
 
-export function useCloseTour(tourIds: number[]) {
+export function useCloseTour(tourIds: (TourStepOptions | number)[]) {
   const onClose = useContext(TourContext).onClose;
 
   useEffect(() => {
@@ -48,7 +48,11 @@ export function useSaveTourAction(url: string, app: string) {
         saveTourAction(url, app, 'exit', refLastState.current.tour.id);
       }
 
-      if (tour && tour.id !== refLastState.current?.tour?.id) {
+      if (
+        tour &&
+        tour.id !== refLastState.current?.tour?.id &&
+        status !== 'paused'
+      ) {
         saveTourAction(url, app, 'start', tour.id);
       }
 

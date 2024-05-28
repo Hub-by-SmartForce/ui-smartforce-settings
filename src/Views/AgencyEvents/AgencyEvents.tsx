@@ -8,7 +8,7 @@ import { AgencyEventsDeleteDialog } from './AgencyEventsDeleteDialog/AgencyEvent
 import { getEventTypes } from '../../Services';
 import { ApiContext } from '../../Context';
 import { AgencyEventsItem } from './AgencyEventsItem/AgencyEventsItem';
-import { SFChip } from 'sfui';
+import { SFButton, SFChip } from 'sfui';
 
 export interface AgencyEventsProps {
   onClose: () => void;
@@ -134,13 +134,16 @@ export const AgencyEvents = ({
       <SettingsContentRender
         renderContent={() => (
           <ListManagment<AgencyEventType>
-            actionButtonLabel="Create Event Type"
+            renderCreateButton={(props) => (
+              <SFButton {...props} onClick={onCreate}>
+                Create Event Type
+              </SFButton>
+            )}
             emptyMessage="There are no event types created yet."
             label="Event Type"
             list={events}
             isLoading={isLoading}
             filter={getFilteredValues}
-            onCreate={onCreate}
             options={[
               {
                 label: 'Edit event type',

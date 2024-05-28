@@ -31,35 +31,39 @@ export const ToursCarrouselModal = (
 
   return (
     <SFDialog
-      open={props.open}
+      open={props.tours.length > 0 && props.open}
       PaperProps={{ className: styles.toursCarrouselModal }}
     >
-      <div className={styles.media}>
-        <YouTubeEmbed title={tourSelected.title} src={tourSelected.link} />
-      </div>
+      {!!tourSelected && (
+        <>
+          <div className={styles.media}>
+            <YouTubeEmbed title={tourSelected.title} src={tourSelected.link} />
+          </div>
 
-      <SFDivider />
-      <div className={styles.content}>
-        <NavIndicator size={props.tours.length} selected={selected} />
+          <SFDivider />
+          <div className={styles.content}>
+            <NavIndicator size={props.tours.length} selected={selected} />
 
-        <TourInfo
-          title={tourSelected.title}
-          description={tourSelected.description}
-          onStart={() => props.onStart(tourSelected)}
-        />
+            <TourInfo
+              title={tourSelected.title}
+              description={tourSelected.description}
+              onStart={() => props.onStart(tourSelected)}
+            />
 
-        <ToursCarrouselModalFooter
-          className={styles.footer}
-          disabledBack={selected === 0}
-          disabledNext={props.tours.length === 1}
-          onSkip={props.onClose}
-          onBack={onBack}
-          onNext={selected < props.tours.length - 1 ? onNext : undefined}
-          onDone={
-            selected === props.tours.length - 1 ? props.onClose : undefined
-          }
-        />
-      </div>
+            <ToursCarrouselModalFooter
+              className={styles.footer}
+              disabledBack={selected === 0}
+              disabledNext={props.tours.length === 1}
+              onSkip={props.onClose}
+              onBack={onBack}
+              onNext={selected < props.tours.length - 1 ? onNext : undefined}
+              onDone={
+                selected === props.tours.length - 1 ? props.onClose : undefined
+              }
+            />
+          </div>
+        </>
+      )}
     </SFDialog>
   );
 };

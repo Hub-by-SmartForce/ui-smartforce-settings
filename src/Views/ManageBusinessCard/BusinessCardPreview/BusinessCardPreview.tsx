@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React, { useContext, useEffect, useRef } from 'react';
 import styles from './BusinessCardPreview.module.scss';
 import {
   PanelModal,
@@ -36,6 +36,14 @@ export const BusinessCardPreview = ({
 
   const isMediaMobile: boolean = mediaType === 'mobile';
 
+  const refIsPristine = useRef<boolean>(true);
+
+  useEffect(() => {
+    if (isOpen) {
+      refIsPristine.current = true;
+    }
+  }, [isOpen]);
+
   const onBackButton = () => {
     onTourNext({ tourId: 4, step: 3 });
     setMediaType('mobile');
@@ -44,6 +52,10 @@ export const BusinessCardPreview = ({
 
   const onMediaChange = (type: BusinessCardMediaType) => {
     if (mediaType !== type) {
+      if (refIsPristine.current) {
+        refIsPristine.current = false;
+        onTourNext({ tourId: 4, step: 3 });
+      }
       setMediaType(type);
     }
   };

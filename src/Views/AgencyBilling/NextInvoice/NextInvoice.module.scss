@@ -6,18 +6,6 @@
   @include billingContent;
   gap: 4px;
   border-top: 1px solid $sf-grey-100;
-
-  .chips {
-    display: flex;
-    gap: 8px;
-  }
-
-  @media screen and (max-width: $sf-media-sm-width) {
-    .chips {
-      flex-direction: column;
-      width: fit-content;
-    }
-  }
 }
 
 :global(.nightMode) {

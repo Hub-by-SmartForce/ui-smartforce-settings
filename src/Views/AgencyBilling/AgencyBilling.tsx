@@ -109,7 +109,6 @@ export const AgencyBilling = ({
                               isColorado={isColorado}
                               plan={subscription.plan}
                               billingCycle={subscription.billing_cycle}
-                              usedSeats={subscription.total_seats_used}
                               billedSeats={subscription.total_seats_billed}
                               canceled={isSubscriptionCanceled}
                             />

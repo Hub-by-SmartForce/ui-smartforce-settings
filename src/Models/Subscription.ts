@@ -3,18 +3,31 @@ import { ApplicationProduct } from './Apps';
 export type BillingCycleType = 'monthly' | 'annually';
 export type PaymentMethod = 'card' | 'check' | 'debit';
 
-export interface SubscriptionPaymentCard {
-  name: string;
-  brand: string;
-  last_4_digits: string;
-  exp_month: number;
-  exp_year: number;
-}
+export type SubscriptionPaymentCard = {
+  method: 'card';
+  card: {
+    name: string;
+    brand: string;
+    last_4_digits: string;
+    exp_month: number;
+    exp_year: number;
+  };
+};
 
-export interface SubscriptionPayment {
-  method: string;
-  card: SubscriptionPaymentCard | null;
-}
+export type SubscriptionPaymentDebit = {
+  method: 'debit';
+  card: {
+    name?: string;
+    bank_name: string;
+    last_4_digits: string;
+    routing_number: string;
+    account_type: string;
+  };
+};
+
+export type SubscriptionPayment =
+  | SubscriptionPaymentCard
+  | SubscriptionPaymentDebit;
 
 export type SubscriptionPlan = 'basic' | 'connect' | 'analytics' | 'schedule';
 export type SubscriptionStatus =
@@ -22,6 +35,16 @@ export type SubscriptionStatus =
   | 'Incomplete'
   | 'Unpaid'
   | 'Canceled';
+
+export interface SubscriptionCoupon {
+  id: string;
+  name: string;
+  amount: number;
+  type: string;
+  months?: number;
+  start: string;
+  end?: string;
+}
 
 export interface Subscription {
   id: string;
@@ -39,6 +62,8 @@ export interface Subscription {
   end_date: string;
   renew: boolean;
   free: boolean;
+  early_adopter?: boolean;
+  coupons: SubscriptionCoupon[];
 }
 
 export interface BillingDetailsValue {

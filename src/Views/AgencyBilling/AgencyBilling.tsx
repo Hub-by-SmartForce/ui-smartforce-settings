@@ -106,7 +106,6 @@ export const AgencyBilling = ({
                               canceled={isSubscriptionCanceled}
                             />
                             <NextInvoice
-                              isColorado={isColorado}
                               plan={subscription.plan}
                               billingCycle={subscription.billing_cycle}
                               billedSeats={subscription.total_seats_billed}

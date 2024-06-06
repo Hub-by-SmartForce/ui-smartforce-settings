@@ -11,10 +11,18 @@ export interface SubscriptionPaymentCard {
   exp_year: number;
 }
 
-export interface SubscriptionPayment {
-  method: string;
-  card: SubscriptionPaymentCard | null;
+export interface SubscriptionPaymentDebit {
+  name?: string;
+  bank_name: string;
+  last_4_digits: string;
+  routing_number?: string;
+  account_type?: string;
 }
+
+export type SubscriptionPayment =
+  | { method: 'card'; card: SubscriptionPaymentCard }
+  | { method: 'debit'; debit: SubscriptionPaymentDebit }
+  | { method: 'check' };
 
 export type SubscriptionPlan = 'basic' | 'connect' | 'analytics' | 'schedule';
 export type SubscriptionStatus =
@@ -22,6 +30,16 @@ export type SubscriptionStatus =
   | 'Incomplete'
   | 'Unpaid'
   | 'Canceled';
+
+export interface SubscriptionCoupon {
+  id: string;
+  name: string;
+  amount: number;
+  type: string;
+  months?: number;
+  start: string;
+  end?: string;
+}
 
 export interface Subscription {
   id: string;
@@ -39,6 +57,8 @@ export interface Subscription {
   end_date: string;
   renew: boolean;
   free: boolean;
+  early_adopter?: boolean;
+  coupons: SubscriptionCoupon[];
 }
 
 export interface BillingDetailsValue {

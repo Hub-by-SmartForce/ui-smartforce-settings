@@ -2,11 +2,7 @@ import {
   PLAN_ENGAGE,
   PLAN_ANALYTICS,
   PLAN_CONNECT,
-  ANNUALLY_FEE_ANALYTICS_COLORADO,
-  MONTHLY_FEE_ANALYTICS_COLORADO,
-  ANNUALLY_FEE_ENGAGE,
   ANNUALLY_FEE_ANALYTICS,
-  MONTHLY_FEE_ENGAGE,
   MONTHLY_FEE_ANALYTICS,
   PLAN_SCHEDULE,
   ANNUALLY_FEE_SCHEDULE,
@@ -51,13 +47,10 @@ export function isFreeCustomer(
 }
 
 export function getInvoiceAmmount(
-  isColorado: boolean,
   plan: string,
   billCycle: BillingCycleType,
   seats: number
 ): number {
-  if (plan === PLAN_CONNECT) return 0;
-
   if (plan === PLAN_SCHEDULE) {
     if (billCycle === 'annually') {
       return ANNUALLY_FEE_SCHEDULE * seats;
@@ -66,25 +59,15 @@ export function getInvoiceAmmount(
     return MONTHLY_FEE_SCHEDULE * seats;
   }
 
-  if (isColorado) {
-    if (plan === PLAN_ENGAGE) return 0;
-
+  if (plan === PLAN_ANALYTICS) {
     if (billCycle === 'annually') {
-      return ANNUALLY_FEE_ANALYTICS_COLORADO * seats;
+      return ANNUALLY_FEE_ANALYTICS * seats;
     }
 
-    return MONTHLY_FEE_ANALYTICS_COLORADO * seats;
+    return MONTHLY_FEE_ANALYTICS * seats;
   }
 
-  if (billCycle === 'annually') {
-    return plan === PLAN_ENGAGE
-      ? ANNUALLY_FEE_ENGAGE * seats
-      : ANNUALLY_FEE_ANALYTICS * seats;
-  }
-
-  return plan === PLAN_ENGAGE
-    ? MONTHLY_FEE_ENGAGE * seats
-    : MONTHLY_FEE_ANALYTICS * seats;
+  return 0;
 }
 
 export const getAppSubscription = (

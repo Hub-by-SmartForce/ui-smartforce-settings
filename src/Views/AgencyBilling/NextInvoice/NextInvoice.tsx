@@ -4,7 +4,6 @@ import { getInvoiceAmmount } from '../../../Helpers';
 import { BillingCycleType } from '../../../Models';
 
 export interface NextInvoiceProps {
-  isColorado: boolean;
   plan: string;
   billedSeats: number;
   billingCycle: BillingCycleType;
@@ -12,14 +11,12 @@ export interface NextInvoiceProps {
 }
 
 export const NextInvoice = ({
-  isColorado,
   plan,
   billedSeats,
   billingCycle,
   canceled
 }: NextInvoiceProps): React.ReactElement<NextInvoiceProps> => {
   const nextInvoiceCost: string = `US$${getInvoiceAmmount(
-    isColorado,
     plan,
     billingCycle,
     billedSeats

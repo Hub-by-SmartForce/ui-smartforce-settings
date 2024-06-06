@@ -1,0 +1,31 @@
+@import '~sfui/dist/Styles/SFMedia/SFMedia.module.scss';
+
+.creditCardInfo {
+  display: flex;
+  justify-content: space-between;
+
+  .info {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+
+    .card {
+      display: flex;
+      flex-direction: column;
+      gap: 3px;
+    }
+  }
+}
+
+@media screen and (min-width: $sf-media-md-width) {
+  .creditCardInfo {
+    .info {
+      gap: 0px;
+
+      .card {
+        flex-direction: row;
+        align-items: center;
+      }
+    }
+  }
+}

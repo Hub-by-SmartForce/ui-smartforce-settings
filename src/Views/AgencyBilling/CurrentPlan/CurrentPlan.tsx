@@ -7,7 +7,8 @@ import { CustomerContext, SubscriptionContext } from '../../../Context';
 import {
   getPlanLabel,
   isFreeCustomer,
-  isPlanAnalytics
+  isPlanAnalytics,
+  replaceElementAt
 } from '../../../Helpers';
 import {
   ApplicationProduct,
@@ -55,14 +56,14 @@ export const CurrentPlan = ({
           (s) => s.id === currentSubscription.id
         );
 
-        return [
-          ...subscriptions.slice(0, currentSubscriptionIndex - 1),
+        return replaceElementAt(
+          subscriptions,
           {
             ...currentSubscription,
             renew: false
           },
-          ...subscriptions.slice(currentSubscriptionIndex)
-        ];
+          currentSubscriptionIndex
+        );
       });
       setIsLoading(false);
       setIsCancelDialogOpen(false);
@@ -81,14 +82,14 @@ export const CurrentPlan = ({
           (s) => s.id === currentSubscription.id
         );
 
-        return [
-          ...subscriptions.slice(0, currentSubscriptionIndex - 1),
+        return replaceElementAt(
+          subscriptions,
           {
             ...currentSubscription,
             renew: true
           },
-          ...subscriptions.slice(currentSubscriptionIndex)
-        ];
+          currentSubscriptionIndex
+        );
       });
       setIsLoading(false);
       setIsResumeDialogOpen(false);

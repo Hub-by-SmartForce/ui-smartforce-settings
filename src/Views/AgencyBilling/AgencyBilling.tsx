@@ -11,7 +11,6 @@ import {
 } from '../../Context';
 import { loadStripeAPI } from '../../Services';
 import { Elements } from '@stripe/react-stripe-js';
-import { COLORADO_STATE } from '../../Constants';
 import { getAppSubscription, isFreeCustomer } from '../../Helpers';
 import { ApplicationProduct, SFApp, SettingsError } from '../../Models';
 import { SFButton, SFText } from 'sfui';
@@ -40,7 +39,6 @@ export const AgencyBilling = ({
   const { customer } = useContext(CustomerContext);
   const { themeType } = useContext(ThemeTypeContext);
   const stripeAPI = useMemo(() => loadStripeAPI(stripeApiKey), [stripeApiKey]);
-  const isColorado: boolean = customer?.state_name === COLORADO_STATE;
   const { total_seats_billed, total_seats_used } = subscriptions[0];
 
   return (
@@ -106,7 +104,6 @@ export const AgencyBilling = ({
                               canceled={isSubscriptionCanceled}
                             />
                             <NextInvoice
-                              isColorado={isColorado}
                               plan={subscription.plan}
                               billingCycle={subscription.billing_cycle}
                               billedSeats={subscription.total_seats_billed}
@@ -118,8 +115,7 @@ export const AgencyBilling = ({
                           subscription.status !== 'Canceled' && (
                             <Elements stripe={stripeAPI}>
                               <PaymentMethod
-                                productName={app.product}
-                                payment={subscription.payment}
+                                subscription={subscription}
                                 onClose={onClose}
                                 onError={onError}
                               />

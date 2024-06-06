@@ -3,31 +3,26 @@ import { ApplicationProduct } from './Apps';
 export type BillingCycleType = 'monthly' | 'annually';
 export type PaymentMethod = 'card' | 'check' | 'debit';
 
-export type SubscriptionPaymentCard = {
-  method: 'card';
-  card: {
-    name: string;
-    brand: string;
-    last_4_digits: string;
-    exp_month: number;
-    exp_year: number;
-  };
-};
+export interface SubscriptionPaymentCard {
+  name: string;
+  brand: string;
+  last_4_digits: string;
+  exp_month: number;
+  exp_year: number;
+}
 
-export type SubscriptionPaymentDebit = {
-  method: 'debit';
-  card: {
-    name?: string;
-    bank_name: string;
-    last_4_digits: string;
-    routing_number: string;
-    account_type: string;
-  };
-};
+export interface SubscriptionPaymentDebit {
+  name?: string;
+  bank_name: string;
+  last_4_digits: string;
+  routing_number?: string;
+  account_type?: string;
+}
 
 export type SubscriptionPayment =
-  | SubscriptionPaymentCard
-  | SubscriptionPaymentDebit;
+  | { method: 'card'; card: SubscriptionPaymentCard }
+  | { method: 'debit'; debit: SubscriptionPaymentDebit }
+  | { method: 'check' };
 
 export type SubscriptionPlan = 'basic' | 'connect' | 'analytics' | 'schedule';
 export type SubscriptionStatus =

@@ -1,16 +1,24 @@
 @import '~sfui/dist/Styles/SFColors/SFColors.module.scss';
-@import '~sfui/dist/Styles/SFMedia/SFMedia.module.scss';
-@import '../../../Mixins/BillingCommon.module.scss';
 
 .nextInvoice {
-  @include billingContent;
-  gap: 4px;
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  padding: 12px 0;
   border-top: 1px solid $sf-grey-100;
+
+  .withoutDiscountAmount {
+    text-decoration: line-through;
+  }
+
+  .withDiscountAmount {
+    display: flex;
+    gap: 12px;
+  }
 }
 
 :global(.nightMode) {
   .nextInvoice {
-    @include billingContent(false);
     border-color: $sf-grey-700;
   }
 }

@@ -58,6 +58,8 @@ export interface Subscription {
   renew: boolean;
   free: boolean;
   early_adopter?: boolean;
+  current_coupon?: SubscriptionCoupon;
+  next_coupon?: SubscriptionCoupon;
   coupons: SubscriptionCoupon[];
 }
 

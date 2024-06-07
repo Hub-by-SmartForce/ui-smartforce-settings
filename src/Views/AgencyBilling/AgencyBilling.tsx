@@ -108,6 +108,7 @@ export const AgencyBilling = ({
                               billingCycle={subscription.billing_cycle}
                               billedSeats={subscription.total_seats_billed}
                               canceled={isSubscriptionCanceled}
+                              coupon={subscription.next_coupon}
                             />
                           </Fragment>
                         )}

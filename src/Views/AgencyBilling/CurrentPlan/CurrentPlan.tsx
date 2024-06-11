@@ -20,6 +20,7 @@ import { ApiContext } from '../../../Context';
 
 export interface CurrentPlanProps {
   canUpdate: boolean;
+  isFreeTrial: boolean;
   currentSubscription: Subscription;
   product: ApplicationProduct;
   onError: (e: SettingsError) => void;
@@ -28,6 +29,7 @@ export interface CurrentPlanProps {
 
 export const CurrentPlan = ({
   canUpdate,
+  isFreeTrial,
   currentSubscription,
   product,
   onError,
@@ -99,6 +101,10 @@ export const CurrentPlan = ({
     }
   };
 
+  const onActivate = () => {
+    // TODO
+  };
+
   return (
     <div className={styles.currentPlan}>
       <CancelDialog
@@ -134,36 +140,52 @@ export const CurrentPlan = ({
               }
             />
           )}
+          {isFreeTrial && (
+            <SFChip
+              sfColor="primary"
+              variant="outlined"
+              size="small"
+              label="100% Free Trial"
+            />
+          )}
         </div>
       </div>
 
       {canUpdate && (
         <div className={styles.buttonContainer}>
-          {currentSubscription.renew === false && (
-            <SFButton onClick={() => setIsResumeDialogOpen(true)}>
-              Resume Plan
-            </SFButton>
+          {isFreeTrial && (
+            <SFButton onClick={onActivate}>Activate Plan</SFButton>
           )}
 
-          {currentSubscription.renew === true && (
-            <Fragment>
-              {!isFreeCustomer(customer, currentSubscription.plan) && (
-                <SFButton
-                  sfColor="grey"
-                  variant="text"
-                  onClick={() => setIsCancelDialogOpen(true)}
-                >
-                  Cancel Plan
+          {!isFreeTrial && (
+            <>
+              {currentSubscription.renew === false && (
+                <SFButton onClick={() => setIsResumeDialogOpen(true)}>
+                  Resume Plan
                 </SFButton>
               )}
 
-              {product !== 'shift' &&
-                !isPlanAnalytics(currentSubscription.plan) &&
-                currentSubscription.product !== 'shift' &&
-                currentSubscription.status === 'Active' && (
-                  <SFButton onClick={onUpgrade}>Upgrade Plan</SFButton>
-                )}
-            </Fragment>
+              {currentSubscription.renew === true && (
+                <Fragment>
+                  {!isFreeCustomer(customer, currentSubscription.plan) && (
+                    <SFButton
+                      sfColor="grey"
+                      variant="text"
+                      onClick={() => setIsCancelDialogOpen(true)}
+                    >
+                      Cancel Plan
+                    </SFButton>
+                  )}
+
+                  {product !== 'shift' &&
+                    !isPlanAnalytics(currentSubscription.plan) &&
+                    currentSubscription.product !== 'shift' &&
+                    currentSubscription.status === 'Active' && (
+                      <SFButton onClick={onUpgrade}>Upgrade Plan</SFButton>
+                    )}
+                </Fragment>
+              )}
+            </>
           )}
         </div>
       )}

@@ -64,8 +64,10 @@ export const AgencyBilling = ({
       {subscriptions &&
         SF_APPS.map((app: SFApp) => {
           const subscription = getAppSubscription(subscriptions, app.product);
-          const isSubscriptionCanceled: boolean =
-            subscription?.renew === false ?? false;
+          const isSubscriptionCanceled: boolean = true;
+
+          // TODO get from subscription
+          const isFreeTrial = true;
 
           return (
             <div className={styles.card} key={app.product}>
@@ -88,6 +90,7 @@ export const AgencyBilling = ({
                   <div className={styles.section}>
                     <CurrentPlan
                       canUpdate={canUpdate}
+                      isFreeTrial={isFreeTrial}
                       currentSubscription={subscription}
                       product={product}
                       onError={onError}
@@ -103,16 +106,21 @@ export const AgencyBilling = ({
                               paymentDue={subscription.end_date}
                               canceled={isSubscriptionCanceled}
                             />
-                            <NextInvoice
-                              plan={subscription.plan}
-                              billingCycle={subscription.billing_cycle}
-                              billedSeats={subscription.total_seats_billed}
-                              canceled={isSubscriptionCanceled}
-                              coupon={subscription.next_coupon}
-                            />
+
+                            {!isFreeTrial && (
+                              <NextInvoice
+                                plan={subscription.plan}
+                                billingCycle={subscription.billing_cycle}
+                                billedSeats={subscription.total_seats_billed}
+                                canceled={isSubscriptionCanceled}
+                                coupon={subscription.next_coupon}
+                              />
+                            )}
                           </Fragment>
                         )}
-                        {subscription.payment &&
+
+                        {!isFreeTrial &&
+                          subscription.payment &&
                           subscription.status !== 'Canceled' && (
                             <Elements stripe={stripeAPI}>
                               <PaymentMethod

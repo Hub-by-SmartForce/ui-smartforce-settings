@@ -165,6 +165,10 @@ export const PaymentMethod = ({
       <div className={styles.description}>
         <p className={styles.title}>Payment Method</p>
 
+        {subscription.payment?.method === 'wire_transfer' && (
+          <SFText type="component-1-medium">Wire Transfer</SFText>
+        )}
+
         {subscription.payment?.method === 'check' && (
           <SFText type="component-1-medium">Check</SFText>
         )}

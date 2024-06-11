@@ -22,7 +22,7 @@ export interface SubscriptionPaymentDebit {
 export type SubscriptionPayment =
   | { method: 'card'; card: SubscriptionPaymentCard }
   | { method: 'debit'; debit: SubscriptionPaymentDebit }
-  | { method: 'check' };
+  | { method: 'check' | 'wire_transfer' };
 
 export type SubscriptionPlan = 'basic' | 'connect' | 'analytics' | 'schedule';
 export type SubscriptionStatus =

@@ -59,6 +59,7 @@ export interface SFSettingsProps {
   product: ApplicationProduct;
   onError: (e: SettingsError) => void;
   onHome: () => void;
+  onActivate: (product: string) => void;
   onUpgrade: (product: string) => void;
   onSectionChange: (name: string) => void;
 }
@@ -85,6 +86,7 @@ export const SFSettings = ({
   enviroment,
   product,
   onError,
+  onActivate,
   onUpgrade,
   onHome,
   onSectionChange
@@ -223,6 +225,7 @@ export const SFSettings = ({
               onGetStarted(enviroment, product)
             }
             onUpgrade={onUpgrade}
+            onActivate={onActivate}
           />
         )
       }

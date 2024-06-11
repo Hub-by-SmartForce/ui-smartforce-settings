@@ -61,6 +61,7 @@ export const Main = (): React.ReactElement<{}> => {
 
   const onSettingsError = (e: SettingsError) => console.error(e);
   const onHome = () => console.log('onHome');
+  const onActivate = () => console.log('onActivate');
   const onUpgrade = () => console.log('onUpgrade');
 
   useEffect(() => {
@@ -210,6 +211,7 @@ export const Main = (): React.ReactElement<{}> => {
                 selectedSectionName={selectedSectionName}
                 onError={onSettingsError}
                 onHome={onHome}
+                onActivate={onActivate}
                 onUpgrade={onUpgrade}
                 onSectionChange={(name) => setSelectedSectionName(name)}
               />

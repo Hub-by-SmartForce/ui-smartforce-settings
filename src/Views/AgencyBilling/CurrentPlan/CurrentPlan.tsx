@@ -3,10 +3,10 @@ import styles from './CurrentPlan.module.scss';
 import { SFButton, SFChip } from 'sfui';
 import { CancelDialog } from './CancelDialog/CancelDialog';
 import { ResumeDialog } from './ResumeDialog/ResumeDialog';
-import { CustomerContext, SubscriptionContext } from '../../../Context';
+import { SubscriptionContext } from '../../../Context';
 import {
   getPlanLabel,
-  isFreeCustomer,
+  isFreePlan,
   isPlanAnalytics,
   replaceElementAt
 } from '../../../Helpers';
@@ -22,7 +22,9 @@ export interface CurrentPlanProps {
   canUpdate: boolean;
   currentSubscription: Subscription;
   product: ApplicationProduct;
+  isFreeTrial: boolean;
   onError: (e: SettingsError) => void;
+  onActivate: () => void;
   onUpgrade: () => void;
 }
 
@@ -30,17 +32,20 @@ export const CurrentPlan = ({
   canUpdate,
   currentSubscription,
   product,
+  isFreeTrial,
   onError,
+  onActivate,
   onUpgrade
 }: CurrentPlanProps): React.ReactElement<CurrentPlanProps> => {
   const { setSubscriptions } = useContext(SubscriptionContext);
   const apiBaseUrl = useContext(ApiContext).settings;
-  const { customer } = useContext(CustomerContext);
   const [isCancelDialogOpen, setIsCancelDialogOpen] =
     React.useState<boolean>(false);
   const [isResumeDialogOpen, setIsResumeDialogOpen] =
     React.useState<boolean>(false);
   const [isLoading, setIsLoading] = React.useState<boolean>(false);
+
+  const showActivate = isFreeTrial && !currentSubscription.renew;
 
   const onCloseDialog = () => {
     setIsCancelDialogOpen(false);
@@ -134,37 +139,51 @@ export const CurrentPlan = ({
               }
             />
           )}
+          {isFreeTrial && (
+            <SFChip
+              sfColor="primary"
+              variant="outlined"
+              size="small"
+              label="100% Free Trial"
+            />
+          )}
         </div>
       </div>
 
       {canUpdate && (
         <div className={styles.buttonContainer}>
-          {currentSubscription.renew === false && (
-            <SFButton onClick={() => setIsResumeDialogOpen(true)}>
-              Resume Plan
-            </SFButton>
+          {showActivate && (
+            <SFButton onClick={onActivate}>Activate Plan</SFButton>
           )}
 
-          {currentSubscription.renew === true && (
-            <Fragment>
-              {!isFreeCustomer(customer, currentSubscription.plan) && (
-                <SFButton
-                  sfColor="grey"
-                  variant="text"
-                  onClick={() => setIsCancelDialogOpen(true)}
-                >
-                  Cancel Plan
+          {!showActivate && !isFreePlan(currentSubscription.plan) && (
+            <>
+              {currentSubscription.renew === false && (
+                <SFButton onClick={() => setIsResumeDialogOpen(true)}>
+                  Resume Plan
                 </SFButton>
               )}
 
-              {product !== 'shift' &&
-                !isPlanAnalytics(currentSubscription.plan) &&
-                currentSubscription.product !== 'shift' &&
-                currentSubscription.status === 'Active' && (
-                  <SFButton onClick={onUpgrade}>Upgrade Plan</SFButton>
-                )}
-            </Fragment>
+              {currentSubscription.renew === true && (
+                <Fragment>
+                  <SFButton
+                    sfColor="grey"
+                    variant="text"
+                    onClick={() => setIsCancelDialogOpen(true)}
+                  >
+                    Cancel Plan
+                  </SFButton>
+                </Fragment>
+              )}
+            </>
           )}
+
+          {product !== 'shift' &&
+            !isPlanAnalytics(currentSubscription.plan) &&
+            currentSubscription.product !== 'shift' &&
+            currentSubscription.status === 'Active' && (
+              <SFButton onClick={onUpgrade}>Upgrade Plan</SFButton>
+            )}
         </div>
       )}
     </div>

@@ -8,9 +8,8 @@ import {
   ANNUALLY_FEE_SCHEDULE,
   MONTHLY_FEE_SCHEDULE
 } from '../Constants';
-import { BillingCycleType, Customer, Subscription } from '../Models';
+import { BillingCycleType, Subscription } from '../Models';
 import { upperFirstChar } from './format';
-import { isColorado } from './states';
 
 export function isPlanConnect(plan?: string): boolean {
   return plan === PLAN_CONNECT;
@@ -36,14 +35,8 @@ export function getPlanLabel(plan: string): string {
   return upperFirstChar(plan);
 }
 
-export function isFreeCustomer(
-  customer: Customer | undefined,
-  plan: string | undefined
-): boolean {
-  return (
-    isPlanConnect(plan) ||
-    (isColorado(customer?.state_name) && isPlanEngage(plan))
-  );
+export function isFreePlan(plan: string | undefined): boolean {
+  return isPlanConnect(plan);
 }
 
 export function getInvoiceAmmount(

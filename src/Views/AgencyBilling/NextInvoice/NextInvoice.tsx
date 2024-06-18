@@ -55,7 +55,7 @@ export const NextInvoice = ({
               size="small"
               sfColor="primary"
               variant="outlined"
-              label={`${coupon.amount}% ${coupon.name}`}
+              label={coupon.label}
             />
           </div>
         </div>

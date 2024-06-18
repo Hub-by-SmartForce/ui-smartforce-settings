@@ -34,6 +34,8 @@ export type SubscriptionStatus =
 export interface SubscriptionCoupon {
   id: string;
   name: string;
+  code?: string;
+  label: string;
   amount: number;
   type: string;
   months?: number;

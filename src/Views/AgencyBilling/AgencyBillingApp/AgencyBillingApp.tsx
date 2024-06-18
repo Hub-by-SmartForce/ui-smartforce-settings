@@ -1,7 +1,7 @@
 import React, { Fragment, useContext } from 'react';
 import styles from './AgencyBillingApp.module.scss';
 import { SFButton } from 'sfui';
-import { isFreePlan } from '../../../Helpers';
+import { isFreePlan, isFreeTrial } from '../../../Helpers';
 import {
   ApplicationProduct,
   SFApp,
@@ -39,9 +39,9 @@ export const AgencyBillingApp = ({
 }: AgencyBillingAppProps): React.ReactElement<AgencyBillingAppProps> => {
   const { themeType } = useContext(ThemeTypeContext);
 
-  const isFreeTrial = subscription?.current_coupon?.amount === 100;
+  const freeTrial = isFreeTrial(subscription);
   const isCanceled = !subscription?.renew;
-  const hasNextPayment = !isCanceled || !isFreeTrial;
+  const hasNextPayment = !isCanceled || !freeTrial;
 
   return (
     <div className={styles.agencyBillingApp}>
@@ -65,7 +65,6 @@ export const AgencyBillingApp = ({
           <div className={styles.section}>
             <CurrentPlan
               canUpdate={canUpdate}
-              isFreeTrial={isFreeTrial}
               currentSubscription={subscription}
               product={currentProduct}
               onError={onError}
@@ -77,7 +76,7 @@ export const AgencyBillingApp = ({
           {!isFreePlan(subscription.plan) && (
             <div className={styles.section}>
               <Fragment>
-                {subscription.status === 'Active' && (
+                {subscription.status === 'Active' && subscription.payment && (
                   <Fragment>
                     <NextPayment
                       paymentDue={subscription.end_date}

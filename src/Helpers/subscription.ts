@@ -39,6 +39,10 @@ export function isFreePlan(plan: string | undefined): boolean {
   return isPlanConnect(plan);
 }
 
+export function isFreeTrial(subscription: Subscription | undefined): boolean {
+  return subscription?.current_coupon?.amount === 100;
+}
+
 export function getInvoiceAmmount(
   plan: string,
   billCycle: BillingCycleType,

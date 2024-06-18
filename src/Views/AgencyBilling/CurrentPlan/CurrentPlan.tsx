@@ -1,12 +1,13 @@
 import React, { Fragment, useContext } from 'react';
 import styles from './CurrentPlan.module.scss';
-import { SFButton, SFChip } from 'sfui';
+import { SFButton } from 'sfui';
 import { CancelDialog } from './CancelDialog/CancelDialog';
 import { ResumeDialog } from './ResumeDialog/ResumeDialog';
 import { SubscriptionContext } from '../../../Context';
 import {
   getPlanLabel,
   isFreePlan,
+  isFreeTrial,
   isPlanAnalytics,
   replaceElementAt
 } from '../../../Helpers';
@@ -17,12 +18,12 @@ import {
 } from '../../../Models';
 import { cancelSubscription, resumeSubscription } from '../../../Services';
 import { ApiContext } from '../../../Context';
+import { CurrentPlanStatus } from './CurrentPlanStatus/CurrentPlanStatus';
 
 export interface CurrentPlanProps {
   canUpdate: boolean;
   currentSubscription: Subscription;
   product: ApplicationProduct;
-  isFreeTrial: boolean;
   onError: (e: SettingsError) => void;
   onActivate: () => void;
   onUpgrade: () => void;
@@ -32,7 +33,6 @@ export const CurrentPlan = ({
   canUpdate,
   currentSubscription,
   product,
-  isFreeTrial,
   onError,
   onActivate,
   onUpgrade
@@ -45,7 +45,8 @@ export const CurrentPlan = ({
     React.useState<boolean>(false);
   const [isLoading, setIsLoading] = React.useState<boolean>(false);
 
-  const showActivate = isFreeTrial && !currentSubscription.renew;
+  const showActivate =
+    isFreeTrial(currentSubscription) && !currentSubscription.renew;
 
   const onCloseDialog = () => {
     setIsCancelDialogOpen(false);
@@ -126,27 +127,8 @@ export const CurrentPlan = ({
           <p className={styles.text}>
             {getPlanLabel(currentSubscription.plan)}
           </p>
-          {currentSubscription.status !== 'Active' && (
-            <SFChip
-              sfColor="primary"
-              variant="outlined"
-              size="small"
-              hasError={currentSubscription.status !== 'Incomplete'}
-              label={
-                currentSubscription.status === 'Incomplete'
-                  ? 'Pending'
-                  : currentSubscription.status
-              }
-            />
-          )}
-          {isFreeTrial && (
-            <SFChip
-              sfColor="primary"
-              variant="outlined"
-              size="small"
-              label="100% Free Trial"
-            />
-          )}
+
+          <CurrentPlanStatus subscription={currentSubscription} />
         </div>
       </div>
 

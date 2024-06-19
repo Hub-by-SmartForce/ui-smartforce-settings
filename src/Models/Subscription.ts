@@ -19,10 +19,12 @@ export interface SubscriptionPaymentDebit {
   account_type?: string;
 }
 
-export type SubscriptionPayment =
-  | { method: 'card'; card: SubscriptionPaymentCard }
-  | { method: 'debit'; debit: SubscriptionPaymentDebit }
-  | { method: 'check' | 'wire_transfer' };
+export interface SubscriptionPayment {
+  method: 'card' | 'debit' | 'check' | 'wire_transfer';
+  card?: SubscriptionPaymentCard;
+  debit?: SubscriptionPaymentDebit;
+  payment_method_setup_url?: string;
+}
 
 export type SubscriptionPlan = 'basic' | 'connect' | 'analytics' | 'schedule';
 export type SubscriptionStatus =

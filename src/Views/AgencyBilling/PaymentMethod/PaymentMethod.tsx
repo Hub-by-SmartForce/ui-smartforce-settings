@@ -172,15 +172,17 @@ export const PaymentMethod = ({
         {subscription.payment?.method === 'check' && (
           <SFText type="component-1-medium">Check</SFText>
         )}
-        {subscription.payment?.method === 'card' && (
-          <CreditCardInfo
-            card={subscription.payment.card}
-            onChangeCardClick={onChangeLink}
-          />
-        )}
-        {subscription.payment?.method === 'debit' && (
-          <DebitInfo debit={subscription.payment.debit} />
-        )}
+        {subscription.payment?.method === 'card' &&
+          subscription.payment.card && (
+            <CreditCardInfo
+              card={subscription.payment.card}
+              onChangeCardClick={onChangeLink}
+            />
+          )}
+        {subscription.payment?.method === 'debit' &&
+          subscription.payment.debit && (
+            <DebitInfo debit={subscription.payment.debit} />
+          )}
       </div>
     </div>
   );

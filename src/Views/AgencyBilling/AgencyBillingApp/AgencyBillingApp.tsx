@@ -6,13 +6,21 @@ import {
   ApplicationProduct,
   SFApp,
   SettingsError,
-  Subscription
+  Subscription,
+  SubscriptionPayment
 } from '../../../Models';
 import { CurrentPlan } from '../CurrentPlan/CurrentPlan';
 import { NextInvoice } from '../NextInvoice/NextInvoice';
 import { NextPayment } from '../NextPayment/NextPayment';
 import { PaymentMethod } from '../PaymentMethod/PaymentMethod';
 import { ThemeTypeContext } from '../../../Context';
+
+function hasPayment(payment: SubscriptionPayment | null): boolean {
+  return (
+    (payment?.method === 'debit' && !!payment.debit) ||
+    (payment?.method === 'card' && !!payment.card)
+  );
+}
 
 export interface AgencyBillingAppProps {
   app: SFApp;
@@ -99,7 +107,7 @@ export const AgencyBillingApp = ({
                   </>
                 )}
 
-                {subscription?.payment && (
+                {hasPayment(subscription.payment) && (
                   <PaymentMethod
                     subscription={subscription}
                     onClose={onClose}

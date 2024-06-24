@@ -151,7 +151,7 @@ export const CurrentPlan = ({
                 </SFButton>
               )}
 
-              {currentSubscription.renew === true && (
+              {!isPending && currentSubscription.renew === true && (
                 <Fragment>
                   <SFButton
                     sfColor="grey"

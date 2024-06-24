@@ -1,17 +1,15 @@
 import React from 'react';
 import { Subscription } from '../../../../Models';
 import { SFChip } from 'sfui';
-import { isFreePlan, isFreeTrial } from '../../../../Helpers';
+import { isFreeTrial } from '../../../../Helpers';
 
-function getPlanStatus(subscription: Subscription): string | undefined {
+function getPlanStatus(
+  subscription: Subscription,
+  isPending: boolean
+): string | undefined {
   if (isFreeTrial(subscription)) {
     return '100% Free Trial';
-  } else if (
-    subscription.status === 'Incomplete' ||
-    (!isFreePlan(subscription.plan) &&
-      subscription.payment?.method === 'debit' &&
-      !subscription.payment?.debit)
-  ) {
+  } else if (subscription.status === 'Incomplete' || isPending) {
     return 'Pending';
   } else if (subscription.status !== 'Active') {
     return subscription.status;
@@ -22,12 +20,14 @@ function getPlanStatus(subscription: Subscription): string | undefined {
 
 export interface CurrentPlanStatusProps {
   subscription: Subscription;
+  isPending: boolean;
 }
 
 export const CurrentPlanStatus = ({
-  subscription
+  subscription,
+  isPending
 }: CurrentPlanStatusProps): React.ReactElement<CurrentPlanStatusProps> => {
-  const status: string | undefined = getPlanStatus(subscription);
+  const status: string | undefined = getPlanStatus(subscription, isPending);
 
   return (
     <>

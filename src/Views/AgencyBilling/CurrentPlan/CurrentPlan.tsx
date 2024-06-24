@@ -24,6 +24,7 @@ export interface CurrentPlanProps {
   canUpdate: boolean;
   currentSubscription: Subscription;
   product: ApplicationProduct;
+  isPending: boolean;
   onError: (e: SettingsError) => void;
   onActivate: () => void;
   onUpgrade: () => void;
@@ -33,6 +34,7 @@ export const CurrentPlan = ({
   canUpdate,
   currentSubscription,
   product,
+  isPending,
   onError,
   onActivate,
   onUpgrade
@@ -128,7 +130,10 @@ export const CurrentPlan = ({
             {getPlanLabel(currentSubscription.plan)}
           </p>
 
-          <CurrentPlanStatus subscription={currentSubscription} />
+          <CurrentPlanStatus
+            subscription={currentSubscription}
+            isPending={isPending}
+          />
         </div>
       </div>
 

@@ -1,7 +1,7 @@
 import React, { Fragment, useContext } from 'react';
 import styles from './AgencyBillingApp.module.scss';
 import { SFButton } from 'sfui';
-import { isFreePlan, isFreeTrial } from '../../../Helpers';
+import { isFreePlan } from '../../../Helpers';
 import {
   ApplicationProduct,
   SFApp,
@@ -39,9 +39,12 @@ export const AgencyBillingApp = ({
 }: AgencyBillingAppProps): React.ReactElement<AgencyBillingAppProps> => {
   const { themeType } = useContext(ThemeTypeContext);
 
-  const freeTrial = isFreeTrial(subscription);
   const isCanceled = !subscription?.renew;
-  const hasNextPayment = !isCanceled || !freeTrial;
+  const isPending =
+    subscription?.status === 'Incomplete' ||
+    (!isFreePlan(subscription?.plan) &&
+      subscription?.payment?.method === 'debit' &&
+      !subscription.payment?.debit);
 
   return (
     <div className={styles.agencyBillingApp}>
@@ -67,6 +70,7 @@ export const AgencyBillingApp = ({
               canUpdate={canUpdate}
               currentSubscription={subscription}
               product={currentProduct}
+              isPending={isPending}
               onError={onError}
               onActivate={() => onActivate(subscription.product)}
               onUpgrade={() => onUpgrade(subscription.product)}
@@ -76,14 +80,14 @@ export const AgencyBillingApp = ({
           {!isFreePlan(subscription.plan) && (
             <div className={styles.section}>
               <Fragment>
-                {subscription.status === 'Active' && subscription.payment && (
-                  <Fragment>
+                {!isPending && subscription.status !== 'Unpaid' && (
+                  <>
                     <NextPayment
                       paymentDue={subscription.end_date}
                       canceled={isCanceled}
                     />
 
-                    {hasNextPayment && (
+                    {subscription?.payment && (
                       <NextInvoice
                         plan={subscription.plan}
                         billingCycle={subscription.billing_cycle}
@@ -92,18 +96,16 @@ export const AgencyBillingApp = ({
                         coupon={subscription.next_coupon}
                       />
                     )}
-                  </Fragment>
+                  </>
                 )}
 
-                {hasNextPayment &&
-                  subscription.payment &&
-                  subscription.status !== 'Canceled' && (
-                    <PaymentMethod
-                      subscription={subscription}
-                      onClose={onClose}
-                      onError={onError}
-                    />
-                  )}
+                {subscription?.payment && (
+                  <PaymentMethod
+                    subscription={subscription}
+                    onClose={onClose}
+                    onError={onError}
+                  />
+                )}
               </Fragment>
             </div>
           )}

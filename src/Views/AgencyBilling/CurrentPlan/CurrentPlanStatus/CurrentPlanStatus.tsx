@@ -7,8 +7,10 @@ function getPlanStatus(subscription: Subscription): string | undefined {
   if (isFreeTrial(subscription)) {
     return '100% Free Trial';
   } else if (
-    (!isFreePlan(subscription.plan) && !subscription.payment) ||
-    subscription.status === 'Incomplete'
+    subscription.status === 'Incomplete' ||
+    (!isFreePlan(subscription.plan) &&
+      subscription.payment?.method === 'debit' &&
+      !subscription.payment?.debit)
   ) {
     return 'Pending';
   } else if (subscription.status !== 'Active') {

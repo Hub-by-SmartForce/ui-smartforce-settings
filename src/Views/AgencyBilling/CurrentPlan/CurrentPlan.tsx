@@ -140,7 +140,10 @@ export const CurrentPlan = ({
       {canUpdate && (
         <div className={styles.buttonContainer}>
           {showActivate && (
-            <SFButton onClick={onActivate}>Activate Plan</SFButton>
+            // TODO enable when ready
+            <SFButton disabled onClick={onActivate}>
+              Activate Plan
+            </SFButton>
           )}
 
           {!showActivate && !isFreePlan(currentSubscription.plan) && (

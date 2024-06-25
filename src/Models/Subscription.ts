@@ -1,7 +1,6 @@
 import { ApplicationProduct } from './Apps';
 
 export type BillingCycleType = 'monthly' | 'annually';
-export type PaymentMethod = 'card' | 'check' | 'debit';
 
 export interface SubscriptionPaymentCard {
   name: string;
@@ -84,7 +83,7 @@ export interface SubscriptionValue {
   plan: string;
   product: ApplicationProduct;
   card_token?: string;
-  payment_method: PaymentMethod;
+  payment_method: 'card' | 'check' | 'debit';
   additional_seats?: number;
   billing_cycle?: BillingCycleType;
   billing_details?: BillingDetailsValue;

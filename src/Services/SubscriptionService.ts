@@ -132,7 +132,7 @@ export const updateSubscription = async (
 
 export const activateSubscription = async (
   baseUrl: string,
-  subscription: Omit<SubscriptionValue, 'plan' | 'payment_method'>
+  subscription: Omit<SubscriptionValue, 'plan'>
 ): Promise<Subscription> => {
   const url: string = `${baseUrl}/subscriptions/${subscription.product}/activate`;
   return apiPost(url, subscription, getUserSession().access_token);

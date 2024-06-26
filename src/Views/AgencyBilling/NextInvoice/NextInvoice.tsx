@@ -31,13 +31,13 @@ export const NextInvoice = ({
         NEXT INVOICE
       </SFText>
 
-      {!coupon && (
+      {(canceled || !coupon) && (
         <SFText type="component-1-medium">
           {canceled ? 'Canceled' : getPriceString(nextInvoiceCost)}
         </SFText>
       )}
 
-      {coupon && coupon.type === 'percent' && (
+      {!canceled && coupon && coupon.type === 'percent' && (
         <div>
           <SFText
             className={styles.withoutDiscountAmount}

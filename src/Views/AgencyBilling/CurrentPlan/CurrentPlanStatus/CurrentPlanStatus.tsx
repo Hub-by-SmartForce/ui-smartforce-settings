@@ -7,9 +7,7 @@ function getPlanStatus(
   subscription: Subscription,
   isPending: boolean
 ): string | undefined {
-  if (isFreeTrial(subscription)) {
-    return '100% Free Trial';
-  } else if (subscription.status === 'Incomplete' || isPending) {
+  if (subscription.status === 'Incomplete' || isPending) {
     return 'Pending';
   } else if (subscription.status !== 'Active') {
     return subscription.status;
@@ -38,6 +36,15 @@ export const CurrentPlanStatus = ({
           size="small"
           hasError={subscription.status === 'Unpaid'}
           label={status}
+        />
+      )}
+
+      {isFreeTrial(subscription) && (
+        <SFChip
+          sfColor="primary"
+          variant="outlined"
+          size="small"
+          label="100% Free Trial"
         />
       )}
     </>

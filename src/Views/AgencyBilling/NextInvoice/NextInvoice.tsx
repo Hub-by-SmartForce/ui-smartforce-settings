@@ -48,7 +48,9 @@ export const NextInvoice = ({
 
           <div className={styles.withDiscountAmount}>
             <SFText type="component-1-medium">
-              {getPriceString((nextInvoiceCost * coupon.amount) / 100)}
+              {getPriceString(
+                nextInvoiceCost - (nextInvoiceCost * coupon.amount) / 100
+              )}
             </SFText>
 
             <SFChip

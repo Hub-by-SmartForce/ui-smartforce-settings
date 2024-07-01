@@ -1,49 +1,67 @@
 import React from 'react';
 import styles from './NextInvoice.module.scss';
-import { SFChip } from 'sfui';
 import { getInvoiceAmmount } from '../../../Helpers';
-import { BillingCycleType } from '../../../Models';
+import { BillingCycleType, SubscriptionCoupon } from '../../../Models';
+import { SFChip, SFText } from 'sfui';
+
+function getPriceString(amount: number): string {
+  return `US$${amount.toFixed(2)}`;
+}
 
 export interface NextInvoiceProps {
-  isColorado: boolean;
   plan: string;
-  usedSeats: number;
   billedSeats: number;
   billingCycle: BillingCycleType;
   canceled: boolean;
+  coupon?: SubscriptionCoupon;
 }
 
 export const NextInvoice = ({
-  isColorado,
   plan,
-  usedSeats,
   billedSeats,
   billingCycle,
-  canceled
+  canceled,
+  coupon
 }: NextInvoiceProps): React.ReactElement<NextInvoiceProps> => {
-  const additionalSeats: number = billedSeats - usedSeats;
-  const nextInvoiceCost: string = `US$${getInvoiceAmmount(
-    isColorado,
-    plan,
-    billingCycle,
-    billedSeats
-  ).toFixed(2)}`;
+  const nextInvoiceCost = getInvoiceAmmount(plan, billingCycle, billedSeats);
 
   return (
     <div className={styles.nextInvoice}>
-      <div className={styles.description}>
-        <p className={styles.title}>Next Invoice</p>
-        <p className={styles.text}>{canceled ? 'Canceled' : nextInvoiceCost}</p>
-      </div>
-      <div className={styles.chips}>
-        <SFChip size="small" sfColor="primary" label={`${usedSeats} members`} />
-        <SFChip
-          size="small"
-          sfColor="default"
-          variant="outlined"
-          label={`${additionalSeats} additional seats`}
-        />
-      </div>
+      <SFText type="component-messages" sfColor="neutral">
+        NEXT INVOICE
+      </SFText>
+
+      {(canceled || !coupon) && (
+        <SFText type="component-1-medium">
+          {canceled ? 'Canceled' : getPriceString(nextInvoiceCost)}
+        </SFText>
+      )}
+
+      {!canceled && coupon && coupon.type === 'percent' && (
+        <div>
+          <SFText
+            className={styles.withoutDiscountAmount}
+            type="component-chip-S-M"
+          >
+            {getPriceString(nextInvoiceCost)}
+          </SFText>
+
+          <div className={styles.withDiscountAmount}>
+            <SFText type="component-1-medium">
+              {getPriceString(
+                nextInvoiceCost - (nextInvoiceCost * coupon.amount) / 100
+              )}
+            </SFText>
+
+            <SFChip
+              size="small"
+              sfColor="primary"
+              variant="outlined"
+              label={coupon.label}
+            />
+          </div>
+        </div>
+      )}
     </div>
   );
 };

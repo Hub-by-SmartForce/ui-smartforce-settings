@@ -1,4 +1,4 @@
-import { apiGet } from '../Helpers';
+import { apiGet, apiPost } from '../Helpers';
 import {
   ApplicationProduct,
   Subscription,
@@ -128,6 +128,14 @@ export const updateSubscription = async (
   } catch (e) {
     return Promise.reject(e);
   }
+};
+
+export const activateSubscription = async (
+  baseUrl: string,
+  { product, ...subscription }: Omit<SubscriptionValue, 'plan'>
+): Promise<Subscription> => {
+  const url: string = `${baseUrl}/subscriptions/${product}/activate`;
+  return apiPost(url, subscription, getUserSession().access_token);
 };
 
 export const updateCreditCard = async (

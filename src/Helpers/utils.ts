@@ -54,3 +54,7 @@ export function asyncDebounce<F extends (...args: any[]) => Promise<any>>(
       debounced(resolve, reject, args);
     }) as ReturnType<F>;
 }
+
+export function replaceElementAt<T>(list: T[], elem: T, index: number): T[] {
+  return [...list.slice(0, index), elem, ...list.slice(index + 1)];
+}

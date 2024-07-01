@@ -6,7 +6,8 @@ import { RemainingSeats } from './RemainingSeats/RemainingSeats';
 import {
   getPaidSubscription,
   isChipListValid,
-  isEmailValid
+  isEmailValid,
+  isFreeTrial
 } from '../../../../../Helpers';
 import { TourContext, TourTooltip } from '../../../../../Modules/Tour';
 
@@ -42,7 +43,7 @@ export const AgencyMembersForm = ({
           members.length === 0 ? styles.emptyList : ''
         }`}
       >
-        {paidSubscription && (
+        {paidSubscription && !isFreeTrial(paidSubscription) && (
           <RemainingSeats
             seatsBilled={paidSubscription.total_seats_billed}
             seatsUsed={paidSubscription.total_seats_used}

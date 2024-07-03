@@ -17,6 +17,7 @@ import { ThemeTypeContext } from '../../../Context';
 
 function hasPayment(payment: SubscriptionPayment | null): boolean {
   return (
+    (payment?.method !== 'debit' && payment?.method !== 'card') ||
     (payment?.method === 'debit' && !!payment.debit) ||
     (payment?.method === 'card' && !!payment.card)
   );

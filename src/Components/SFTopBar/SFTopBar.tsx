@@ -9,6 +9,7 @@ import {
   ToursReminderTooltip,
   ToursReminderTooltipProps
 } from '../../Modules/Tour';
+import { SFTopBarNotification } from './SFTopBarNotification/SFTopBarNotification';
 
 interface SFTopBarEnvContextProps {
   enviroment: AppEnv;
@@ -84,6 +85,7 @@ export const SFTopBar = ({
           <div className={styles.actions}>
             {actions}
 
+            <SFTopBarNotification />
             <SFTopBarApps />
           </div>
 

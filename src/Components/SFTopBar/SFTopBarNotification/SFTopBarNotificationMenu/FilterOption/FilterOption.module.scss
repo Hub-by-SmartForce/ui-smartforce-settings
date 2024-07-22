@@ -1,0 +1,44 @@
+@import '~sfui/dist/Styles/SFColors/SFColors.module.scss';
+
+.filterOption {
+  cursor: pointer;
+  padding: 5px 12px;
+  box-sizing: border-box;
+  border-radius: 16px;
+
+  &.disabled {
+    pointer-events: none;
+  }
+
+  &.selected {
+    background-color: $sf-grey-100;
+  }
+
+  @media (hover: hover) {
+    &:hover {
+      background-color: $sf-grey-200;
+    }
+  }
+
+  &:active {
+    background-color: $sf-grey-300;
+  }
+}
+
+:global(.nightMode) {
+  .filterOption {
+    &.selected {
+      background-color: $sf-grey-500;
+    }
+
+    @media (hover: hover) {
+      &:hover {
+        background-color: $sf-grey-600;
+      }
+    }
+
+    &:active {
+      background-color: $sf-grey-700;
+    }
+  }
+}

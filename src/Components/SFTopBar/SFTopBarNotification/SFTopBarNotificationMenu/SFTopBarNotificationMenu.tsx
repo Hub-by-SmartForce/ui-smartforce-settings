@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import styles from './SFTopBarNotificationMenu.module.scss';
 import { SFButton, SFDivider } from 'sfui';
 import { FilterOption } from './FilterOption/FilterOption';
+import { NotificationList } from './NotificationList/NotificationList';
 import { AppNotification } from '../../../../Models';
 
 export interface SFTopBarNotificationMenuProps {
@@ -52,7 +53,9 @@ export const SFTopBarNotificationMenu = ({
 
       <SFDivider size={1} />
 
-      <div>//TODO notifications list</div>
+      <NotificationList
+        list={filterUnread ? unreadNotifications : notifications}
+      />
     </div>
   );
 };

@@ -1,0 +1,29 @@
+@import '~sfui/dist/Styles/SFMedia/SFMedia.module.scss';
+
+.sFTopBarNotificationMenu {
+  width: 343px;
+  max-height: 100%;
+  padding: 13px 0;
+  box-sizing: border-box;
+  display: grid;
+  grid-template-rows: auto auto minmax(0, 1fr);
+
+  .topActions {
+    display: flex;
+    justify-content: space-between;
+    padding: 0 24px 12px 24px;
+    box-sizing: border-box;
+
+    .filters {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+    }
+  }
+}
+
+@media screen and (min-width: $sf-media-xl-width) {
+  .sFTopBarNotificationMenu {
+    width: 500px;
+  }
+}

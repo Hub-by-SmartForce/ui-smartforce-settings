@@ -1,0 +1,73 @@
+@import '~sfui/dist/Styles/SFColors/SFColors.module.scss';
+
+.notificationListItem {
+  display: flex;
+  gap: 15px;
+  padding: 6px 24px;
+  box-sizing: border-box;
+  cursor: pointer;
+
+  @media (hover: hover) {
+    &:hover {
+      background-color: rgba(204, 204, 204, 0.3);
+    }
+  }
+
+  &:active {
+    background-color: rgba(204, 204, 204, 0.5);
+  }
+
+  .avatar {
+    width: 42px;
+    height: 42px;
+    border-radius: 20px;
+  }
+
+  .body {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    flex: 1;
+    justify-content: space-between;
+    gap: 2px;
+
+    .text {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+      padding: 1px 0;
+      box-sizing: border-box;
+
+      .author {
+        font-weight: 500;
+      }
+    }
+
+    .unread {
+      margin-top: 8px;
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background-color: $sf-blue-main-light;
+    }
+  }
+}
+
+:global(.nightMode) {
+  .notificationListItem {
+    @media (hover: hover) {
+      &:hover {
+        background-color: rgba(128, 128, 128, 0.3);
+      }
+    }
+
+    &:active {
+      background-color: rgba(128, 128, 128, 0.2);
+    }
+
+    .body {
+      .unread {
+        background-color: $sf-blue-main-dark;
+      }
+    }
+  }
+}

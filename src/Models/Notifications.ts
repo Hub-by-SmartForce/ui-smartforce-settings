@@ -18,3 +18,13 @@ export interface Preferences {
 export interface RecipientsEmails {
   emails: string[];
 }
+
+// UPDATE model
+export interface AppNotification {
+  id: string;
+  author: string;
+  author_avatar: string;
+  title: string;
+  date_start: string;
+  date_read?: string;
+}

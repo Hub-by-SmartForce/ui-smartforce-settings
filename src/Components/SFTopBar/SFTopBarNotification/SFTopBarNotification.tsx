@@ -1,12 +1,15 @@
 import React, { useState } from 'react';
 import styles from './SFTopBarNotification.module.scss';
 import { SFBadge, SFIconButton, SFPopover } from 'sfui';
+import { SFTopBarNotificationMenu } from './SFTopBarNotificationMenu/SFTopBarNotificationMenu';
+import { APP_NOTIFICATIONS } from '../../../Services';
 
 export interface SFTopBarNotificationProps {}
 
 export const SFTopBarNotification =
   (): React.ReactElement<SFTopBarNotificationProps> => {
     const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null);
+    const unreadNotifications = APP_NOTIFICATIONS.filter((n) => !n.date_read);
 
     const onOpenMenu: React.MouseEventHandler<HTMLButtonElement> = (
       event
@@ -32,13 +35,15 @@ export const SFTopBarNotification =
           }}
           onClose={onClose}
         >
-          <div>//TODO</div>
+          <SFTopBarNotificationMenu
+            notifications={APP_NOTIFICATIONS}
+            unreadNotifications={unreadNotifications}
+          />
         </SFPopover>
 
         <SFBadge
           className={styles.sFTopBarNotification}
-          //TODO set this value if there are unread notifications
-          value={100}
+          value={unreadNotifications.length > 0 ? 100 : 0}
           anchorOrigin={{ vertical: 'top', horizontal: 'left' }}
           overlap="circular"
         >

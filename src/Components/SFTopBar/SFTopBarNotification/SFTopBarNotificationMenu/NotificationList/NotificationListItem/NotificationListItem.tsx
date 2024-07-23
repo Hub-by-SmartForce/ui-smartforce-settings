@@ -35,30 +35,35 @@ function getDateLabel(
 export interface NotificationListItemProps {
   notification: AppNotification;
   isOlder?: boolean;
+  onClick: () => void;
 }
 
 export const NotificationListItem = ({
   notification,
-  isOlder = false
+  isOlder = false,
+  onClick
 }: NotificationListItemProps): React.ReactElement<NotificationListItemProps> => {
   const customer = useContext(CustomerContext).customer as Customer;
 
   return (
-    <div className={styles.notificationListItem}>
-      <img src={notification.author_avatar} className={styles.avatar} />
+    <div className={styles.notificationListItem} onClick={onClick}>
+      <img
+        src={notification.author.thumbnail_image}
+        className={styles.avatar}
+      />
 
       <div className={styles.body}>
         <div className={styles.text}>
           <SFText type="component-1">
-            <span className={styles.author}>{notification.author}</span>{' '}
+            <span className={styles.author}>{notification.author.name}</span>{' '}
             {notification.title}
           </SFText>
           <SFText type="component-3" sfColor="neutral">
-            {getDateLabel(notification.date_start, customer.timezone, isOlder)}
+            {getDateLabel(notification.start_date, customer.timezone, isOlder)}
           </SFText>
         </div>
 
-        {!notification.date_read && <div className={styles.unread}></div>}
+        {!notification.readed_at && <div className={styles.unread}></div>}
       </div>
     </div>
   );

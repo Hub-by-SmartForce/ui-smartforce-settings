@@ -19,7 +19,7 @@ function getGroupedNotifications(
   const now = moment().tz(timezone);
 
   for (const notification of list) {
-    if (now.diff(notification.date_start, 'days') > 7) {
+    if (now.diff(notification.start_date, 'days') > 7) {
       result.older = [...result.older, notification];
     } else {
       result.last = [...result.last, notification];
@@ -31,10 +31,12 @@ function getGroupedNotifications(
 
 export interface NotificationListProps {
   list: AppNotification[];
+  onOpen: (notification: AppNotification) => void;
 }
 
 export const NotificationList = ({
-  list
+  list,
+  onOpen
 }: NotificationListProps): React.ReactElement<NotificationListProps> => {
   const customer = useContext(CustomerContext).customer as Customer;
   const groupedNotifications = getGroupedNotifications(list, customer.timezone);
@@ -56,6 +58,7 @@ export const NotificationList = ({
               <NotificationListItem
                 key={notification.id}
                 notification={notification}
+                onClick={() => onOpen(notification)}
               />
             ))}
           </div>
@@ -77,6 +80,7 @@ export const NotificationList = ({
               <NotificationListItem
                 key={notification.id}
                 notification={notification}
+                onClick={() => onOpen(notification)}
               />
             ))}
           </div>

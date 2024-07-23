@@ -31,10 +31,12 @@ function getGroupedNotifications(
 
 export interface NotificationListProps {
   list: AppNotification[];
+  onOpen: (notification: AppNotification) => void;
 }
 
 export const NotificationList = ({
-  list
+  list,
+  onOpen
 }: NotificationListProps): React.ReactElement<NotificationListProps> => {
   const customer = useContext(CustomerContext).customer as Customer;
   const groupedNotifications = getGroupedNotifications(list, customer.timezone);
@@ -56,6 +58,7 @@ export const NotificationList = ({
               <NotificationListItem
                 key={notification.id}
                 notification={notification}
+                onClick={() => onOpen(notification)}
               />
             ))}
           </div>
@@ -77,6 +80,7 @@ export const NotificationList = ({
               <NotificationListItem
                 key={notification.id}
                 notification={notification}
+                onClick={() => onOpen(notification)}
               />
             ))}
           </div>

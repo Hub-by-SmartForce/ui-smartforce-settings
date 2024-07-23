@@ -8,13 +8,19 @@ import { AppNotification } from '../../../../Models';
 export interface SFTopBarNotificationMenuProps {
   notifications: AppNotification[];
   unreadNotifications: AppNotification[];
+  onOpen: (notification: AppNotification) => void;
 }
 
 export const SFTopBarNotificationMenu = ({
   notifications,
-  unreadNotifications
+  unreadNotifications,
+  onOpen
 }: SFTopBarNotificationMenuProps): React.ReactElement<SFTopBarNotificationMenuProps> => {
   const [filterUnread, setFilterUnread] = useState<boolean>(false);
+
+  const onReadAll = () => {
+    //TODO
+  };
 
   return (
     <div className={styles.sFTopBarNotificationMenu}>
@@ -43,9 +49,7 @@ export const SFTopBarNotificationMenu = ({
           sfColor="blue"
           size="medium"
           disabled={unreadNotifications.length === 0}
-          onClick={() => {
-            //TODO
-          }}
+          onClick={onReadAll}
         >
           Mark all as read
         </SFButton>
@@ -55,6 +59,7 @@ export const SFTopBarNotificationMenu = ({
 
       <NotificationList
         list={filterUnread ? unreadNotifications : notifications}
+        onOpen={onOpen}
       />
     </div>
   );

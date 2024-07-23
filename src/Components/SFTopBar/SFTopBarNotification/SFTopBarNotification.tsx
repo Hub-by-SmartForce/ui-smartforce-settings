@@ -3,6 +3,7 @@ import styles from './SFTopBarNotification.module.scss';
 import { SFBadge, SFIconButton, SFPopover } from 'sfui';
 import { SFTopBarNotificationMenu } from './SFTopBarNotificationMenu/SFTopBarNotificationMenu';
 import { APP_NOTIFICATIONS } from '../../../Services';
+import { AppNotification } from '../../../Models';
 
 export interface SFTopBarNotificationProps {}
 
@@ -18,6 +19,10 @@ export const SFTopBarNotification =
     };
 
     const onClose = (): void => setAnchorEl(null);
+
+    const onOpenDialog = (_notification: AppNotification) => {
+      //TODO
+    };
 
     return (
       <>
@@ -38,6 +43,7 @@ export const SFTopBarNotification =
           <SFTopBarNotificationMenu
             notifications={APP_NOTIFICATIONS}
             unreadNotifications={unreadNotifications}
+            onOpen={onOpenDialog}
           />
         </SFPopover>
 

@@ -35,16 +35,18 @@ function getDateLabel(
 export interface NotificationListItemProps {
   notification: AppNotification;
   isOlder?: boolean;
+  onClick: () => void;
 }
 
 export const NotificationListItem = ({
   notification,
-  isOlder = false
+  isOlder = false,
+  onClick
 }: NotificationListItemProps): React.ReactElement<NotificationListItemProps> => {
   const customer = useContext(CustomerContext).customer as Customer;
 
   return (
-    <div className={styles.notificationListItem}>
+    <div className={styles.notificationListItem} onClick={onClick}>
       <img
         src={notification.author.thumbnail_image}
         className={styles.avatar}

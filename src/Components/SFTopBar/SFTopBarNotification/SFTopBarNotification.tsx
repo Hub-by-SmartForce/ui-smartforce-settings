@@ -4,12 +4,16 @@ import { SFBadge, SFIconButton, SFPopover } from 'sfui';
 import { SFTopBarNotificationMenu } from './SFTopBarNotificationMenu/SFTopBarNotificationMenu';
 import { APP_NOTIFICATIONS } from '../../../Services';
 import { AppNotification } from '../../../Models';
+import { NotificationDialog } from './SFTopBarNotificationMenu/NotificationDialog/NotificationDialog';
 
 export interface SFTopBarNotificationProps {}
 
 export const SFTopBarNotification =
   (): React.ReactElement<SFTopBarNotificationProps> => {
     const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null);
+    const [isDialogOpen, setIsDialogOpen] = useState<boolean>(false);
+    const [selected, setSelected] = useState<AppNotification | undefined>();
+
     const unreadNotifications = APP_NOTIFICATIONS.filter((n) => !n.readed_at);
 
     const onOpenMenu: React.MouseEventHandler<HTMLButtonElement> = (
@@ -20,12 +24,22 @@ export const SFTopBarNotification =
 
     const onClose = (): void => setAnchorEl(null);
 
-    const onOpenDialog = (_notification: AppNotification) => {
-      //TODO
+    const onOpenDialog = (notification: AppNotification) => {
+      setSelected(notification);
+      setIsDialogOpen(true);
+      setAnchorEl(null);
     };
 
     return (
       <>
+        {selected && (
+          <NotificationDialog
+            isOpen={isDialogOpen}
+            notification={selected}
+            onClose={() => setIsDialogOpen(false)}
+          />
+        )}
+
         <SFPopover
           PaperProps={{ style: { display: 'flex' } }}
           open={Boolean(anchorEl)}

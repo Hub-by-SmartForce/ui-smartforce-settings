@@ -19,7 +19,7 @@ function getGroupedNotifications(
   const now = moment().tz(timezone);
 
   for (const notification of list) {
-    if (now.diff(notification.date_start, 'days') > 7) {
+    if (now.diff(notification.start_date, 'days') > 7) {
       result.older = [...result.older, notification];
     } else {
       result.last = [...result.last, notification];

@@ -9,7 +9,7 @@ export interface SFTopBarNotificationProps {}
 export const SFTopBarNotification =
   (): React.ReactElement<SFTopBarNotificationProps> => {
     const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null);
-    const unreadNotifications = APP_NOTIFICATIONS.filter((n) => !n.date_read);
+    const unreadNotifications = APP_NOTIFICATIONS.filter((n) => !n.readed_at);
 
     const onOpenMenu: React.MouseEventHandler<HTMLButtonElement> = (
       event

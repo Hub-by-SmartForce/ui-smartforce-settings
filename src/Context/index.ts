@@ -1,5 +1,6 @@
 export * from './Areas';
 export * from './Api';
+export * from './AppNotifications';
 export * from './Customer';
 export * from './Media';
 export * from './StatesListConfig';

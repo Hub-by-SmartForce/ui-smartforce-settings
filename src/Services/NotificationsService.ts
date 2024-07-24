@@ -5,6 +5,7 @@ import {
   Preferences,
   RecipientsEmails
 } from '../Models';
+import { apiGet, apiPost } from '../Helpers';
 
 // TODO remove mock
 export const APP_NOTIFICATIONS: AppNotification[] = [
@@ -127,9 +128,17 @@ export const updateRecipientsNotifications = async (
   }
 };
 
-export function getAppNotifications(): Promise<AppNotification[]> {
-  // TODO replace mock up
-  return Promise.resolve(APP_NOTIFICATIONS);
-  // const url: string = `${baseUrl}/notifications`;
-  // return apiGet(url, getUserSession().access_token)
+export function getAppNotifications(
+  baseUrl: string
+): Promise<AppNotification[]> {
+  const url: string = `${baseUrl}/user-notifications`;
+  return apiGet(url, getUserSession().access_token);
+}
+
+export function updateNotificationsRead(
+  baseUrl: string,
+  idList: string[]
+): Promise<void> {
+  const url: string = `${baseUrl}/user-notifications/read`;
+  return apiPost(url, idList, getUserSession().access_token);
 }

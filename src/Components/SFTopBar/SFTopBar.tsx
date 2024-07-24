@@ -4,7 +4,7 @@ import { SFIconButton } from 'sfui';
 import { SFTopBarUser } from './SFTopBarUser/SFTopBarUser';
 import { SFLogo } from '../SFLogo/SFLogo';
 import { SFTopBarApps } from './SFTopBarApps/SFTopBarApps';
-import { AppEnv, ApplicationProduct } from '../../Models';
+import { AppEnv, ApplicationProduct, SettingsError } from '../../Models';
 import {
   ToursReminderTooltip,
   ToursReminderTooltipProps
@@ -34,6 +34,7 @@ export interface SFTopBarProps {
   featureReminderProps?: Omit<ToursReminderTooltipProps, 'children'>;
   onLogout: () => void;
   onMenuButtonClick: () => void;
+  onError: (e: SettingsError) => void;
 }
 
 export const SFTopBar = ({
@@ -48,7 +49,8 @@ export const SFTopBar = ({
   userMenuItems,
   featureReminderProps,
   onLogout,
-  onMenuButtonClick
+  onMenuButtonClick,
+  onError
 }: SFTopBarProps): React.ReactElement<SFTopBarProps> => {
   const onGotIt = (value: boolean) => featureReminderProps?.onGotIt(value);
 
@@ -85,7 +87,7 @@ export const SFTopBar = ({
           <div className={styles.actions}>
             {actions}
 
-            <SFTopBarNotification />
+            <SFTopBarNotification onError={onError} />
             <SFTopBarApps />
           </div>
 

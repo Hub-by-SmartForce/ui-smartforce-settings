@@ -9,18 +9,16 @@ export interface SFTopBarNotificationMenuProps {
   notifications: AppNotification[];
   unreadNotifications: AppNotification[];
   onOpen: (notification: AppNotification) => void;
+  onReadAll: () => void;
 }
 
 export const SFTopBarNotificationMenu = ({
   notifications,
   unreadNotifications,
-  onOpen
+  onOpen,
+  onReadAll
 }: SFTopBarNotificationMenuProps): React.ReactElement<SFTopBarNotificationMenuProps> => {
   const [filterUnread, setFilterUnread] = useState<boolean>(false);
-
-  const onReadAll = () => {
-    //TODO
-  };
 
   return (
     <div className={styles.sFTopBarNotificationMenu}>

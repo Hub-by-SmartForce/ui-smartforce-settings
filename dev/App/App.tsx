@@ -20,7 +20,8 @@ import {
   isLogin,
   login,
   logout,
-  TourProvider
+  TourProvider,
+  AppNotificationsProvider
 } from '../../src';
 import { Login, LoginFormValue } from './Login/Login';
 import { Main } from './Main/Main';
@@ -75,15 +76,17 @@ export const App = () => {
                 <CustomerProvider>
                   <SubscriptionProvider>
                     <AreasProvider>
-                      <SFPaper className={styles.app}>
-                        {isLoading && <SFSpinner />}
-                        {!isLoading && (
-                          <React.Fragment>
-                            {!isLogged && <Login onLogin={onLogin} />}
-                            {isLogged && <Main />}
-                          </React.Fragment>
-                        )}
-                      </SFPaper>
+                      <AppNotificationsProvider>
+                        <SFPaper className={styles.app}>
+                          {isLoading && <SFSpinner />}
+                          {!isLoading && (
+                            <React.Fragment>
+                              {!isLogged && <Login onLogin={onLogin} />}
+                              {isLogged && <Main />}
+                            </React.Fragment>
+                          )}
+                        </SFPaper>
+                      </AppNotificationsProvider>
                     </AreasProvider>
                   </SubscriptionProvider>
                 </CustomerProvider>

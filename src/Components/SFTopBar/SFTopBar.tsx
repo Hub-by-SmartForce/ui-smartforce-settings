@@ -87,7 +87,7 @@ export const SFTopBar = ({
           <div className={styles.actions}>
             {actions}
 
-            <SFTopBarNotification onError={onError} />
+            <SFTopBarNotification enviroment={enviroment} onError={onError} />
             <SFTopBarApps />
           </div>
 

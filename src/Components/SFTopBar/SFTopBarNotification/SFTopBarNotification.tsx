@@ -2,19 +2,21 @@ import React, { useContext, useState } from 'react';
 import styles from './SFTopBarNotification.module.scss';
 import { SFBadge, SFIconButton, SFPopover } from 'sfui';
 import { SFTopBarNotificationMenu } from './SFTopBarNotificationMenu/SFTopBarNotificationMenu';
-import { AppNotification, SettingsError } from '../../../Models';
+import { AppEnv, AppNotification, SettingsError } from '../../../Models';
 import { NotificationDialog } from './SFTopBarNotificationMenu/NotificationDialog/NotificationDialog';
-import { ApiContext, AppNotificationsContext } from '../../../Context';
+import { AppNotificationsContext } from '../../../Context';
 import { updateNotificationsRead } from '../../../Services';
+import { getApiBaseUrl } from '../../../Helpers/application';
 
 export interface SFTopBarNotificationProps {
+  enviroment: AppEnv;
   onError: (e: SettingsError) => void;
 }
 
 export const SFTopBarNotification = ({
+  enviroment,
   onError
 }: SFTopBarNotificationProps): React.ReactElement<SFTopBarNotificationProps> => {
-  const apiBaseUrl = React.useContext(ApiContext).settings;
   const { notifications, setNotificationsRead } = useContext(
     AppNotificationsContext
   );
@@ -41,7 +43,7 @@ export const SFTopBarNotification = ({
   const onMarkRead = async (ids: string[]) => {
     try {
       setNotificationsRead(ids);
-      await updateNotificationsRead(apiBaseUrl, ids);
+      await updateNotificationsRead(getApiBaseUrl(enviroment), ids);
     } catch (e: any) {
       console.error('SFTopBarNotification::onMarkRead', e);
       onError(e);
@@ -59,7 +61,10 @@ export const SFTopBarNotification = ({
         <NotificationDialog
           isOpen={isDialogOpen}
           notification={selected}
-          onClose={() => onMarkRead([selected.id])}
+          onClose={() => {
+            setIsDialogOpen(false);
+            !selected.readed_at && onMarkRead([selected.id]);
+          }}
         />
       )}
 

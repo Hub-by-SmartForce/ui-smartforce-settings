@@ -8,6 +8,11 @@
   display: grid;
   grid-template-rows: auto auto minmax(0, 1fr);
 
+  &.isEmpty {
+    display: block;
+    padding: 19px 24px;
+  }
+
   .topActions {
     display: flex;
     justify-content: space-between;

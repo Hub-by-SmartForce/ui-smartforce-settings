@@ -64,7 +64,7 @@ export const AgencyBillingApp = ({
           src={`data:image/jpeg;base64,${
             themeType === 'day' ? app.logo.dayMode : app.logo.nightMode
           }`}
-          alt=""
+          alt="App Logo"
         />
         {!subscription && (
           <SFButton onClick={() => onGetStarted(app.product)}>

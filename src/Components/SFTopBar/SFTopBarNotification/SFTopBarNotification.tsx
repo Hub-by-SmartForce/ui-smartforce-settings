@@ -97,6 +97,7 @@ export const SFTopBarNotification = ({
         overlap="circular"
       >
         <SFIconButton
+          aria-label="Notifications"
           sfIcon="Bell"
           iconSize={20}
           buttonSize={34}

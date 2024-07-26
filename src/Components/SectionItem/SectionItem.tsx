@@ -29,10 +29,10 @@ const SectionItem = ({
       {hasImage && (
         <div className={styles.image}>
           <Fragment>
-            {image !== '' && <img alt="" src={image} />}
+            {image !== '' && <img alt="Picture" src={image} />}
             {image === '' && (
               <img
-                alt=""
+                alt="Picture"
                 src={`data:image/svg+xml;utf8,${encodeURIComponent(
                   themeType === 'day' ? DMImageEmpty : NMImageEmpty
                 )}`}

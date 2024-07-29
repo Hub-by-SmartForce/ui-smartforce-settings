@@ -24,7 +24,7 @@ export const SFLogo = ({
               <img
                 className={styles.badge}
                 src={customer.badge}
-                alt=""
+                alt="Badge"
                 onError={onErrorBadge}
               />
             )}

@@ -35,7 +35,7 @@ export const NotificationDialog = ({
           }`}
         >
           <SFText type="component-title">
-            {notification.author.name} {notification.title}
+            {notification.author.name} - {notification.title}
           </SFText>
 
           {!notification.image && (

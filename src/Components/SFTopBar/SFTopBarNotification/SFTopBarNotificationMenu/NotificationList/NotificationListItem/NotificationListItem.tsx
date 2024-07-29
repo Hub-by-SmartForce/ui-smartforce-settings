@@ -55,7 +55,8 @@ export const NotificationListItem = ({
       <div className={styles.body}>
         <div className={styles.text}>
           <SFText type="component-1">
-            <span className={styles.author}>{notification.author.name}</span>{' '}
+            <span className={styles.author}>{notification.author.name}</span>
+            {' - '}
             {notification.title}
           </SFText>
           <SFText type="component-3" sfColor="neutral">

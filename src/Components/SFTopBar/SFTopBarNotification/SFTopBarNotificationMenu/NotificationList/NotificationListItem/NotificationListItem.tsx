@@ -64,7 +64,7 @@ export const NotificationListItem = ({
           </SFText>
         </div>
 
-        {!notification.readed_at && <div className={styles.unread}></div>}
+        {!notification.read_at && <div className={styles.unread}></div>}
       </div>
     </div>
   );

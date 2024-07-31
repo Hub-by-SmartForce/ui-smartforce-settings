@@ -28,7 +28,7 @@ export const AppNotificationsProvider: FC = ({ children }) => {
         if (idList.includes(n.id)) {
           return {
             ...n,
-            readed_at: date
+            read_at: date
           };
         } else {
           return n;

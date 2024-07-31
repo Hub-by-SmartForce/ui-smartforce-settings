@@ -24,7 +24,7 @@ export const SFTopBarNotification = ({
   const [isDialogOpen, setIsDialogOpen] = useState<boolean>(false);
   const [selected, setSelected] = useState<AppNotification | undefined>();
 
-  const unreadNotifications = notifications.filter((n) => !n.readed_at);
+  const unreadNotifications = notifications.filter((n) => !n.read_at);
 
   const onOpenMenu: React.MouseEventHandler<HTMLButtonElement> = (
     event
@@ -63,7 +63,7 @@ export const SFTopBarNotification = ({
           notification={selected}
           onClose={() => {
             setIsDialogOpen(false);
-            !selected.readed_at && onMarkRead([selected.id]);
+            !selected.read_at && onMarkRead([selected.id]);
           }}
         />
       )}

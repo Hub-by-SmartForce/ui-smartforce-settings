@@ -38,6 +38,6 @@ export interface AppNotification {
   start_date: string;
   end_date: string;
   delivered_at?: string;
-  readed_at?: string;
+  read_at?: string;
   created_at: string;
 }

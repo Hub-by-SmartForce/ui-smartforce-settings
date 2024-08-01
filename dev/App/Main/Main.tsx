@@ -26,7 +26,9 @@ import {
   TourContext,
   UserSettings,
   hideTours,
-  useSaveTourAction
+  useSaveTourAction,
+  getAppNotifications,
+  AppNotificationsContext
 } from '../../../src';
 import { SFIcon, SFSpinner, SFText, useSFMediaQuery } from 'sfui';
 import { BASE_URL } from '../App';
@@ -46,6 +48,7 @@ export const Main = (): React.ReactElement<{}> => {
     onInitPaused
   } = useContext(TourContext);
   const { setUser, setUserSettings } = useContext(UserContext);
+  const { setNotifications } = useContext(AppNotificationsContext);
   const { setAreas } = useContext(AreasContext);
   const { setCustomer } = useContext(CustomerContext);
   const { setSubscriptions } = useContext(SubscriptionContext);
@@ -80,6 +83,9 @@ export const Main = (): React.ReactElement<{}> => {
         if (customerData.status === 'Active') {
           const userSettings: UserSettings = await getUserSettings(BASE_URL);
           setUserSettings(userSettings);
+
+          const appNotifications = await getAppNotifications(BASE_URL);
+          setNotifications(appNotifications);
 
           const tourSettings = userSettings.tours.find((t) => t.app === 'cc');
 
@@ -185,6 +191,7 @@ export const Main = (): React.ReactElement<{}> => {
               isBottomTitleVisible={!isBigScreen}
               onLogout={onLogout}
               onMenuButtonClick={onMenuButtonClick}
+              onError={onSettingsError}
             />
 
             <div className={styles.content}>

@@ -51,7 +51,12 @@ export const SFTopBarUser = ({
         user={user as User}
       />
 
-      <div className={styles.SFTopBarUser} onClick={onMenuOpen}>
+      <div
+        className={styles.SFTopBarUser}
+        onClick={onMenuOpen}
+        aria-label="User Menu"
+        role="button"
+      >
         <Avatar
           className={styles.avatar}
           name={user.name}

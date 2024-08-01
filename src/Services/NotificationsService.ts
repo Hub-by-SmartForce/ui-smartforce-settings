@@ -1,9 +1,11 @@
 import { getUserSession } from './AuthService';
 import {
+  AppNotification,
   EmailNotificationsType,
   Preferences,
   RecipientsEmails
 } from '../Models';
+import { apiGet } from '../Helpers';
 
 export const getNotificationsPreferences = async (
   baseUrl: string
@@ -62,3 +64,40 @@ export const updateRecipientsNotifications = async (
     return Promise.reject(e);
   }
 };
+
+export function getAppNotifications(
+  baseUrl: string
+): Promise<AppNotification[]> {
+  const url: string = `${baseUrl}/user-notifications`;
+  return apiGet(url, getUserSession().access_token);
+}
+
+export async function updateNotificationsRead(
+  baseUrl: string,
+  idList: string[]
+): Promise<void> {
+  const url: string = `${baseUrl}/user-notifications/read`;
+  try {
+    const fetchResp = await fetch(url, {
+      method: 'POST',
+      headers: new Headers({
+        'Content-Type': 'application/json',
+        Authorization: `bearer ${getUserSession().access_token}`
+      }),
+      body: JSON.stringify(idList)
+    });
+
+    if (fetchResp.ok) {
+      return;
+    } else {
+      const fetchData = await fetchResp.json();
+      return Promise.reject({
+        code: fetchResp.status,
+        text: fetchResp.statusText,
+        detail: fetchData.detail
+      });
+    }
+  } catch (e) {
+    return Promise.reject(e);
+  }
+}

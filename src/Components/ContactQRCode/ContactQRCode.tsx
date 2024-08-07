@@ -126,7 +126,7 @@ const getQRCodeURL = (
       paramsArray.push(`${key}=${value}`);
     }
   });
-  const token = Buffer.from(paramsArray.join('&')).toString('base64');
+  const token = btoa(paramsArray.join('&'));
 
   return `${ccPublicURL}${token}`;
 };

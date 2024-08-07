@@ -189,6 +189,7 @@ export const Main = (): React.ReactElement<{}> => {
               product="cc"
               siteTitle="Settings"
               isBottomTitleVisible={!isBigScreen}
+              officerCardUrl="https://officercard-dev.citizencontact.app"
               onLogout={onLogout}
               onMenuButtonClick={onMenuButtonClick}
               onError={onSettingsError}

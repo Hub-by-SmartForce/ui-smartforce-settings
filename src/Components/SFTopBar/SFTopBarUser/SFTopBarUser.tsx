@@ -11,11 +11,13 @@ import { QRCodeModal } from '../../QRCodeModal/QRCodeModal';
 
 export interface SFTopBarUserProps {
   children?: React.ReactNode;
+  officerCardUrl: string;
   onLogout: () => void;
 }
 
 export const SFTopBarUser = ({
   children,
+  officerCardUrl,
   onLogout
 }: SFTopBarUserProps): React.ReactElement<SFTopBarUserProps> => {
   const user = React.useContext(UserContext).user as User;
@@ -43,7 +45,7 @@ export const SFTopBarUser = ({
   return (
     <Fragment>
       <QRCodeModal
-        baseUrl="https://officercard-dev.citizencontact.app"
+        baseUrl={officerCardUrl}
         isOpen={isQRModalOpen}
         onClose={() => setIsQRModalOpen(false)}
         title="Scan the QR Code"

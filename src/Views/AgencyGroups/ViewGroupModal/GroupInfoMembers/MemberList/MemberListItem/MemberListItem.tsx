@@ -65,6 +65,7 @@ export const MemberListItem = ({
       {isActive && (
         <div>
           <SFIconButton
+            aria-label="Open member options menu"
             rotate="left"
             sfIcon="Other"
             sfSize="medium"

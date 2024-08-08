@@ -56,6 +56,7 @@ export const AgencyAreasListItem = ({
         }}
       >
         <SFIconButton
+          aria-label="Open area options menu"
           rotate="left"
           sfIcon="Other"
           sfSize="small"

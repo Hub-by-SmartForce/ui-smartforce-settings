@@ -1,7 +1,11 @@
 import React from 'react';
 import { onKeyUp } from '../../Helpers';
 
-export interface InteractiveBoxProps {
+export interface InteractiveBoxProps
+  extends React.DetailedHTMLProps<
+    React.HTMLAttributes<HTMLDivElement>,
+    HTMLDivElement
+  > {
   className?: string;
   style?: React.CSSProperties;
   children?: React.ReactNode;

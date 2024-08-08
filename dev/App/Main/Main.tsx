@@ -181,7 +181,7 @@ export const Main = (): React.ReactElement<{}> => {
 
   return (
     <React.Fragment>
-      {isLoading && <SFSpinner />}
+      {isLoading && <SFSpinner aria-label="Fetching content" />}
       {!isLoading && (
         <Fragment>
           <TourResumeTab onExit={onExitTourResume} onResume={onResumeTour} />

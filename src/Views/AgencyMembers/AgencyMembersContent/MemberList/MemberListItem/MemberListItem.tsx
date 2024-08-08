@@ -212,6 +212,7 @@ export const MemberListItem = ({
                 >
                   <SFIconButton
                     className={styles.menuButton}
+                    aria-label="Open member options menu"
                     sfIcon="Other"
                     sfSize="medium"
                     onClick={() => {
@@ -225,6 +226,7 @@ export const MemberListItem = ({
               {!member.isFirstOfficer && (
                 <SFIconButton
                   className={styles.menuButton}
+                  aria-label="Open member options menu"
                   sfIcon="Other"
                   sfSize="medium"
                   onClick={() => {

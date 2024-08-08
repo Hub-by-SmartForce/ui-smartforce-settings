@@ -140,7 +140,9 @@ export const StripeCreditCardForm = ({
         </SFAlert>
       )}
 
-      {isLoading && <SFSpinner className={styles.spinner} />}
+      {isLoading && (
+        <SFSpinner aria-label="Initializing form" className={styles.spinner} />
+      )}
 
       <div className={`${styles.form} ${isLoading ? styles.isLoading : ''}`}>
         <CardNumberElement

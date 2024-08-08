@@ -338,7 +338,7 @@ export const MemberList = ({
 
       {isLoading && (
         <div className={styles.spinner}>
-          <SFSpinner />
+          <SFSpinner aria-label="Loading" />
         </div>
       )}
     </div>

@@ -54,6 +54,7 @@ export const ListItem = <T,>({
       >
         {showItemMenu && (
           <SFIconButton
+            aria-label="Open item options"
             rotate="left"
             sfIcon="Other"
             sfSize="small"

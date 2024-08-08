@@ -21,6 +21,7 @@ const SectionMenu = ({
       className={`${styles.sectionMenu} ${selected ? styles.selected : ''} ${
         disabled ? styles.disabled : ''
       }`}
+      aria-disabled={disabled}
       onClick={!disabled ? onClick : undefined}
     >
       <p className={styles.title}>{title}</p>

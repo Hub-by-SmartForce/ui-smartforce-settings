@@ -72,7 +72,7 @@ export const SFTopBar = ({
                 onGotIt={onGotIt}
               >
                 <SFIconButton
-                  aria-label="Menu"
+                  aria-label="Open navigation menu"
                   sfSize="medium"
                   sfIcon="Menu-1"
                   onClick={() => onMenuButtonClick()}

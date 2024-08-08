@@ -20,6 +20,7 @@ import { SETTINGS_CUSTOM_EVENT } from '../../../../../Constants';
 import { ApiContext } from '../../../../../Context';
 import { TourContext, TourTooltip } from '../../../../../Modules/Tour';
 import { MemberItem } from '../MemberList';
+import { InteractiveBox } from '../../../../../Components';
 
 export interface MemberListItemProps {
   member: MemberItem;
@@ -116,9 +117,11 @@ export const MemberListItem = ({
             setIsMenuOpen(false);
           }}
         >
-          <SFMenuItem onClick={onSeeProfile}>See profile</SFMenuItem>
+          <SFMenuItem tabIndex={0} onClick={onSeeProfile}>
+            See profile
+          </SFMenuItem>
           {showResendInvitationItem && (
-            <SFMenuItem onClick={onResendInvitation}>
+            <SFMenuItem tabIndex={0} onClick={onResendInvitation}>
               Resend invitation
             </SFMenuItem>
           )}
@@ -133,6 +136,7 @@ export const MemberListItem = ({
               placement="right"
             >
               <SFMenuItem
+                tabIndex={0}
                 onClick={() => {
                   onTourNext({ tourId: 2, step: 2 });
                   onChangeRole();
@@ -144,16 +148,22 @@ export const MemberListItem = ({
           )}
 
           {showChangeRoleItem && !member.isFirstOfficer && (
-            <SFMenuItem onClick={onChangeRole}>Change role</SFMenuItem>
+            <SFMenuItem tabIndex={0} onClick={onChangeRole}>
+              Change role
+            </SFMenuItem>
           )}
 
-          {showRemoveItem && <SFMenuItem onClick={onRemove}>Remove</SFMenuItem>}
+          {showRemoveItem && (
+            <SFMenuItem tabIndex={0} onClick={onRemove}>
+              Remove
+            </SFMenuItem>
+          )}
         </SFMenu>
 
-        <div className={styles.content} onClick={onClick}>
+        <InteractiveBox className={styles.content} onClick={onClick}>
           <Avatar name={member.name} url={member.avatar_thumbnail_url} />
 
-          <div className={styles.memberInfo} onClick={onClick}>
+          <div className={styles.memberInfo}>
             {member.name && (
               <p className={styles.nameWrapper}>
                 <span className={styles.name}>{member.name}</span>
@@ -185,7 +195,7 @@ export const MemberListItem = ({
               />
             </div>
           </div>
-        </div>
+        </InteractiveBox>
 
         <div className={styles.menu} ref={refAnchorEl}>
           {showMenu && (

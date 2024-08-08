@@ -37,7 +37,12 @@ const SettingsPanel = ({
         } ${isLoading ? styles.hide : ''}`}
       >
         <div className={styles.topBar}>
-          <SFIconButton sfIcon="Close" sfSize="medium" onClick={onClose} />
+          <SFIconButton
+            aria-label="Close panel"
+            sfIcon="Close"
+            sfSize="medium"
+            onClick={onClose}
+          />
         </div>
 
         <div className={styles.content}>{children}</div>

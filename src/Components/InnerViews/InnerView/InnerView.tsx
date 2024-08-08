@@ -49,9 +49,7 @@ export const InnerView = ({
 
           {!isBilling && <h2 className={styles.title}>{view.viewTitle}</h2>}
 
-          {!isPhone && (
-            <h5 className={styles.description}>{view.description}</h5>
-          )}
+          {!isPhone && <p className={styles.description}>{view.description}</p>}
         </div>
       )}
 

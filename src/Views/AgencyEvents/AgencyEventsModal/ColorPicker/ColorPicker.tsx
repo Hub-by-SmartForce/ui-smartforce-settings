@@ -1,6 +1,7 @@
 import React from 'react';
 import styles from './ColorPicker.module.scss';
 import { SFText } from 'sfui';
+import { InteractiveBox } from '../../../../Components';
 
 const colorPalette: string[] = [
   '#0D69F2',
@@ -44,7 +45,7 @@ export const ColorPicker = ({
               color === colorSelected ? styles.selected : ''
             }`}
           >
-            <div
+            <InteractiveBox
               className={styles.color}
               style={{ backgroundColor: color }}
               onClick={() => onColorClick(color)}

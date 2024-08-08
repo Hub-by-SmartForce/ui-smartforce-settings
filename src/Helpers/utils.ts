@@ -58,3 +58,9 @@ export function asyncDebounce<F extends (...args: any[]) => Promise<any>>(
 export function replaceElementAt<T>(list: T[], elem: T, index: number): T[] {
   return [...list.slice(0, index), elem, ...list.slice(index + 1)];
 }
+
+export function onKeyUp(e: React.KeyboardEvent, cb?: Function) {
+  if (e.key === 'Enter' && cb) {
+    cb();
+  }
+}

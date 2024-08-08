@@ -4,6 +4,7 @@ import { SFChip, SFIconButton, SFMenu, SFMenuItem, SFText } from 'sfui';
 import { GroupMember, User } from '../../../../../../Models';
 import { Avatar } from '../../../../../../Components/Avatar/Avatar';
 import { isRoleOwner, upperFirstChar } from '../../../../../../Helpers';
+import { InteractiveBox } from '../../../../../../Components';
 
 export interface MemberListItemProps {
   isActive: boolean;
@@ -42,7 +43,7 @@ export const MemberListItem = ({
     >
       <Avatar name={member.name} url={member.avatar_thumbnail_url} />
 
-      <div className={styles.memberInfo} onClick={props.onClick}>
+      <InteractiveBox className={styles.memberInfo} onClick={props.onClick}>
         <SFText type="component-2">
           {member.name}
           {isUser && <span className={styles.textNeutral}>{' (You)'}</span>}
@@ -59,7 +60,7 @@ export const MemberListItem = ({
           variant={isRoleOwner(member.role) ? 'default' : 'outlined'}
           size="small"
         />
-      </div>
+      </InteractiveBox>
 
       {isActive && (
         <div>
@@ -72,7 +73,7 @@ export const MemberListItem = ({
 
           <SFMenu
             className={styles.optionsMenu}
-            autoFocus={false}
+            autoFocus={false} // eslint-disable-line jsx-a11y/no-autofocus
             anchorEl={menuAnchorElement}
             open={Boolean(menuAnchorElement)}
             onClose={onMenuClose}
@@ -81,7 +82,9 @@ export const MemberListItem = ({
             anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
             transformOrigin={{ vertical: 'top', horizontal: 'right' }}
           >
-            <SFMenuItem onClick={onRemove}>Remove from group</SFMenuItem>
+            <SFMenuItem tabIndex={0} onClick={onRemove}>
+              Remove from group
+            </SFMenuItem>
           </SFMenu>
         </div>
       )}

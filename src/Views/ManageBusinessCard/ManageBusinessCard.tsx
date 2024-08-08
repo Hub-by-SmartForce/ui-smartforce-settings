@@ -170,9 +170,9 @@ export const ManageBusinessCard = ({
                 <div className={styles.textContainer}>
                   <h2 className={styles.title}>My Business Card</h2>
                   {!isPhone && (
-                    <h5 className={styles.description}>
+                    <p className={styles.description}>
                       Manage your business card information.
-                    </h5>
+                    </p>
                   )}
                 </div>
 

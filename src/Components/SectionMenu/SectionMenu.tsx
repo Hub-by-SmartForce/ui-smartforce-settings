@@ -1,6 +1,7 @@
 import React from 'react';
 import styles from './SectionMenu.module.scss';
 import { SFChip } from 'sfui';
+import { InteractiveBox } from '../InteractiveBox/InteractiveBox';
 
 export interface SectionMenuProps {
   title: string;
@@ -16,7 +17,7 @@ const SectionMenu = ({
   onClick
 }: SectionMenuProps): React.ReactElement<SectionMenuProps> => {
   return (
-    <div
+    <InteractiveBox
       className={`${styles.sectionMenu} ${selected ? styles.selected : ''} ${
         disabled ? styles.disabled : ''
       }`}
@@ -24,7 +25,7 @@ const SectionMenu = ({
     >
       <p className={styles.title}>{title}</p>
       {disabled && <SFChip size="small" sfColor="default" label="Soon" />}
-    </div>
+    </InteractiveBox>
   );
 };
 

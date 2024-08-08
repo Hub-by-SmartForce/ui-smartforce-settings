@@ -24,6 +24,7 @@ export const ToursReminderContent = (
 
   return (
     <div
+      role="presentation"
       className={styles.tourTooltipContent}
       onClick={(e) => e.stopPropagation()}
     >

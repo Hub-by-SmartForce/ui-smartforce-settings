@@ -1,6 +1,7 @@
 import React from 'react';
 import styles from './AppLink.module.scss';
 import { SFText } from 'sfui';
+import { InteractiveBox } from '../../../../../InteractiveBox/InteractiveBox';
 
 export interface AppLinkProps {
   icon: string;
@@ -16,7 +17,7 @@ export const AppLink = ({
   onClick
 }: AppLinkProps): React.ReactElement<AppLinkProps> => {
   return (
-    <div
+    <InteractiveBox
       className={`${styles.appLink} ${selected ? styles.selected : ''}`}
       onClick={onClick}
     >
@@ -27,6 +28,6 @@ export const AppLink = ({
       />
 
       <SFText type="component-2">{label}</SFText>
-    </div>
+    </InteractiveBox>
   );
 };

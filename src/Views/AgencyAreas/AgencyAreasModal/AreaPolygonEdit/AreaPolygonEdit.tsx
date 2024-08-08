@@ -23,6 +23,7 @@ import {
   isEqualObject
 } from '../../../../Helpers';
 import { TourContext, TourTooltip } from '../../../../Modules/Tour';
+import { InteractiveBox } from '../../../../Components';
 
 export interface AreaPolygonEditProps {
   area?: Area;
@@ -102,9 +103,9 @@ export const AreaPolygonEdit = ({
             marginLeft: '27px'
           }}
         >
-          <div className={styles.undoButton} onClick={onUndo}>
+          <InteractiveBox className={styles.undoButton} onClick={onUndo}>
             <SFIcon icon="Reload" size={30} />
-          </div>
+          </InteractiveBox>
         </TourTooltip>
       )}
 
@@ -115,9 +116,9 @@ export const AreaPolygonEdit = ({
           }}
           title="Restore area"
         >
-          <div className={styles.undoButton} onClick={onUndo}>
+          <InteractiveBox className={styles.undoButton} onClick={onUndo}>
             <SFIcon icon="Reload" size={30} />
-          </div>
+          </InteractiveBox>
         </SFTooltip>
       )}
 

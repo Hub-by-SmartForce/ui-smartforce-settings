@@ -3,6 +3,7 @@ import styles from './AgencyAreasLIstItem.module.scss';
 import { Avatar } from '../../../../Components/Avatar/Avatar';
 import { SFIconButton, SFMenu, SFMenuItem, SFText } from 'sfui';
 import { Area } from '../../../../Models';
+import { InteractiveBox } from '../../../../Components';
 
 export interface AgencyAreasListItemProps {
   area: Area;
@@ -43,10 +44,11 @@ export const AgencyAreasListItem = ({
   };
 
   return (
-    <div className={styles.agencyAreasListItem} onClick={onClick}>
+    <InteractiveBox className={styles.agencyAreasListItem} onClick={onClick}>
       <Avatar size="small" acronym={area.acronym} />
       <SFText type="component-2">{area.name}</SFText>
       <div
+        role="presentation"
         className={styles.menu}
         onClick={(e) => {
           e.stopPropagation();
@@ -61,7 +63,7 @@ export const AgencyAreasListItem = ({
         />
 
         <SFMenu
-          autoFocus={false}
+          autoFocus={false} // eslint-disable-line jsx-a11y/no-autofocus
           anchorEl={menuAnchorElement}
           open={Boolean(menuAnchorElement)}
           onClose={onMenuClose}
@@ -70,11 +72,17 @@ export const AgencyAreasListItem = ({
           anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
           transformOrigin={{ vertical: 'top', horizontal: 'right' }}
         >
-          <SFMenuItem onClick={onSeeInfo}>See area information</SFMenuItem>
-          <SFMenuItem onClick={onAreaEdit}>Edit Area</SFMenuItem>
-          <SFMenuItem onClick={onAreaDelete}>Delete</SFMenuItem>
+          <SFMenuItem tabIndex={0} onClick={onSeeInfo}>
+            See area information
+          </SFMenuItem>
+          <SFMenuItem tabIndex={0} onClick={onAreaEdit}>
+            Edit Area
+          </SFMenuItem>
+          <SFMenuItem tabIndex={0} onClick={onAreaDelete}>
+            Delete
+          </SFMenuItem>
         </SFMenu>
       </div>
-    </div>
+    </InteractiveBox>
   );
 };

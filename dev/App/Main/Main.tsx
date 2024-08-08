@@ -28,7 +28,8 @@ import {
   hideTours,
   useSaveTourAction,
   getAppNotifications,
-  AppNotificationsContext
+  AppNotificationsContext,
+  InteractiveBox
 } from '../../../src';
 import { SFIcon, SFSpinner, SFText, useSFMediaQuery } from 'sfui';
 import { BASE_URL } from '../App';
@@ -111,11 +112,20 @@ export const Main = (): React.ReactElement<{}> => {
     };
 
     init();
-  }, []);
+  }, [
+    onInitPaused,
+    setAreas,
+    setCustomer,
+    setNotifications,
+    setSubscriptions,
+    setTimezones,
+    setUser,
+    setUserSettings
+  ]);
 
   const onLogout = () => {
     logout();
-    location.reload();
+    window.location.reload();
   };
 
   const onMenuButtonClick = () => console.log('Open menu');
@@ -201,12 +211,15 @@ export const Main = (): React.ReactElement<{}> => {
                   open={isFeatureReminderOpen}
                   onGotIt={onGotIt}
                 >
-                  <div className={styles.tours} onClick={onShowTours}>
+                  <InteractiveBox
+                    className={styles.tours}
+                    onClick={onShowTours}
+                  >
                     <SFIcon icon="Rectangle-Star" />
                     <SFText type="component-1" sfColor="neutral">
                       Feature Tours
                     </SFText>
-                  </div>
+                  </InteractiveBox>
                 </ToursReminderTooltip>
               </div>
 

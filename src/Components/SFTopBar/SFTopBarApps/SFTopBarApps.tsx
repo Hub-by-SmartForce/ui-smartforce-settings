@@ -17,6 +17,7 @@ export const SFTopBarApps = (): React.ReactElement<{}> => {
       <AppsPopover anchorEl={anchorEl} onClose={onClose} />
 
       {/* <SFIconButton
+        aria-label='Open apps menu'
         sfIcon="Bento"
         iconSize={20}
         buttonSize={34}

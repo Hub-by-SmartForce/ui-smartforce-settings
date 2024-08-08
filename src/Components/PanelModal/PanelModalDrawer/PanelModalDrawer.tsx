@@ -36,7 +36,12 @@ export const PanelModalDrawer = ({
     >
       <div className={styles.header}>
         {onBack && (
-          <SFIconButton sfIcon="Left-7" sfSize="medium" onClick={onBack} />
+          <SFIconButton
+            aria-label="Go back"
+            sfIcon="Left-7"
+            sfSize="medium"
+            onClick={onBack}
+          />
         )}
 
         {headerTitle && (
@@ -45,6 +50,7 @@ export const PanelModalDrawer = ({
 
         <SFIconButton
           className={styles.closeButton}
+          aria-label="Close panel"
           sfIcon="Close"
           buttonSize="medium"
           iconSize="medium"

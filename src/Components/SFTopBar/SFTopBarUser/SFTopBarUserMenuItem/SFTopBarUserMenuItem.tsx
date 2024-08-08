@@ -24,6 +24,7 @@ export const SFTopBarUserMenuItem = React.forwardRef(
   ): React.ReactElement<SFTopBarUserMenuItemProps> => {
     return (
       <SFMenuItem
+        tabIndex={0}
         className={`${styles.SFTopBarUserMenuItem} ${className}`}
         onClick={onClick}
         innerRef={ref}

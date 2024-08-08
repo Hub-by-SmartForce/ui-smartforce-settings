@@ -11,7 +11,7 @@ export const Loader = ({
 }: LoaderProps): React.ReactElement<LoaderProps> => {
   return (
     <div className={`${className} ${styles.loader}`}>
-      <SFSpinner size={40} />
+      <SFSpinner aria-label="Loading" size={40} />
     </div>
   );
 };

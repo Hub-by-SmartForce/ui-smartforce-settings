@@ -5,6 +5,7 @@ export * from './ContactQRCode/ContactQRCode';
 export * from './DateTime/DateTime';
 export * from './GoogleMap';
 export * from './ImageUpload/ImageUpload';
+export * from './InteractiveBox/InteractiveBox';
 export * from './ListManagment/ListManagment';
 export * from './Loader/Loader';
 export * from './MultipleMemberPicker/MultipleMemberPicker';

@@ -154,7 +154,7 @@ export const ShiftInfoModal = ({
 
       {props.isLoading && (
         <div className={styles.spinner}>
-          <SFSpinner />
+          <SFSpinner aria-label="Loading" />
         </div>
       )}
 

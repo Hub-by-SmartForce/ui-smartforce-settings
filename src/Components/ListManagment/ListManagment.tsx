@@ -75,7 +75,7 @@ export const ListManagment = <T,>(
       <div className={styles.list}>
         {props.isLoading && (
           <div className={styles.spinner}>
-            <SFSpinner />
+            <SFSpinner aria-label="Loading" />
           </div>
         )}
 

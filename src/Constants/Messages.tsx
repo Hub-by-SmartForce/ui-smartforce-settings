@@ -1,11 +1,11 @@
 import React from 'react';
 
 export const EMAIL_INVALID_MSG = (
-  <label>
+  <p style={{ margin: 0 }}>
     Please enter an email in the correct format and domain.
     <br />
     For example: yourname@youragency.com
-  </label>
+  </p>
 );
 
 export const OFFICER_ID_INVALID_MSG =

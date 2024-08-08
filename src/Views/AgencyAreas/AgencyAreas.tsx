@@ -161,7 +161,7 @@ export const AgencyAreas = ({
               <Divider size={2} />
               {isLoading && (
                 <div className={styles.container}>
-                  <SFSpinner />
+                  <SFSpinner aria-label="Loading" />
                 </div>
               )}
               {!isLoading && (

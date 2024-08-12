@@ -5,26 +5,20 @@ export interface InteractiveBoxProps
   extends React.DetailedHTMLProps<
     React.HTMLAttributes<HTMLDivElement>,
     HTMLDivElement
-  > {
-  className?: string;
-  style?: React.CSSProperties;
-  children?: React.ReactNode;
-  onClick?: () => void;
-}
+  > {}
 
 export const InteractiveBox = React.forwardRef<
   HTMLDivElement,
   InteractiveBoxProps
 >(
   (
-    { className = '', style, children, onClick }: InteractiveBoxProps,
+    { children, onClick, ...props }: InteractiveBoxProps,
     ref
   ): React.ReactElement<InteractiveBoxProps> => {
     return (
       <div
+        {...props}
         ref={ref}
-        className={className}
-        style={style}
         role="button"
         tabIndex={0}
         onKeyUp={(e) => onKeyUp(e, onClick)}

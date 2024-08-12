@@ -12,22 +12,26 @@ export interface InteractiveBoxProps
   onClick?: () => void;
 }
 
-export const InteractiveBox = ({
-  className = '',
-  style,
-  children,
-  onClick
-}: InteractiveBoxProps): React.ReactElement<InteractiveBoxProps> => {
-  return (
-    <div
-      className={className}
-      style={style}
-      role="button"
-      tabIndex={0}
-      onKeyUp={(e) => onKeyUp(e, onClick)}
-      onClick={onClick}
-    >
-      {children}
-    </div>
-  );
-};
+export const InteractiveBox = React.forwardRef<
+  HTMLDivElement,
+  InteractiveBoxProps
+>(
+  (
+    { className = '', style, children, onClick }: InteractiveBoxProps,
+    ref
+  ): React.ReactElement<InteractiveBoxProps> => {
+    return (
+      <div
+        ref={ref}
+        className={className}
+        style={style}
+        role="button"
+        tabIndex={0}
+        onKeyUp={(e) => onKeyUp(e, onClick)}
+        onClick={onClick}
+      >
+        {children}
+      </div>
+    );
+  }
+);

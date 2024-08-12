@@ -2,10 +2,7 @@ import React from 'react';
 import { onKeyUp } from '../../Helpers';
 
 export interface InteractiveBoxProps
-  extends React.DetailedHTMLProps<
-    React.HTMLAttributes<HTMLDivElement>,
-    HTMLDivElement
-  > {}
+  extends React.HTMLAttributes<HTMLDivElement> {}
 
 export const InteractiveBox = React.forwardRef<
   HTMLDivElement,

@@ -22,8 +22,7 @@
     "build": "npm run clean && rollup -c --environment BUILD:production",
     "build_dev": "npm run clean && rollup -c --environment BUILD:development",
     "link": "npm link --ignore-scripts && npm link ./example-app/node_modules/react",
-    "prepare": "npm run build",
-    "serve": "npm run build_dev && npm run link && cd example-app && npm run serve"
+    "prepare": "npm run build"
   },
   "dependencies": {
     "@turf/destination": "^6.5.0",

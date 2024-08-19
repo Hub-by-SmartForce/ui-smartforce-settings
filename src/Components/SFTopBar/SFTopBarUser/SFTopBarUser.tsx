@@ -1,4 +1,4 @@
-import React, { Fragment, MouseEvent } from 'react';
+import React, { Fragment, MouseEvent, useRef } from 'react';
 import styles from './SFTopBarUser.module.scss';
 import { SFIcon } from 'sfui';
 import { UserContext } from '../../../Context';
@@ -11,19 +11,29 @@ import { QRCodeModal } from '../../QRCodeModal/QRCodeModal';
 
 export interface SFTopBarUserProps {
   children?: React.ReactNode;
+  officerCardUrl: string;
   onLogout: () => void;
 }
 
 export const SFTopBarUser = ({
   children,
+  officerCardUrl,
   onLogout
 }: SFTopBarUserProps): React.ReactElement<SFTopBarUserProps> => {
   const user = React.useContext(UserContext).user as User;
   const [anchorEl, setAnchorEl] = React.useState<HTMLDivElement | null>(null);
   const [isQRModalOpen, setIsQRModalOpen] = React.useState<boolean>(false);
 
+  const refDiv = useRef<HTMLDivElement>(null);
+
   const onMenuOpen = (event: MouseEvent<HTMLDivElement>) => {
     setAnchorEl(event.currentTarget);
+  };
+
+  const onKeyMenuOpen = (e: React.KeyboardEvent) => {
+    if (e.key === 'Enter') {
+      setAnchorEl(refDiv.current);
+    }
   };
 
   const onMenuClose = () => {
@@ -43,7 +53,7 @@ export const SFTopBarUser = ({
   return (
     <Fragment>
       <QRCodeModal
-        baseUrl="https://officercard-dev.citizencontact.app"
+        baseUrl={officerCardUrl}
         isOpen={isQRModalOpen}
         onClose={() => setIsQRModalOpen(false)}
         title="Scan the QR Code"
@@ -52,10 +62,12 @@ export const SFTopBarUser = ({
       />
 
       <div
+        ref={refDiv}
         className={styles.SFTopBarUser}
         onClick={onMenuOpen}
-        aria-label="User Menu"
+        onKeyUp={onKeyMenuOpen}
         role="button"
+        tabIndex={0}
       >
         <Avatar
           className={styles.avatar}

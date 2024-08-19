@@ -29,13 +29,13 @@ export const Login = ({
   };
 
   return (
-    <div className={styles.login} onKeyUp={onKeyUp}>
+    <div className={styles.login} role="presentation" onKeyUp={onKeyUp}>
       <form>
         <SFTextField
           label="E-mail"
           type="email"
           value={value.email}
-          autoFocus
+          autoFocus // eslint-disable-line jsx-a11y/no-autofocus
           onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
             setValue((v) => ({ ...v, email: e.target.value.toLowerCase() }))
           }
@@ -50,7 +50,6 @@ export const Login = ({
           }
         />
       </form>
-
       <SFButton disabled={disabled} onClick={() => onLogin(value)}>
         Log in
       </SFButton>

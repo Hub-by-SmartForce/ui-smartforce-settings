@@ -1,6 +1,7 @@
 import React from 'react';
 import styles from './DayPicker.module.scss';
 import { SFMenuOption, SFText } from 'sfui';
+import { InteractiveBox } from '../../../../../../Components';
 
 const options: SFMenuOption[] = [
   { label: 'M', value: 'MO' },
@@ -34,13 +35,13 @@ export const DayPicker = ({
       {options.map((day: SFMenuOption) => {
         const selected: boolean = value.includes(day.value);
         return (
-          <div
+          <InteractiveBox
             key={day.value}
             onClick={() => onToggle(day.value, selected)}
             className={`${styles.day} ${selected ? styles.selected : ''}`}
           >
             <SFText type="component-button-L">{day.label}</SFText>
-          </div>
+          </InteractiveBox>
         );
       })}
     </div>

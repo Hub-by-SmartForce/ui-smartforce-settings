@@ -439,7 +439,7 @@ export const SFSettings = ({
     );
   }, [routeSectionSelected]);
 
-  React.useEffect(() => {
+  useEffect(() => {
     // Opens the panel with the selected section if routeSection is selected
     if (routeSectionSelected !== -1 && isPhone) {
       setIsPanelOpen(true);

@@ -111,7 +111,7 @@ export const GroupHistoryModal = ({
       <div className={styles.groupHistoryModal}>
         {isLoading && (
           <div className={styles.spinner}>
-            <SFSpinner />
+            <SFSpinner aria-label="Loading" />
           </div>
         )}
 

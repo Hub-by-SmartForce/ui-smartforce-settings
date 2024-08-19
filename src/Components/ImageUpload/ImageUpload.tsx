@@ -90,17 +90,15 @@ export const ImageUpload = ({
       />
 
       <div className={styles.imageField}>
-        {value && typeof value === 'string' && (
-          <img alt="Picture" src={value} />
-        )}
+        {value && typeof value === 'string' && <img alt="" src={value} />}
 
         {value && typeof value !== 'string' && (
-          <img alt="Picture" src={window.URL.createObjectURL(value)} />
+          <img alt="" src={window.URL.createObjectURL(value)} />
         )}
 
         {!value && (
           <img
-            alt="Picture"
+            alt=""
             className={styles.emptyBadge}
             src={`data:image/svg+xml;utf8,${encodeURIComponent(
               themeType === 'day' ? DMImageEmpty : NMImageEmpty

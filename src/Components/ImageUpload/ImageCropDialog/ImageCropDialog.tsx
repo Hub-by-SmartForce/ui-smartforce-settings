@@ -107,7 +107,12 @@ export const ImageCropDialog = ({
     >
       <header>
         <h4>Move and Scale</h4>
-        <SFIconButton sfIcon="Close" sfSize="medium" onClick={onClose} />
+        <SFIconButton
+          aria-label="Close dialog"
+          sfIcon="Close"
+          sfSize="medium"
+          onClick={onClose}
+        />
       </header>
 
       <div className={styles.dialogContent}>

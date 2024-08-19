@@ -1,6 +1,7 @@
 import React from 'react';
 import styles from './FilterOption.module.scss';
 import { SFText } from 'sfui';
+import { InteractiveBox } from '../../../../InteractiveBox/InteractiveBox';
 
 export interface FilterOptionProps {
   selected: boolean;
@@ -16,7 +17,7 @@ export const FilterOption = ({
   onClick
 }: FilterOptionProps): React.ReactElement<FilterOptionProps> => {
   return (
-    <div
+    <InteractiveBox
       className={`${styles.filterOption} ${selected ? styles.selected : ''} ${
         disabled ? styles.disabled : ''
       }`}
@@ -28,6 +29,6 @@ export const FilterOption = ({
       >
         {label}
       </SFText>
-    </div>
+    </InteractiveBox>
   );
 };

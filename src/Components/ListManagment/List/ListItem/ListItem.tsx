@@ -1,6 +1,7 @@
 import React from 'react';
 import styles from './ListItem.module.scss';
 import { SFIconButton, SFMenu, SFMenuItem } from 'sfui';
+import { InteractiveBox } from '../../../InteractiveBox/InteractiveBox';
 
 export interface ListManagmentMenuOption<T> {
   label: string;
@@ -40,11 +41,12 @@ export const ListItem = <T,>({
   };
 
   return (
-    <div className={styles.listItem} onClick={onClick}>
+    <InteractiveBox className={styles.listItem} onClick={onClick}>
       {renderItem(item)}
 
       <div
         className={styles.menu}
+        role="presentation"
         onClick={(e) => {
           e.stopPropagation();
           e.preventDefault();
@@ -52,6 +54,7 @@ export const ListItem = <T,>({
       >
         {showItemMenu && (
           <SFIconButton
+            aria-label="Open item options"
             rotate="left"
             sfIcon="Other"
             sfSize="small"
@@ -60,7 +63,7 @@ export const ListItem = <T,>({
         )}
 
         <SFMenu
-          autoFocus={false}
+          autoFocus={false} // eslint-disable-line jsx-a11y/no-autofocus
           anchorEl={menuAnchorElement}
           open={Boolean(menuAnchorElement)}
           onClose={onMenuClose}
@@ -76,6 +79,7 @@ export const ListItem = <T,>({
             )
             .map((o: ListManagmentMenuOption<T>) => (
               <SFMenuItem
+                tabIndex={0}
                 className={styles.listMenuItem}
                 key={o.label}
                 disabled={o.disabled}
@@ -87,6 +91,6 @@ export const ListItem = <T,>({
             ))}
         </SFMenu>
       </div>
-    </div>
+    </InteractiveBox>
   );
 };

@@ -78,7 +78,9 @@ export const App = () => {
                     <AreasProvider>
                       <AppNotificationsProvider>
                         <SFPaper className={styles.app}>
-                          {isLoading && <SFSpinner />}
+                          {isLoading && (
+                            <SFSpinner aria-label="Validating user" />
+                          )}
                           {!isLoading && (
                             <React.Fragment>
                               {!isLogged && <Login onLogin={onLogin} />}

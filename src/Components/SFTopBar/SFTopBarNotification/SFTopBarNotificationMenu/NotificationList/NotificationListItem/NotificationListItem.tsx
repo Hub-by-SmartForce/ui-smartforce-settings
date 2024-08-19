@@ -4,6 +4,7 @@ import moment from 'moment-timezone';
 import { AppNotification, Customer } from '../../../../../../Models';
 import { SFText } from 'sfui';
 import { CustomerContext } from '../../../../../../Context';
+import { InteractiveBox } from '../../../../../InteractiveBox/InteractiveBox';
 
 function getDateLabel(
   date: string,
@@ -46,10 +47,11 @@ export const NotificationListItem = ({
   const customer = useContext(CustomerContext).customer as Customer;
 
   return (
-    <div className={styles.notificationListItem} onClick={onClick}>
+    <InteractiveBox className={styles.notificationListItem} onClick={onClick}>
       <img
         src={notification.author.thumbnail_image}
         className={styles.avatar}
+        alt="Author Avatar"
       />
 
       <div className={styles.body}>
@@ -66,6 +68,6 @@ export const NotificationListItem = ({
 
         {!notification.read_at && <div className={styles.unread}></div>}
       </div>
-    </div>
+    </InteractiveBox>
   );
 };

@@ -32,6 +32,7 @@ export interface SFTopBarProps {
   actions?: React.ReactNode;
   userMenuItems?: React.ReactNode;
   featureReminderProps?: Omit<ToursReminderTooltipProps, 'children'>;
+  officerCardUrl: string;
   onLogout: () => void;
   onMenuButtonClick: () => void;
   onError: (e: SettingsError) => void;
@@ -48,6 +49,7 @@ export const SFTopBar = ({
   actions,
   userMenuItems,
   featureReminderProps,
+  officerCardUrl,
   onLogout,
   onMenuButtonClick,
   onError
@@ -70,7 +72,7 @@ export const SFTopBar = ({
                 onGotIt={onGotIt}
               >
                 <SFIconButton
-                  aria-label="Menu"
+                  aria-label="Open navigation menu"
                   sfSize="medium"
                   sfIcon="Menu-1"
                   onClick={() => onMenuButtonClick()}
@@ -93,7 +95,9 @@ export const SFTopBar = ({
           </div>
 
           <div className={styles.user}>
-            <SFTopBarUser onLogout={onLogout}>{userMenuItems}</SFTopBarUser>
+            <SFTopBarUser officerCardUrl={officerCardUrl} onLogout={onLogout}>
+              {userMenuItems}
+            </SFTopBarUser>
           </div>
         </div>
 

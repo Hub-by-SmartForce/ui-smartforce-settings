@@ -116,6 +116,7 @@ export const BusinessCardPreview = ({
                   className={`${styles.icon} ${
                     mediaType === 'mobile' ? styles.active : ''
                   }`}
+                  aria-label="Change to mobile screen"
                   sfSize="medium"
                   sfIcon="Smartphone"
                   onClick={() => onMediaChange('mobile')}
@@ -124,6 +125,7 @@ export const BusinessCardPreview = ({
                   className={`${styles.icon} ${
                     mediaType === 'desktop' ? styles.active : ''
                   }`}
+                  aria-label="Change to desktop screen"
                   sfIcon="Computer"
                   sfSize="medium"
                   onClick={() => onMediaChange('desktop')}

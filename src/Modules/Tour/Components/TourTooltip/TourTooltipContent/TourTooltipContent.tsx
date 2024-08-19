@@ -39,6 +39,7 @@ export const TourTooltipContent = (
           </div>
 
           <SFIconButton
+            aria-label="Close tooltip"
             sfIcon="Close"
             sfSize="small"
             onClick={() => onTourClose([props.tourId])}

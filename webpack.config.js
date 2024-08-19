@@ -2,6 +2,7 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 const path = require('path');
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 const ReactRefreshWebpackPlugin = require('@pmmmwh/react-refresh-webpack-plugin');
+const ESLintPlugin = require('eslint-webpack-plugin');
 
 module.exports = {
   mode: 'development',
@@ -64,6 +65,11 @@ module.exports = {
     nodeEnv: 'development'
   },
   plugins: [
+    new ESLintPlugin({
+      extensions: ['ts', 'tsx'],
+      failOnWarning: false,
+      emitWarning: false
+    }),
     new HtmlWebpackPlugin({
       filename: 'index.html',
       template: './dev/public/index.html'

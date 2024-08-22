@@ -1,6 +1,6 @@
 {
   "name": "ui-smartforce-settings",
-  "version": "3.12.0",
+  "version": "3.12.1",
   "description": "Smartforce UI Settings library",
   "author": "The Smartforce Team",
   "license": "MIT",
@@ -51,7 +51,7 @@
     "@typescript-eslint/parser": "^4.5.0",
     "autoprefixer": "^10.4.12",
     "babel-loader": "^8.2.5",
-    "business-card-component": "git+https://github.com/CitizenContactApp/business-card-component.git#v1.2.1",
+    "business-card-component": "git+https://github.com/CitizenContactApp/business-card-component.git#hotfix/v3.12.1",
     "clean-webpack-plugin": "^4.0.0",
     "css-loader": "^6.7.1",
     "eslint": "^7.32.0",

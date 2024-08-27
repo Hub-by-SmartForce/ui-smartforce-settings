@@ -133,7 +133,7 @@ export const ManageBusinessCard = ({
       setIsLoading(false);
       setIsSaveDisabled(true);
       dispatchCustomEvent(SETTINGS_CUSTOM_EVENT, {
-        message: 'Your changes was saved successfully.'
+        message: 'Your changes were saved successfully.'
       });
 
       if (tourStatus === 'active') {

@@ -40,6 +40,8 @@
       color: $sf-grey-900;
     }
 
-    background-color: $sf-grey-200;
+    & {
+      background-color: $sf-grey-200;
+    }
   }
 }

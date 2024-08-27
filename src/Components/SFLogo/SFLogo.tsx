@@ -37,8 +37,8 @@ export const SFLogo = ({
           </div>
 
           <div className={styles.customerInfo}>
-            <h3 className={styles.name}>{customer.full_name}</h3>
-            <h5 className={styles.state}>{customer.state_name}</h5>
+            <div className={styles.name}>{customer.full_name}</div>
+            <div className={styles.state}>{customer.state_name}</div>
           </div>
         </div>
       )}

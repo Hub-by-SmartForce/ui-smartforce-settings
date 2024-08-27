@@ -3,12 +3,16 @@
 
 .nextPayment {
   @include billingContent;
-  border-top: 1px solid $sf-grey-100;
+  & {
+    border-top: 1px solid $sf-grey-100;
+  }
 }
 
 :global(.nightMode) {
   .nextPayment {
     @include billingContent(false);
-    border-color: $sf-grey-700;
+    & {
+      border-color: $sf-grey-700;
+    }
   }
 }

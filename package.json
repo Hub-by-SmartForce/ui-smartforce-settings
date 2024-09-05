@@ -1,6 +1,6 @@
 {
   "name": "ui-smartforce-settings",
-  "version": "3.12.1",
+  "version": "3.13.0",
   "description": "Smartforce UI Settings library",
   "author": "The Smartforce Team",
   "license": "MIT",
@@ -82,7 +82,7 @@
     "rollup-plugin-terser": "^7.0.2",
     "sass": "^1.55.0",
     "sass-loader": "^13.2.0",
-    "sfui": "git+https://github.com/Smartforce-Technologies-Inc/sfui.git#v1.20.0",
+    "sfui": "git+https://github.com/Smartforce-Technologies-Inc/sfui.git#v1.21.0",
     "style-loader": "^3.3.1",
     "ts-loader": "^9.4.1",
     "tslib": "^2.4.0",
@@ -101,6 +101,6 @@
     "moment-timezone": "^0.5.43",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
-    "sfui": "git+https://github.com/Smartforce-Technologies-Inc/sfui.git#v1.20.0"
+    "sfui": "git+https://github.com/Smartforce-Technologies-Inc/sfui.git#v1.21.0"
   }
 }

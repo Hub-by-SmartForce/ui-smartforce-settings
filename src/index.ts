@@ -6,5 +6,6 @@ export * from './Models';
 export * from './Services';
 export * from './Hooks';
 export * from './Modules/Tour';
+export * from './Modules/SubscriptionWizards';
 export type { SFSettingsProps } from './SFSettings';
 export { SFSettings } from './SFSettings';

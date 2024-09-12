@@ -1,0 +1,54 @@
+@import '~sfui/dist/Styles/SFMedia/SFMedia.module.scss';
+
+.paymentInformation {
+  display: grid;
+  grid-template-rows: minmax(0, 1fr) auto;
+  gap: 24px;
+  box-sizing: border-box;
+
+  .scrollable {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+    padding-right: 16px;
+
+    .paymentMethodOptions {
+      display: flex;
+      flex-direction: column;
+      gap: 0;
+
+      .paymentMethodLabel {
+        margin: 9px 0 0;
+        font-weight: 400;
+        font-size: 16px;
+        line-height: 24px;
+      }
+
+      h3 {
+        padding-bottom: 12px;
+      }
+
+      .option {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+      }
+    }
+  }
+
+  .button {
+    padding-right: 16px;
+  }
+}
+
+@media screen and (min-width: $sf-media-sm-width) {
+  .paymentInformation {
+    .scrollable {
+      padding-right: 36px;
+    }
+
+    .button {
+      padding-right: 36px;
+    }
+  }
+}

@@ -64,3 +64,29 @@ export function onKeyUp(e: React.KeyboardEvent, cb?: Function) {
     cb();
   }
 }
+
+export const isValueEmpty = (value: unknown): boolean => {
+  return (
+    value === null ||
+    value === undefined ||
+    value === 'null' ||
+    value === 'undefined' ||
+    value === '' ||
+    (Array.isArray(value) && value.length === 0) ||
+    (typeof value === typeof {} && Object.keys(value).length === 0)
+  );
+};
+
+export function isFormEmpty<T>(formValue: T | undefined) {
+  if (!formValue) {
+    return true;
+  }
+
+  for (let key in formValue) {
+    if (isValueEmpty(formValue[key as keyof T])) {
+      return true;
+    }
+  }
+
+  return false;
+}

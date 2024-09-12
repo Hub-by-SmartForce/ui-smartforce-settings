@@ -37,7 +37,7 @@ function getIsButtonDisabled(
 
 function getOptions(hideDebit: boolean): SFRadioOptionsProps[] {
   let result: SFRadioOptionsProps[] = [{ label: 'Credit Card', value: 'card' }];
-  if (hideDebit) {
+  if (!hideDebit) {
     result = [...result, { label: 'Bank Account', value: 'debit' }];
   }
   return result;

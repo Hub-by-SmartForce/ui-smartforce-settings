@@ -1,24 +1,8 @@
-@import '~sfui/dist/Styles/SFColors/SFColors.module.scss';
-
-.nextInvoice {
-  display: flex;
-  flex-direction: column;
-  gap: 3px;
-  padding: 12px 0;
-  border-top: 1px solid $sf-grey-100;
-
-  .withoutDiscountAmount {
-    text-decoration: line-through;
-  }
-
-  .withDiscountAmount {
-    display: flex;
-    gap: 12px;
-  }
+.withoutDiscountAmount {
+  text-decoration: line-through;
 }
 
-:global(.nightMode) {
-  .nextInvoice {
-    border-color: $sf-grey-700;
-  }
+.withDiscountAmount {
+  display: flex;
+  gap: 12px;
 }

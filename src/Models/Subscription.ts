@@ -26,11 +26,7 @@ export interface SubscriptionPayment {
 }
 
 export type SubscriptionPlan = 'basic' | 'connect' | 'analytics' | 'schedule';
-export type SubscriptionStatus =
-  | 'Active'
-  | 'Incomplete'
-  | 'Unpaid'
-  | 'Canceled';
+export type SubscriptionStatus = 'Active' | 'Unpaid' | 'Canceled' | 'Pending';
 
 export interface SubscriptionCoupon {
   id: string;
@@ -59,6 +55,7 @@ export interface Subscription {
   start_date: string;
   end_date: string;
   renew: boolean;
+  renewal_date: string;
   free: boolean;
   early_adopter?: boolean;
   current_coupon?: SubscriptionCoupon;

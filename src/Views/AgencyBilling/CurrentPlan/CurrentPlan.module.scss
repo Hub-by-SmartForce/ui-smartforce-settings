@@ -1,32 +1,4 @@
-@import '~sfui/dist/Styles/SFColors/SFColors.module.scss';
-@import '../../../Mixins/BillingCommon.module.scss';
-
 .currentPlan {
-  @include billingContent;
-
-  & {
-    flex-direction: row;
-    align-items: center;
-  }
-
-  .buttonContainer {
-    display: flex;
-    gap: 12px;
-  }
-
-  .description {
-    .plan {
-      display: flex;
-      gap: 10px;
-    }
-  }
-}
-
-:global(.nightMode) {
-  .currentPlan {
-    @include billingContent(false);
-    & {
-      flex-direction: row;
-    }
-  }
+  display: flex;
+  gap: 12px;
 }

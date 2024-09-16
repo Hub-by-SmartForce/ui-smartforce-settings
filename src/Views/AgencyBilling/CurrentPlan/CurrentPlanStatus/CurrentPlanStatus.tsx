@@ -7,8 +7,10 @@ function getPlanStatus(
   subscription: Subscription,
   isPending: boolean
 ): string | undefined {
-  if (subscription.status === 'Incomplete' || isPending) {
+  if (isPending) {
     return 'Pending';
+  } else if (!subscription.renew && !isFreeTrial(subscription)) {
+    return 'Canceled';
   } else if (subscription.status !== 'Active') {
     return subscription.status;
   } else {
@@ -34,7 +36,7 @@ export const CurrentPlanStatus = ({
           sfColor="primary"
           variant="outlined"
           size="small"
-          hasError={subscription.status === 'Unpaid'}
+          hasError={subscription.status === 'Unpaid' || status === 'Canceled'}
           label={status}
         />
       )}

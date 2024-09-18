@@ -21,15 +21,10 @@ function getFee(isAnnually: boolean): number {
   return isAnnually ? ANNUALLY_FEE_ANALYTICS : MONTHLY_FEE_ANALYTICS;
 }
 
-function getCycleOption(allowMonthly: boolean): SFRadioOptionsProps[] {
-  let options = [{ label: 'Pay annually', value: 'annually' }];
-
-  if (allowMonthly) {
-    options = [...options, { label: 'Pay monthly', value: 'monthly' }];
-  }
-
-  return options;
-}
+const CYCLE_OPTIONS: SFRadioOptionsProps[] = [
+  { label: 'Pay annually', value: 'annually' },
+  { label: 'Pay monthly', value: 'monthly' }
+];
 
 export interface BillingFormValue {
   billing_cycle: BillingCycleType;
@@ -44,7 +39,6 @@ export interface PurchaseDetailsProps {
   totalSeatsBilled?: number;
   value: BillingFormValue;
   additionalSeatsAvailable: boolean;
-  allowMonthly?: boolean;
   coupon?: SubscriptionCoupon;
 }
 
@@ -56,7 +50,6 @@ export const PurchaseDetails = ({
   totalSeatsBilled,
   value,
   additionalSeatsAvailable,
-  allowMonthly = true,
   coupon
 }: PurchaseDetailsProps): React.ReactElement<PurchaseDetailsProps> => {
   const isAnnually: boolean = value.billing_cycle === 'annually';
@@ -84,7 +77,7 @@ export const PurchaseDetails = ({
         <WizardStepSection title="Billing Cycle for your Annual Plan">
           <SFRadioGroup
             className={styles.options}
-            options={getCycleOption(allowMonthly)}
+            options={CYCLE_OPTIONS}
             value={value.billing_cycle}
             onChange={(_e, newCycle: string) =>
               onChange({

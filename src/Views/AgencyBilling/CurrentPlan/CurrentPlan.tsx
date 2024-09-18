@@ -49,7 +49,9 @@ export const CurrentPlan = ({
   const [isLoading, setIsLoading] = React.useState<boolean>(false);
 
   const showActivate =
-    isFreeTrial(currentSubscription) && !currentSubscription.renew;
+    isFreeTrial(currentSubscription) &&
+    !currentSubscription?.payment?.method &&
+    !currentSubscription.renew;
 
   const onCloseDialog = () => {
     setIsCancelDialogOpen(false);

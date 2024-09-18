@@ -57,7 +57,7 @@ const memoizedMemberFn = (
           cacheFilter
         );
 
-        if (response.data.length < PAGE_SIZE) {
+        if (!response.links.next) {
           const membersResult = await fn(baseUrl, 'members', cacheFilter);
           response.data = [...response.data, ...membersResult.data];
           if (membersResult.data.length > 0) {

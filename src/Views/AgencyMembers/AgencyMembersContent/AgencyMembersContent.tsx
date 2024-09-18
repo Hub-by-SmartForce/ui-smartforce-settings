@@ -142,8 +142,6 @@ export const AgencyMembersContent = ({
         if (refGetSearchMembers.current) {
           setIsLoading(true);
 
-          let moreMembers: boolean = true;
-
           // Clear members and show loading
           if (searchValue.length >= 3 || refPrevSearch.current.length >= 3) {
             setMembers([]);
@@ -152,15 +150,9 @@ export const AgencyMembersContent = ({
           const response = await refGetSearchMembers.current(searchValue);
 
           if (subscribed && response) {
-            if (response.data.length < PAGE_SIZE) {
-              refSeeMoreUrl.current = undefined;
-              moreMembers = false;
-            } else {
-              refSeeMoreUrl.current = response.links.next;
-            }
-
+            refSeeMoreUrl.current = response.links.next;
             setMembers(setFirstOfficer(response.data));
-            setHasMoreMembers(moreMembers);
+            setHasMoreMembers(!!response.links.next);
             setShowLimit(PAGE_SIZE);
             setIsLoading(false);
 
@@ -240,17 +232,10 @@ export const AgencyMembersContent = ({
       // Reset search cache and update member list
       resetSearchFn();
 
-      let moreMembers: boolean = true;
       const response = await refGetSearchMembers.current(searchValue);
       if (response) {
-        if (response.data.length < PAGE_SIZE) {
-          refSeeMoreUrl.current = undefined;
-          moreMembers = false;
-        } else {
-          refSeeMoreUrl.current = response.links.next;
-        }
         setMembers(setFirstOfficer(response.data));
-        setHasMoreMembers(moreMembers);
+        setHasMoreMembers(!!response.links.next);
         setShowLimit(PAGE_SIZE);
 
         if (

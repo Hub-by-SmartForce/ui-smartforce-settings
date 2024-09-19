@@ -1,7 +1,7 @@
 import React, { Fragment, useContext } from 'react';
 import styles from './AgencyBillingApp.module.scss';
-import { SFButton } from 'sfui';
-import { isFreePlan } from '../../../Helpers';
+import { SFButton, SFDivider } from 'sfui';
+import { formatDateString, isFreePlan, isFreeTrial } from '../../../Helpers';
 import {
   ApplicationProduct,
   SFApp,
@@ -11,9 +11,9 @@ import {
 } from '../../../Models';
 import { CurrentPlan } from '../CurrentPlan/CurrentPlan';
 import { NextInvoice } from '../NextInvoice/NextInvoice';
-import { NextPayment } from '../NextPayment/NextPayment';
 import { PaymentMethod } from '../PaymentMethod/PaymentMethod';
 import { ThemeTypeContext } from '../../../Context';
+import { AgencyBillingItem } from '../AgencyBillingItem/AgencyBillingItem';
 
 function hasPayment(payment: SubscriptionPayment | null): boolean {
   return (
@@ -49,12 +49,15 @@ export const AgencyBillingApp = ({
 }: AgencyBillingAppProps): React.ReactElement<AgencyBillingAppProps> => {
   const { themeType } = useContext(ThemeTypeContext);
 
-  const isCanceled = !subscription?.renew;
   const isPending =
-    subscription?.status === 'Incomplete' ||
-    (!isFreePlan(subscription?.plan) &&
-      subscription?.payment?.method === 'debit' &&
-      !subscription.payment?.debit);
+    !isFreePlan(subscription?.plan) &&
+    subscription?.payment?.method === 'debit' &&
+    !subscription.payment?.debit;
+
+  const arePendingPayments =
+    subscription?.renew ||
+    (subscription?.billing_cycle === 'monthly' &&
+      subscription.end_date !== subscription.renewal_date);
 
   return (
     <div className={styles.agencyBillingApp}>
@@ -74,38 +77,63 @@ export const AgencyBillingApp = ({
       </div>
 
       {subscription && (
-        <Fragment>
-          <div className={styles.section}>
-            <CurrentPlan
-              canUpdate={canUpdate}
-              currentSubscription={subscription}
-              product={currentProduct}
-              isPending={isPending}
-              onError={onError}
-              onActivate={() => onActivate(subscription.product)}
-              onUpgrade={() => onUpgrade(subscription.product)}
-            />
-          </div>
+        <div className={styles.section}>
+          <CurrentPlan
+            canUpdate={canUpdate}
+            currentSubscription={subscription}
+            product={currentProduct}
+            isPending={isPending}
+            onError={onError}
+            onActivate={() => onActivate(subscription.product)}
+            onUpgrade={() => onUpgrade(subscription.product)}
+          />
 
-          {!isFreePlan(subscription.plan) && (
-            <div className={styles.section}>
+          {isFreeTrial(subscription) && !subscription.renew && (
+            <>
+              <SFDivider />
+              <AgencyBillingItem title="Expires on">
+                {formatDateString(subscription.end_date, 'MMMM D, YYYY')}
+              </AgencyBillingItem>
+            </>
+          )}
+
+          {!isFreePlan(subscription.plan) &&
+            (!isFreeTrial(subscription) || !!subscription?.payment?.method) && (
               <Fragment>
-                {!isPending && subscription.status !== 'Unpaid' && (
-                  <>
-                    <NextPayment
-                      paymentDue={subscription.end_date}
-                      canceled={isCanceled}
-                    />
+                <SFDivider />
+                <AgencyBillingItem
+                  title="Billing Cycle"
+                  children={`Annual plan / Pay ${subscription.billing_cycle}`}
+                />
 
-                    {subscription?.payment && (
-                      <NextInvoice
-                        plan={subscription.plan}
-                        billingCycle={subscription.billing_cycle}
-                        billedSeats={subscription.total_seats_billed}
-                        canceled={isCanceled}
-                        coupon={subscription.next_coupon}
-                      />
-                    )}
+                <SFDivider />
+                <AgencyBillingItem
+                  title="RENEWAL DATE"
+                  children={`${formatDateString(
+                    subscription.renewal_date,
+                    'MMMM D, YYYY'
+                  )}${!subscription.renew ? ' (canceled)' : ''}`}
+                />
+
+                <SFDivider />
+                <AgencyBillingItem
+                  title="Next Payment Due"
+                  children={
+                    arePendingPayments
+                      ? formatDateString(subscription.end_date, 'MMMM D, YYYY')
+                      : 'There are no more pending payments'
+                  }
+                />
+
+                {subscription.renew && (
+                  <>
+                    <SFDivider />
+                    <NextInvoice
+                      plan={subscription.plan}
+                      billingCycle={subscription.billing_cycle}
+                      billedSeats={subscription.total_seats_billed}
+                      coupon={subscription.next_coupon}
+                    />
                   </>
                 )}
 
@@ -117,9 +145,8 @@ export const AgencyBillingApp = ({
                   />
                 )}
               </Fragment>
-            </div>
-          )}
-        </Fragment>
+            )}
+        </div>
       )}
     </div>
   );

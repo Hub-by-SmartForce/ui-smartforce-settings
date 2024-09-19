@@ -49,6 +49,7 @@ export const AGENCY_SUBSCRIPTION_UPDATE: string = 'agency.subscription.update';
 export const AGENCY_AREAS_CREATE: string = 'agency.areas.create';
 export const AGENCY_AREAS_UPDATE: string = 'agency.areas.update';
 
+export const AGENCY_GROUPS_READ: string = 'agency.groups.read';
 export const AGENCY_GROUPS_CREATE: string = 'agency.groups.create';
 
 /**

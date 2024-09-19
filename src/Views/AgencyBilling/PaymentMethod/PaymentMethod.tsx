@@ -1,6 +1,5 @@
 import React, { useContext } from 'react';
-import styles from './PaymentMethod.module.scss';
-import { HttpStatusCode, SFText } from 'sfui';
+import { HttpStatusCode, SFButton, SFDivider, SFText } from 'sfui';
 import {
   PanelModal,
   PanelModalAnchor,
@@ -8,9 +7,13 @@ import {
   StripeCreditCardForm
 } from '../../../Components';
 import { useElements, useStripe } from '@stripe/react-stripe-js';
-import { SubscriptionContext } from '../../../Context';
-import { SETTINGS_CUSTOM_EVENT } from '../../../Constants';
+import { SubscriptionContext, UserContext } from '../../../Context';
 import {
+  AGENCY_SUBSCRIPTION_UPDATE,
+  SETTINGS_CUSTOM_EVENT
+} from '../../../Constants';
+import {
+  checkPermissions,
   dispatchCustomEvent,
   getCardErrorMessage,
   replaceElementAt
@@ -20,6 +23,7 @@ import { updateCreditCard, getStripeCardToken } from '../../../Services';
 import { ApiContext } from '../../../Context';
 import { CreditCardInfo } from './CreditCardInfo/CreditCardInfo';
 import { DebitInfo } from './DebitInfo/DebitInfo';
+import { AgencyBillingItem } from '../AgencyBillingItem/AgencyBillingItem';
 
 export interface PaymentMethodProps {
   subscription: Subscription;
@@ -33,6 +37,7 @@ export const PaymentMethod = ({
   onError
 }: PaymentMethodProps): React.ReactElement<PaymentMethodProps> => {
   const apiBaseUrl = useContext(ApiContext).settings;
+  const { user } = useContext(UserContext);
   const elements = useElements();
   const stripe = useStripe();
   const { setSubscriptions } = useContext(SubscriptionContext);
@@ -129,8 +134,13 @@ export const PaymentMethod = ({
     }
   };
 
+  const showCreditCardChangeButton =
+    checkPermissions(AGENCY_SUBSCRIPTION_UPDATE, user?.role.permissions) &&
+    subscription.payment?.method === 'card' &&
+    subscription.payment.card;
+
   return (
-    <div className={styles.paymentMethod}>
+    <>
       <PanelModal
         anchor={anchor}
         title="Change Credit Card"
@@ -162,25 +172,35 @@ export const PaymentMethod = ({
         />
       </PanelModal>
 
-      <div className={styles.description}>
-        <p className={styles.title}>Payment Method</p>
-
+      <SFDivider />
+      <AgencyBillingItem
+        title="Payment Method"
+        action={
+          showCreditCardChangeButton ? (
+            <SFButton
+              size="small"
+              variant="text"
+              color="primary"
+              onClick={onChangeLink}
+            >
+              Change Credit Card
+            </SFButton>
+          ) : undefined
+        }
+      >
         {(subscription.payment?.method === 'check' ||
           subscription.payment?.method === 'wire_transfer') && (
           <SFText type="component-1-medium">Manual Payment</SFText>
         )}
         {subscription.payment?.method === 'card' &&
           subscription.payment.card && (
-            <CreditCardInfo
-              card={subscription.payment.card}
-              onChangeCardClick={onChangeLink}
-            />
+            <CreditCardInfo card={subscription.payment.card} />
           )}
         {subscription.payment?.method === 'debit' &&
           subscription.payment.debit && (
             <DebitInfo debit={subscription.payment.debit} />
           )}
-      </div>
-    </div>
+      </AgencyBillingItem>
+    </>
   );
 };

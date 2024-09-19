@@ -1,0 +1,80 @@
+@import '~sfui/dist/Styles/SFMedia/SFMedia.module.scss';
+
+.purchaseDetails {
+  display: grid;
+  grid-template-rows: minmax(0, 1fr) auto;
+  gap: 24px;
+
+  .scrollable {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+    padding-right: 16px;
+
+    .options {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .membersPrice {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+
+      > h3 {
+        margin: 0;
+        font-weight: 500;
+      }
+    }
+
+    .additionalPrice {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+
+      > h3 {
+        margin: 0;
+        font-weight: 500;
+      }
+    }
+
+    .billingCycle {
+      margin: 9px 0 0;
+      font-weight: 400;
+      font-size: 16px;
+      line-height: 24px;
+    }
+
+    .alertMessage {
+      margin: 0;
+      font-weight: 400;
+      font-size: 16px;
+      line-height: 24px;
+    }
+  }
+
+  .price {
+    display: flex;
+    justify-content: space-between;
+
+    h3 {
+      margin: 0;
+    }
+  }
+
+  .button {
+    padding-right: 16px;
+  }
+}
+
+@media screen and (min-width: $sf-media-sm-width) {
+  .purchaseDetails {
+    .scrollable {
+      padding-right: 36px;
+    }
+
+    .button {
+      padding-right: 36px;
+    }
+  }
+}

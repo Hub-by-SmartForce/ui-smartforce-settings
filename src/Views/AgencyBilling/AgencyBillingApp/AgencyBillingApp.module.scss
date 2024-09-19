@@ -4,8 +4,9 @@
   border: 1px solid $sf-grey-100;
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: 24px;
   padding: 24px 0;
+  padding: 24px 0 12px;
 
   .section {
     padding: 0 24px;

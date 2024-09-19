@@ -1,6 +1,6 @@
 import React, { Fragment, useContext } from 'react';
 import styles from './CurrentPlan.module.scss';
-import { SFButton } from 'sfui';
+import { SFButton, SFText } from 'sfui';
 import { CancelDialog } from './CancelDialog/CancelDialog';
 import { ResumeDialog } from './ResumeDialog/ResumeDialog';
 import { SubscriptionContext } from '../../../Context';
@@ -19,6 +19,7 @@ import {
 import { cancelSubscription, resumeSubscription } from '../../../Services';
 import { ApiContext } from '../../../Context';
 import { CurrentPlanStatus } from './CurrentPlanStatus/CurrentPlanStatus';
+import { AgencyBillingItem } from '../AgencyBillingItem/AgencyBillingItem';
 
 export interface CurrentPlanProps {
   canUpdate: boolean;
@@ -48,7 +49,9 @@ export const CurrentPlan = ({
   const [isLoading, setIsLoading] = React.useState<boolean>(false);
 
   const showActivate =
-    isFreeTrial(currentSubscription) && !currentSubscription.renew;
+    isFreeTrial(currentSubscription) &&
+    !currentSubscription?.payment?.method &&
+    !currentSubscription.renew;
 
   const onCloseDialog = () => {
     setIsCancelDialogOpen(false);
@@ -108,7 +111,7 @@ export const CurrentPlan = ({
   };
 
   return (
-    <div className={styles.currentPlan}>
+    <>
       <CancelDialog
         isOpen={isCancelDialogOpen}
         isLoading={isLoading}
@@ -123,56 +126,58 @@ export const CurrentPlan = ({
         onClick={onResumePlan}
       />
 
-      <div className={styles.description}>
-        <p className={styles.title}>Current Plan</p>
-        <div className={styles.plan}>
-          <p className={styles.text}>
+      <AgencyBillingItem
+        title="Current Plan"
+        action={
+          canUpdate ? (
+            <>
+              {showActivate && (
+                <SFButton onClick={onActivate}>Activate Plan</SFButton>
+              )}
+
+              {!showActivate && !isFreePlan(currentSubscription.plan) && (
+                <>
+                  {currentSubscription.renew === false && (
+                    <SFButton onClick={() => setIsResumeDialogOpen(true)}>
+                      Resume Plan
+                    </SFButton>
+                  )}
+
+                  {!isPending && currentSubscription.renew === true && (
+                    <Fragment>
+                      <SFButton
+                        sfColor="grey"
+                        variant="text"
+                        onClick={() => setIsCancelDialogOpen(true)}
+                      >
+                        Cancel Plan
+                      </SFButton>
+                    </Fragment>
+                  )}
+                </>
+              )}
+
+              {product !== 'shift' &&
+                !isPlanAnalytics(currentSubscription.plan) &&
+                currentSubscription.product !== 'shift' &&
+                currentSubscription.status === 'Active' && (
+                  <SFButton onClick={onUpgrade}>Upgrade Plan</SFButton>
+                )}
+            </>
+          ) : undefined
+        }
+      >
+        <div className={styles.currentPlan}>
+          <SFText type="component-1-medium">
             {getPlanLabel(currentSubscription.plan)}
-          </p>
+          </SFText>
 
           <CurrentPlanStatus
             subscription={currentSubscription}
             isPending={isPending}
           />
         </div>
-      </div>
-
-      {canUpdate && (
-        <div className={styles.buttonContainer}>
-          {showActivate && (
-            <SFButton onClick={onActivate}>Activate Plan</SFButton>
-          )}
-
-          {!showActivate && !isFreePlan(currentSubscription.plan) && (
-            <>
-              {currentSubscription.renew === false && (
-                <SFButton onClick={() => setIsResumeDialogOpen(true)}>
-                  Resume Plan
-                </SFButton>
-              )}
-
-              {!isPending && currentSubscription.renew === true && (
-                <Fragment>
-                  <SFButton
-                    sfColor="grey"
-                    variant="text"
-                    onClick={() => setIsCancelDialogOpen(true)}
-                  >
-                    Cancel Plan
-                  </SFButton>
-                </Fragment>
-              )}
-            </>
-          )}
-
-          {product !== 'shift' &&
-            !isPlanAnalytics(currentSubscription.plan) &&
-            currentSubscription.product !== 'shift' &&
-            currentSubscription.status === 'Active' && (
-              <SFButton onClick={onUpgrade}>Upgrade Plan</SFButton>
-            )}
-        </div>
-      )}
-    </div>
+      </AgencyBillingItem>
+    </>
   );
 };

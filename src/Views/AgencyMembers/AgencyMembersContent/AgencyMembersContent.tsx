@@ -234,6 +234,7 @@ export const AgencyMembersContent = ({
 
       const response = await refGetSearchMembers.current(searchValue);
       if (response) {
+        refSeeMoreUrl.current = response.links.next;
         setMembers(setFirstOfficer(response.data));
         setHasMoreMembers(!!response.links.next);
         setShowLimit(PAGE_SIZE);

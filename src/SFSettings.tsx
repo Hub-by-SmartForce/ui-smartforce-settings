@@ -243,8 +243,7 @@ export const SFSettings = ({
         cardTitle: 'Members',
         viewTitle: 'Members',
         name: 'members',
-        description:
-          'The agency owner can add and manage members in the agency settings.',
+        description: "Add and manage your agency's members.",
         component: (
           <AgencyMembers
             onHome={onHome}

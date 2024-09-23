@@ -14,6 +14,7 @@ import { NextInvoice } from '../NextInvoice/NextInvoice';
 import { PaymentMethod } from '../PaymentMethod/PaymentMethod';
 import { ThemeTypeContext } from '../../../Context';
 import { AgencyBillingItem } from '../AgencyBillingItem/AgencyBillingItem';
+import { BillingCycle } from '../BillingCycle/BillingCycle';
 
 function hasPayment(payment: SubscriptionPayment | null): boolean {
   return (
@@ -101,9 +102,12 @@ export const AgencyBillingApp = ({
             (!isFreeTrial(subscription) || !!subscription?.payment?.method) && (
               <Fragment>
                 <SFDivider />
-                <AgencyBillingItem
-                  title="Billing Cycle"
-                  children={`Annual plan / Pay ${subscription.billing_cycle}`}
+                <BillingCycle
+                  billing_cycle={subscription.billing_cycle}
+                  canChange={
+                    subscription.payment?.method === 'card' &&
+                    subscription.billing_cycle === 'annually'
+                  }
                 />
 
                 <SFDivider />

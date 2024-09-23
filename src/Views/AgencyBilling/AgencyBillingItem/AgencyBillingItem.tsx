@@ -31,7 +31,7 @@ export const AgencyBillingItem = ({
         {typeof children !== 'string' && children}
       </div>
 
-      {action}
+      {action && <div className={styles.actions}>{action}</div>}
     </div>
   );
 };

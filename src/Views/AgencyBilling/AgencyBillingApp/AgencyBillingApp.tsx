@@ -108,6 +108,8 @@ export const AgencyBillingApp = ({
                     subscription.payment?.method === 'card' &&
                     subscription.billing_cycle === 'annually'
                   }
+                  onClose={onClose}
+                  onError={onError}
                 />
 
                 <SFDivider />

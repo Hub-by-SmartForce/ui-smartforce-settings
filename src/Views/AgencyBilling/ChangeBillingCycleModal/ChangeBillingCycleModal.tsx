@@ -5,6 +5,7 @@ import { SFAlert, SFRadio } from 'sfui';
 import { dispatchCustomEvent } from '../../../Helpers';
 import { SETTINGS_CUSTOM_EVENT } from '../../../Constants';
 import { SettingsError } from '../../../Models';
+import { H3Alt } from '../../../Components/H3Alt/H3Alt';
 
 export interface ChangeBillingCycleModalProps {
   isOpen: boolean;
@@ -95,7 +96,7 @@ export const ChangeBillingCycleModal = ({
         />
 
         <div>
-          <h3 className={styles.h3Alt}>Billing Cycle for your Annual Plan</h3>
+          <H3Alt>Billing Cycle for your Annual Plan</H3Alt>
           <SFRadio
             label="Pay monthly"
             checked={checked}

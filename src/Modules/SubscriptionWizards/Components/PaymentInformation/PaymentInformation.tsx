@@ -9,12 +9,12 @@ import {
   SFScrollableRefHandler
 } from 'sfui';
 import { WizardStepSection } from '../WizardStepSection/WizardStepSection';
-import { CreditCardForm } from './CreditCardForm/CreditCardForm';
-import { BillingDetailsForm } from './BillingDetailsForm/BillingDetailsForm';
 import { PaymentMethodOption } from './PaymentMethodOption/PaymentMethodOption';
 import { StripeCardError } from '../../../../Components';
 import { isFormEmpty, isValueEmpty } from '../../../../Helpers';
 import { BillingDetailsValue } from '../../../../Models';
+import { BillingDetailsForm } from '../../../../Components/BillingDetailsForm/BillingDetailsForm';
+import { CreditCardForm } from '../../../../Components/CreditCardForm/CreditCardForm';
 
 function getIsButtonDisabled(
   method: string,

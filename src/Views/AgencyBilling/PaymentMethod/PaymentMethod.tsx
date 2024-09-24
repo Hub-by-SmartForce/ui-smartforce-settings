@@ -8,6 +8,7 @@ import { CreditCardInfo } from './CreditCardInfo/CreditCardInfo';
 import { DebitInfo } from './DebitInfo/DebitInfo';
 import { AgencyBillingItem } from '../AgencyBillingItem/AgencyBillingItem';
 import { ChangeCreditCardModal } from './ChangeCreditCardModal/ChangeCreditCardModal';
+import { ChangePaymentMethodModal } from './ChangePaymentMethodModal/ChangePaymentMethodModal';
 
 export interface PaymentMethodProps {
   subscription: Subscription;
@@ -42,6 +43,14 @@ export const PaymentMethod = ({
         subscription={subscription}
         isOpen={isChangeCardOpen}
         onPanelClose={() => setIsChangeCardOpen(false)}
+        onClose={onClose}
+        onError={onError}
+      />
+
+      <ChangePaymentMethodModal
+        subscription={subscription}
+        isOpen={isChangeMethodOpen}
+        onPanelClose={() => setIsChangeMethodOpen(false)}
         onClose={onClose}
         onError={onError}
       />

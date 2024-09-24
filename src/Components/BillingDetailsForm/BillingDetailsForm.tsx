@@ -1,12 +1,13 @@
 import React from 'react';
+import styles from './BillingDetailsForm.module.scss';
 import {
-  SFAutocompleteLocation,
-  SFAutocompleteLocationResult,
+  SFTextField,
   SFNumericField,
-  SFTextField
+  SFAutocompleteLocation,
+  SFAutocompleteLocationResult
 } from 'sfui';
-import { WizardStepSection } from '../../WizardStepSection/WizardStepSection';
-import { BillingDetailsValue } from '../../../../../Models';
+import { BillingDetailsValue } from '../../Models';
+import { H3Alt } from '../H3Alt/H3Alt';
 
 export interface BillingDetailsFormProps {
   value: BillingDetailsValue;
@@ -18,7 +19,9 @@ export const BillingDetailsForm = ({
   onChange
 }: BillingDetailsFormProps): React.ReactElement<BillingDetailsFormProps> => {
   return (
-    <WizardStepSection title="Billing Details">
+    <div className={styles.billingDetailsForm}>
+      <H3Alt>Billing Details</H3Alt>
+
       <SFTextField
         label="Full Name"
         required
@@ -55,6 +58,6 @@ export const BillingDetailsForm = ({
           })
         }
       />
-    </WizardStepSection>
+    </div>
   );
 };

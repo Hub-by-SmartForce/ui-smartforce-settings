@@ -18,8 +18,14 @@ export interface SubscriptionPaymentDebit {
   account_type?: string;
 }
 
+export type SubscriptionPaymentMethod =
+  | 'card'
+  | 'debit'
+  | 'check'
+  | 'wire_transfer';
+
 export interface SubscriptionPayment {
-  method: 'card' | 'debit' | 'check' | 'wire_transfer';
+  method: SubscriptionPaymentMethod;
   card?: SubscriptionPaymentCard;
   debit?: SubscriptionPaymentDebit;
   payment_method_setup_url?: string;

@@ -1,7 +1,7 @@
 @import '~sfui/dist/Styles/SFColors/SFColors.module.scss';
 @import '~sfui/dist/Styles/SFMedia/SFMedia.module.scss';
 
-.completeDebitInformationView {
+.completeDebitInformation {
   width: 100%;
   height: 100%;
   background-color: $sf-background-light;
@@ -47,7 +47,7 @@
 }
 
 @media screen and (min-width: $sf-media-sm-width) {
-  .completeDebitInformationView {
+  .completeDebitInformation {
     display: grid;
     grid-template-rows: 66px minmax(0, 1fr);
 
@@ -64,7 +64,7 @@
 }
 
 @media screen and (min-width: $sf-media-md-width) {
-  .completeDebitInformationView {
+  .completeDebitInformation {
     .card {
       width: 642px;
       height: 654px;
@@ -73,7 +73,7 @@
 }
 
 @media screen and (min-width: $sf-media-lg-width) {
-  .completeDebitInformationView {
+  .completeDebitInformation {
     .card {
       width: 604px;
       height: 584px;
@@ -82,7 +82,7 @@
 }
 
 @media screen and (min-width: $sf-media-xl-width) {
-  .completeDebitInformationView {
+  .completeDebitInformation {
     .card {
       width: 764px;
       height: 764px;
@@ -91,7 +91,7 @@
 }
 
 @media screen and (min-width: $sf-media-xxl-width) {
-  .completeDebitInformationView {
+  .completeDebitInformation {
     .card {
       width: 608px;
       height: 795px;
@@ -100,7 +100,7 @@
 }
 
 :global(.nightMode) {
-  .completeDebitInformationView {
+  .completeDebitInformation {
     background-color: $sf-background-dark;
   }
 }

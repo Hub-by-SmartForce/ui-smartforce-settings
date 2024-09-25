@@ -1,20 +1,20 @@
 import React from 'react';
-import styles from './CompleteDebitInformationView.module.scss';
+import styles from './CompleteDebitInformation.module.scss';
 import { SFBlueMainLight, SFButton, SFCard, SFIcon, SFText } from 'sfui';
 import { SFTopBarUser } from '../SFTopBar/SFTopBarUser/SFTopBarUser';
 
-export interface CompleteDebitInformationViewProps {
+export interface CompleteDebitInformationProps {
   officerCardUrl: string;
   onLogout: () => void;
   onFinish: () => void;
 }
 
-export const CompleteDebitInformationView = ({
+export const CompleteDebitInformation = ({
   onFinish,
   ...props
-}: CompleteDebitInformationViewProps): React.ReactElement<CompleteDebitInformationViewProps> => {
+}: CompleteDebitInformationProps): React.ReactElement<CompleteDebitInformationProps> => {
   return (
-    <div className={styles.completeDebitInformationView}>
+    <div className={styles.completeDebitInformation}>
       <div className={styles.topBar}>
         <SFTopBarUser {...props} />
       </div>

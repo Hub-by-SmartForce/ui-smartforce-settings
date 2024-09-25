@@ -126,7 +126,7 @@ export const ChangePaymentMethodModal = ({
       anchor={anchor}
       title="Change Payment Method"
       actionButton={{
-        label: 'Save Changes',
+        label: method === 'debit' ? 'Generate Payment Link' : 'Save Changes',
         disabled:
           getIsButtonDisabled(
             billingDetailsValue,

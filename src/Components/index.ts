@@ -15,5 +15,6 @@ export * from './QRCodeModal/QRCodeModal';
 export * from './SFLogo/SFLogo';
 export * from './StripeCreditCardForm/StripeCreditCardForm';
 export * from './SFTopBar/SFTopBar';
+export * from './SFTopBar/SFTopBarUser/SFTopBarUser';
 export * from './SFTopBar/SFTopBarUser/SFTopBarUserMenuItem/SFTopBarUserMenuItem';
 export * from './YouTubeEmbed/YouTubeEmbed';

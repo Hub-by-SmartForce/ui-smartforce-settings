@@ -1,6 +1,7 @@
 export * from './Agency/AgencyForm/AgencyForm';
 export * from './Avatar/Avatar';
 export * from './AvatarListItem/AvatarListItem';
+export * from './CompleteDebitInformationView/CompleteDebitInformationView';
 export * from './ContactQRCode/ContactQRCode';
 export * from './DateTime/DateTime';
 export * from './GoogleMap';

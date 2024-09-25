@@ -1,6 +1,8 @@
+@import '~sfui/dist/Styles/SFMedia/SFMedia.module.scss';
+
 .agencyBillingItem {
   display: flex;
-  align-items: center;
+  flex-direction: column;
   justify-content: space-between;
   gap: 12px;
   padding: 12px 0;
@@ -17,6 +19,19 @@
 
   .actions {
     display: flex;
+    flex-direction: column;
+    align-items: flex-start;
     gap: 12px;
+  }
+}
+
+@media screen and (min-width: $sf-media-md-width) {
+  .agencyBillingItem {
+    flex-direction: row;
+    align-items: center;
+
+    .actions {
+      flex-direction: row;
+    }
   }
 }

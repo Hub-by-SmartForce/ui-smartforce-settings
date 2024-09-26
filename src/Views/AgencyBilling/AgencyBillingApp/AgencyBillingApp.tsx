@@ -32,6 +32,7 @@ export interface AgencyBillingAppProps {
   canUpdate: boolean;
   onClose: () => void;
   onError: (e: SettingsError) => void;
+  onGenerateDebitUrl: (url: string) => void;
   onActivate: (product: ApplicationProduct) => void;
   onUpgrade: (product: string) => void;
   onGetStarted: (product: ApplicationProduct) => void;
@@ -46,7 +47,8 @@ export const AgencyBillingApp = ({
   onGetStarted,
   onActivate,
   onUpgrade,
-  onError
+  onError,
+  onGenerateDebitUrl
 }: AgencyBillingAppProps): React.ReactElement<AgencyBillingAppProps> => {
   const { themeType } = useContext(ThemeTypeContext);
 
@@ -148,6 +150,7 @@ export const AgencyBillingApp = ({
                     subscription={subscription}
                     onClose={onClose}
                     onError={onError}
+                    onGenerateDebitUrl={onGenerateDebitUrl}
                   />
                 )}
               </Fragment>

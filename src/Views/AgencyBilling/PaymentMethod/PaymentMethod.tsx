@@ -14,12 +14,14 @@ export interface PaymentMethodProps {
   subscription: Subscription;
   onClose: () => void;
   onError: (e: SettingsError) => void;
+  onGenerateDebitUrl: (url: string) => void;
 }
 
 export const PaymentMethod = ({
   subscription,
   onClose,
-  onError
+  onError,
+  onGenerateDebitUrl
 }: PaymentMethodProps): React.ReactElement<PaymentMethodProps> => {
   const { user } = useContext(UserContext);
 
@@ -53,6 +55,7 @@ export const PaymentMethod = ({
         onPanelClose={() => setIsChangeMethodOpen(false)}
         onClose={onClose}
         onError={onError}
+        onGenerateDebitUrl={onGenerateDebitUrl}
       />
 
       <SFDivider />

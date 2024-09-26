@@ -44,6 +44,16 @@ function getIsButtonDisabled(
   );
 }
 
+function getInitialMethod(
+  subscription: Subscription
+): SubscriptionPaymentMethod {
+  if (subscription.payment?.method === 'card') {
+    return 'debit';
+  } else {
+    return 'card';
+  }
+}
+
 const initialBillingDetails = {
   full_name: '',
   phone: '',
@@ -56,6 +66,7 @@ export interface ChangePaymentMethodModalProps {
   onClose: () => void;
   onError: (e: SettingsError) => void;
   onPanelClose: () => void;
+  onGenerateDebitUrl: (url: string) => void;
 }
 
 export const ChangePaymentMethodModal = ({
@@ -63,11 +74,14 @@ export const ChangePaymentMethodModal = ({
   isOpen,
   onClose,
   onError,
-  onPanelClose
+  onPanelClose,
+  onGenerateDebitUrl
 }: ChangePaymentMethodModalProps): React.ReactElement<ChangePaymentMethodModalProps> => {
   const [anchor, setAnchor] = useState<PanelModalAnchor>('right');
   const [isLoading, setIsLoading] = useState<boolean>(false);
-  const [method, setMethod] = useState<SubscriptionPaymentMethod | undefined>();
+  const [method, setMethod] = useState<SubscriptionPaymentMethod>(
+    getInitialMethod(subscription)
+  );
   const [isCardValid, setIsCardValid] = useState<boolean>(false);
   const [cardName, setCardName] = useState<string>('');
   const [paymentError, setPaymentError] = useState<
@@ -114,15 +128,27 @@ export const ChangePaymentMethodModal = ({
           onError(e);
         }
       }
+    } else {
+      try {
+        // TODO api call to get url
+        let url = '';
+        onGenerateDebitUrl(url);
+        setIsLoading(false);
+        onPanelClose();
+      } catch (e: any) {
+        onError(e);
+      }
     }
+  };
+
+  const onExitCloseTransition = () => {
+    setMethod(getInitialMethod(subscription));
+    clearForms();
   };
 
   return (
     <PanelModal
-      onExit={() => {
-        setMethod(undefined);
-        clearForms();
-      }}
+      onExit={onExitCloseTransition}
       anchor={anchor}
       title="Change Payment Method"
       actionButton={{

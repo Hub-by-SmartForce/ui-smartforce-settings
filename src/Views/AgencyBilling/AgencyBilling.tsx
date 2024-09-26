@@ -18,6 +18,7 @@ export interface AgencyBillingProps {
   onActivate: (product: ApplicationProduct) => void;
   onUpgrade: (product: string) => void;
   onGetStarted: (product: ApplicationProduct) => void;
+  onGenerateDebitUrl: (url: string) => void;
 }
 
 export const AgencyBilling = ({
@@ -28,7 +29,8 @@ export const AgencyBilling = ({
   onError,
   onActivate,
   onUpgrade,
-  onGetStarted
+  onGetStarted,
+  onGenerateDebitUrl
 }: AgencyBillingProps): React.ReactElement<AgencyBillingProps> => {
   const subscriptions = React.useContext(SubscriptionContext).subscriptions;
   const stripeAPI = useMemo(() => loadStripeAPI(stripeApiKey), [stripeApiKey]);
@@ -69,6 +71,7 @@ export const AgencyBilling = ({
               onActivate={onActivate}
               onUpgrade={onUpgrade}
               onError={onError}
+              onGenerateDebitUrl={onGenerateDebitUrl}
             />
           ))}
       </div>

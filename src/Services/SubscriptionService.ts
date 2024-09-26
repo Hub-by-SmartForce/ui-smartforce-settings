@@ -3,6 +3,7 @@ import {
   ApplicationProduct,
   Subscription,
   SubscriptionPaymentCard,
+  SubscriptionPaymentMethod,
   SubscriptionValue
 } from '../Models';
 import { getUserSession } from './AuthService';
@@ -170,3 +171,20 @@ export const updateCreditCard = async (
     return Promise.reject(e);
   }
 };
+
+export function changePaymentMethod(
+  baseUrl: string,
+  product: ApplicationProduct,
+  method: SubscriptionPaymentMethod,
+  card_token?: string
+): Promise<Subscription> {
+  const url: string = `${baseUrl}/subscriptions/${product}/payment_method/change`;
+  return apiPost(
+    url,
+    {
+      method,
+      card_token
+    },
+    getUserSession().access_token
+  );
+}

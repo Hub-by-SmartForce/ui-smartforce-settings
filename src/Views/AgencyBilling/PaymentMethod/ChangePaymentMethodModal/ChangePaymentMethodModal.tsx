@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import styles from './ChangePaymentMethodModal.module.scss';
 import {
   PanelModal,
@@ -16,10 +16,14 @@ import { BillingDetailsForm } from '../../../../Components/BillingDetailsForm/Bi
 import {
   dispatchCustomEvent,
   getCardErrorMessage,
-  isFormEmpty
+  isFormEmpty,
+  replaceElementAt
 } from '../../../../Helpers';
 import { CreditCardForm } from '../../../../Components/CreditCardForm/CreditCardForm';
 import { SETTINGS_CUSTOM_EVENT } from '../../../../Constants';
+import { changePaymentMethod, getStripeCardToken } from '../../../../Services';
+import { ApiContext, SubscriptionContext } from '../../../../Context';
+import { useElements, useStripe } from '@stripe/react-stripe-js';
 
 function getOptions(method?: SubscriptionPaymentMethod): SFRadioOptionsProps[] {
   let result: SFRadioOptionsProps[] = [];
@@ -77,6 +81,10 @@ export const ChangePaymentMethodModal = ({
   onPanelClose,
   onGenerateDebitUrl
 }: ChangePaymentMethodModalProps): React.ReactElement<ChangePaymentMethodModalProps> => {
+  const apiBaseUrl = useContext(ApiContext).settings;
+  const { setSubscriptions } = useContext(SubscriptionContext);
+  const elements = useElements();
+  const stripe = useStripe();
   const [anchor, setAnchor] = useState<PanelModalAnchor>('right');
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [method, setMethod] = useState<SubscriptionPaymentMethod>(
@@ -102,19 +110,44 @@ export const ChangePaymentMethodModal = ({
     }
   };
 
-  const onSave = () => {
+  const onSave = async () => {
     setIsLoading(true);
 
     if (method === 'card') {
       try {
-        // TODO api call
+        if (elements && stripe) {
+          const stripeCardToken = await getStripeCardToken(
+            cardName,
+            stripe,
+            elements
+          );
 
-        dispatchCustomEvent(SETTINGS_CUSTOM_EVENT, {
-          message: 'Your change was saved successfully.'
-        });
+          const updatedSubscription = await changePaymentMethod(
+            apiBaseUrl,
+            subscription.product,
+            'card',
+            stripeCardToken
+          );
 
-        setIsLoading(false);
-        onPanelClose();
+          setSubscriptions((subscriptions) => {
+            const currentSubscriptionIndex = subscriptions.findIndex(
+              (s) => s.id === updatedSubscription.id
+            );
+
+            return replaceElementAt(
+              subscriptions,
+              updatedSubscription,
+              currentSubscriptionIndex
+            );
+          });
+
+          dispatchCustomEvent(SETTINGS_CUSTOM_EVENT, {
+            message: 'Your change was saved successfully.'
+          });
+
+          setIsLoading(false);
+          onPanelClose();
+        }
       } catch (e: any) {
         setIsLoading(false);
 
@@ -130,9 +163,28 @@ export const ChangePaymentMethodModal = ({
       }
     } else {
       try {
-        // TODO api call to get url
-        let url = '';
-        onGenerateDebitUrl(url);
+        const updatedSubscription = await changePaymentMethod(
+          apiBaseUrl,
+          subscription.product,
+          'debit'
+        );
+
+        setSubscriptions((subscriptions) => {
+          const currentSubscriptionIndex = subscriptions.findIndex(
+            (s) => s.id === updatedSubscription.id
+          );
+
+          return replaceElementAt(
+            subscriptions,
+            updatedSubscription,
+            currentSubscriptionIndex
+          );
+        });
+
+        onGenerateDebitUrl(
+          updatedSubscription.unverified_payment
+            ?.payment_method_setup_url as string
+        );
         setIsLoading(false);
         onPanelClose();
       } catch (e: any) {

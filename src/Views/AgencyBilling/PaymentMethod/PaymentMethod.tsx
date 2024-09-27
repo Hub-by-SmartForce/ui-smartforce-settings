@@ -90,17 +90,27 @@ export const PaymentMethod = ({
           </>
         }
       >
-        {(subscription.payment?.method === 'check' ||
-          subscription.payment?.method === 'wire_transfer') && (
-          <SFText type="component-1-medium">Manual Payment</SFText>
+        {!subscription.unverified_payment && (
+          <>
+            {(subscription.payment?.method === 'check' ||
+              subscription.payment?.method === 'wire_transfer') && (
+              <SFText type="component-1-medium">Manual Payment</SFText>
+            )}
+            {subscription.payment?.method === 'card' &&
+              subscription.payment.card && (
+                <CreditCardInfo card={subscription.payment.card} />
+              )}
+            {subscription.payment?.method === 'debit' &&
+              subscription.payment.debit && (
+                <DebitInfo debit={subscription.payment.debit} />
+              )}
+          </>
         )}
-        {subscription.payment?.method === 'card' &&
-          subscription.payment.card && (
-            <CreditCardInfo card={subscription.payment.card} />
-          )}
-        {subscription.payment?.method === 'debit' &&
-          subscription.payment.debit && (
-            <DebitInfo debit={subscription.payment.debit} />
+
+        {subscription.unverified_payment &&
+          subscription.unverified_payment?.method === 'debit' &&
+          subscription.unverified_payment.debit && (
+            <DebitInfo debit={subscription.unverified_payment.debit} />
           )}
       </AgencyBillingItem>
     </>

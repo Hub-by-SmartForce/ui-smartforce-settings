@@ -19,7 +19,6 @@ import {
   TimezonesContext,
   SFTopBar,
   LARGE_SCREEN,
-  ToursReminderTooltip,
   ToursCarrouselModal,
   Tour,
   TourResumeTab,
@@ -28,16 +27,18 @@ import {
   hideTours,
   useSaveTourAction,
   getAppNotifications,
-  AppNotificationsContext,
-  InteractiveBox
+  AppNotificationsContext
 } from '../../../src';
-import { SFIcon, SFSpinner, SFText, useSFMediaQuery } from 'sfui';
-import { BASE_URL } from '../App';
+import { SFSpinner, useSFMediaQuery } from 'sfui';
 import { getTimezones } from '../../../src/Services/TimezoneService';
 import { logout } from '../../../src/Services/AuthService';
 import { TOURS } from '../tours';
+import { useHistory } from 'react-router-dom';
+import { BASE_URL } from '../constants';
+import { LeftPanel } from '../LeftPanel/LeftPanel';
 
 export const Main = (): React.ReactElement<{}> => {
+  const history = useHistory();
   const {
     onStart: onTourStart,
     onEnd: onTourEnd,
@@ -125,7 +126,7 @@ export const Main = (): React.ReactElement<{}> => {
 
   const onLogout = () => {
     logout();
-    window.location.reload();
+    history.push('/');
   };
 
   const onMenuButtonClick = () => console.log('Open menu');
@@ -180,8 +181,9 @@ export const Main = (): React.ReactElement<{}> => {
   useSaveTourAction(BASE_URL, 'cc');
 
   return (
-    <React.Fragment>
+    <div className={styles.main}>
       {isLoading && <SFSpinner aria-label="Fetching content" />}
+
       {!isLoading && (
         <Fragment>
           <TourResumeTab onExit={onExitTourResume} onResume={onResumeTour} />
@@ -193,7 +195,7 @@ export const Main = (): React.ReactElement<{}> => {
             onStart={(tour) => onStartTour(tour)}
           />
 
-          <div className={styles.main}>
+          <div className={styles.container}>
             <SFTopBar
               enviroment="local"
               product="cc"
@@ -206,22 +208,11 @@ export const Main = (): React.ReactElement<{}> => {
             />
 
             <div className={styles.content}>
-              <div className={styles.leftPanel}>
-                <ToursReminderTooltip
-                  open={isFeatureReminderOpen}
-                  onGotIt={onGotIt}
-                >
-                  <InteractiveBox
-                    className={styles.tours}
-                    onClick={onShowTours}
-                  >
-                    <SFIcon icon="Rectangle-Star" />
-                    <SFText type="component-1" sfColor="neutral">
-                      Feature Tours
-                    </SFText>
-                  </InteractiveBox>
-                </ToursReminderTooltip>
-              </div>
+              <LeftPanel
+                isFeatureReminderOpen={isFeatureReminderOpen}
+                onGotIt={onGotIt}
+                onShowTours={onShowTours}
+              />
 
               <SFSettings
                 product="cc"
@@ -240,6 +231,6 @@ export const Main = (): React.ReactElement<{}> => {
           </div>
         </Fragment>
       )}
-    </React.Fragment>
+    </div>
   );
 };

@@ -1,12 +1,14 @@
-import React from 'react';
-import styles from './App.module.scss';
+import React, {
+  createContext,
+  Dispatch,
+  SetStateAction,
+  useState
+} from 'react';
 import {
   SFThemeProvider,
   SFStylesProvider,
   createSFTheme,
-  SFTheme,
-  SFSpinner,
-  SFPaper
+  SFTheme
 } from 'sfui';
 import {
   AreasProvider,
@@ -16,87 +18,59 @@ import {
   ThemeTypeContext,
   UserProvider,
   TimezonesProvider,
-  getUser,
-  isLogin,
-  login,
-  logout,
   TourProvider,
   AppNotificationsProvider
 } from '../../src';
-import { Login, LoginFormValue } from './Login/Login';
+import { Login } from './Login/Login';
 import { Main } from './Main/Main';
+import { Switch, Route, Redirect } from 'react-router-dom';
+import { RouteAuthGuard } from './RouteAuthGuard';
 
-export const BASE_URL = 'http://localhost:8001/api';
+export const AuthContext = createContext<{
+  isLogged: boolean;
+  setIsLogged: Dispatch<SetStateAction<boolean>>;
+}>({ isLogged: false, setIsLogged: () => {} });
 
 export const App = () => {
   const { themeType } = React.useContext(ThemeTypeContext);
   const theme: SFTheme = createSFTheme(themeType);
-  const [isLoading, setIsLoading] = React.useState<boolean>(true);
-  const [isLogged, setIsLogged] = React.useState<boolean>(false);
-
-  React.useEffect(() => {
-    const init = async () => {
-      if (isLogin()) {
-        try {
-          await getUser(BASE_URL);
-          setIsLogged(true);
-          setIsLoading(false);
-        } catch (e) {
-          logout();
-          setIsLogged(false);
-          setIsLoading(false);
-        }
-      } else {
-        setIsLoading(false);
-      }
-    };
-
-    init();
-  }, []);
-
-  const onLogin = async (formValue: LoginFormValue) => {
-    try {
-      setIsLoading(true);
-      await login(BASE_URL, formValue.email, formValue.password);
-      setIsLoading(false);
-      setIsLogged(true);
-    } catch (e) {
-      setIsLoading(false);
-      console.error(e);
-    }
-  };
+  const [isLogged, setIsLogged] = useState<boolean>(false);
 
   return (
-    <MediaProvider>
-      <TourProvider>
-        <SFThemeProvider theme={theme}>
-          <SFStylesProvider injectFirst>
-            <UserProvider>
-              <TimezonesProvider>
-                <CustomerProvider>
-                  <SubscriptionProvider>
-                    <AreasProvider>
-                      <AppNotificationsProvider>
-                        <SFPaper className={styles.app}>
-                          {isLoading && (
-                            <SFSpinner aria-label="Validating user" />
-                          )}
-                          {!isLoading && (
-                            <React.Fragment>
-                              {!isLogged && <Login onLogin={onLogin} />}
-                              {isLogged && <Main />}
-                            </React.Fragment>
-                          )}
-                        </SFPaper>
-                      </AppNotificationsProvider>
-                    </AreasProvider>
-                  </SubscriptionProvider>
-                </CustomerProvider>
-              </TimezonesProvider>
-            </UserProvider>
-          </SFStylesProvider>
-        </SFThemeProvider>
-      </TourProvider>
-    </MediaProvider>
+    <AuthContext.Provider value={{ isLogged, setIsLogged }}>
+      <MediaProvider>
+        <Switch>
+          <Route path="/" exact>
+            <Login />
+          </Route>
+
+          <RouteAuthGuard path="/main" isLogged={isLogged}>
+            <TourProvider>
+              <SFThemeProvider theme={theme}>
+                <SFStylesProvider injectFirst>
+                  <UserProvider>
+                    <TimezonesProvider>
+                      <CustomerProvider>
+                        <SubscriptionProvider>
+                          <AreasProvider>
+                            <AppNotificationsProvider>
+                              <Main />
+                            </AppNotificationsProvider>
+                          </AreasProvider>
+                        </SubscriptionProvider>
+                      </CustomerProvider>
+                    </TimezonesProvider>
+                  </UserProvider>
+                </SFStylesProvider>
+              </SFThemeProvider>
+            </TourProvider>
+          </RouteAuthGuard>
+
+          <Route path="*">
+            <Redirect to={'/'} />
+          </Route>
+        </Switch>
+      </MediaProvider>
+    </AuthContext.Provider>
   );
 };

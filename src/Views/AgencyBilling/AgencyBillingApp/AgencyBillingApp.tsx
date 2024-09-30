@@ -103,8 +103,10 @@ export const AgencyBillingApp = ({
               <Fragment>
                 <SFDivider />
                 <BillingCycle
+                  product={subscription.product}
                   billing_cycle={subscription.billing_cycle}
                   canChange={
+                    subscription.renew !== false &&
                     subscription.payment?.method === 'card' &&
                     subscription.billing_cycle === 'annually'
                   }

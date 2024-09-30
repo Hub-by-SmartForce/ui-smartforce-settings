@@ -1,10 +1,15 @@
 import React, { useState } from 'react';
 import { AgencyBillingItem } from '../AgencyBillingItem/AgencyBillingItem';
 import { SFButton } from 'sfui';
-import { BillingCycleType, SettingsError } from '../../../Models';
+import {
+  ApplicationProduct,
+  BillingCycleType,
+  SettingsError
+} from '../../../Models';
 import { ChangeBillingCycleModal } from '../ChangeBillingCycleModal/ChangeBillingCycleModal';
 
 export interface BillingCycleProps {
+  product: ApplicationProduct;
   billing_cycle: BillingCycleType;
   canChange: boolean;
   onClose: () => void;
@@ -12,6 +17,7 @@ export interface BillingCycleProps {
 }
 
 export const BillingCycle = ({
+  product,
   billing_cycle,
   canChange,
   onClose,
@@ -22,6 +28,7 @@ export const BillingCycle = ({
   return (
     <>
       <ChangeBillingCycleModal
+        product={product}
         isOpen={isModalOpen}
         onClose={onClose}
         onPanelClose={() => setIsModalOpen(false)}

@@ -15,6 +15,7 @@ const getOptionSelected = (o: SFPeopleOption, v: SFPeopleOption): boolean => {
 };
 
 export interface MemberPickerProps {
+  activeOnly?: boolean;
   disabled?: boolean;
   baseUrl: string;
   label: string;
@@ -24,6 +25,7 @@ export interface MemberPickerProps {
 }
 
 export const MemberPicker = ({
+  activeOnly = false,
   disabled = false,
   baseUrl,
   label,
@@ -49,7 +51,9 @@ export const MemberPicker = ({
       multiple={false}
       label={label}
       formatUrlQuery={(value: string) =>
-        `${baseUrl}/agencies/me/users?active_only=True&name=${value}`
+        `${baseUrl}/agencies/me/users?active_only=${
+          activeOnly ? 'True' : 'False'
+        }&name=${value}`
       }
       formatOption={formatOption}
       fetchInit={fetchInit}

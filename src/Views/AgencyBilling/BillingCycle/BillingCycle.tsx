@@ -10,7 +10,8 @@ import { ChangeBillingCycleModal } from '../ChangeBillingCycleModal/ChangeBillin
 
 export interface BillingCycleProps {
   product: ApplicationProduct;
-  billing_cycle: BillingCycleType;
+  cycle: BillingCycleType;
+  nextCycle?: BillingCycleType;
   canChange: boolean;
   onClose: () => void;
   onError: (e: SettingsError) => void;
@@ -18,7 +19,8 @@ export interface BillingCycleProps {
 
 export const BillingCycle = ({
   product,
-  billing_cycle,
+  cycle,
+  nextCycle,
   canChange,
   onClose,
   onError
@@ -48,7 +50,7 @@ export const BillingCycle = ({
             </SFButton>
           ) : undefined
         }
-      >{`Annual plan / Pay ${billing_cycle}`}</AgencyBillingItem>
+      >{`Annual plan / Pay ${nextCycle || cycle}`}</AgencyBillingItem>
     </>
   );
 };

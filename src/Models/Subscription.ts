@@ -58,6 +58,7 @@ export interface Subscription {
   total_seats_billed: number;
   payment: SubscriptionPayment | null;
   billing_cycle: BillingCycleType;
+  next_billing_cycle?: BillingCycleType;
   start_date: string;
   end_date: string;
   renew: boolean;

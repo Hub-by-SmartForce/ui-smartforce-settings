@@ -1,13 +1,16 @@
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import styles from './ChangeBillingCycleModal.module.scss';
 import { PanelModal, PanelModalAnchor } from '../../../Components';
 import { SFAlert, SFRadio } from 'sfui';
-import { dispatchCustomEvent } from '../../../Helpers';
+import { dispatchCustomEvent, replaceElementAt } from '../../../Helpers';
 import { SETTINGS_CUSTOM_EVENT } from '../../../Constants';
-import { SettingsError } from '../../../Models';
+import { ApplicationProduct, SettingsError } from '../../../Models';
 import { H3Alt } from '../../../Components/H3Alt/H3Alt';
+import { changeBillingCycle } from '../../../Services';
+import { ApiContext, SubscriptionContext } from '../../../Context';
 
 export interface ChangeBillingCycleModalProps {
+  product: ApplicationProduct;
   isOpen: boolean;
   onClose: () => void;
   onError: (e: SettingsError) => void;
@@ -15,12 +18,14 @@ export interface ChangeBillingCycleModalProps {
 }
 
 export const ChangeBillingCycleModal = ({
+  product,
   isOpen,
   onClose,
   onPanelClose,
   onError
 }: ChangeBillingCycleModalProps): React.ReactElement<ChangeBillingCycleModalProps> => {
-  //   const { setSubscriptions } = useContext(SubscriptionContext);
+  const apiBaseUrl = useContext(ApiContext).settings;
+  const { setSubscriptions } = useContext(SubscriptionContext);
   const [anchor, setAnchor] = useState<PanelModalAnchor>('right');
   const [checked, setChecked] = useState<boolean>(false);
   const [isLoading, setIsLoading] = useState<boolean>(false);
@@ -34,22 +39,23 @@ export const ChangeBillingCycleModal = ({
   const onSave = async () => {
     setIsLoading(true);
     try {
-      // TODO api call
+      const updatedSubscription = await changeBillingCycle(
+        apiBaseUrl,
+        product,
+        'monthly'
+      );
 
-      // UPDATE subscription context
-      //   setSubscriptions((subscriptions) => {
-      //     const currentSubscriptionIndex = subscriptions.findIndex(
-      //       (s) => s.id === newSubscription.id
-      //     );
+      setSubscriptions((subscriptions) => {
+        const currentSubscriptionIndex = subscriptions.findIndex(
+          (s) => s.id === updatedSubscription.id
+        );
 
-      //     return replaceElementAt(
-      //       subscriptions,
-      //       {
-      //         ...newSubscription
-      //       },
-      //       currentSubscriptionIndex
-      //     );
-      //   });
+        return replaceElementAt(
+          subscriptions,
+          updatedSubscription,
+          currentSubscriptionIndex
+        );
+      });
 
       dispatchCustomEvent(SETTINGS_CUSTOM_EVENT, {
         message: 'Your change was saved successfully.'

@@ -1,18 +1,26 @@
 import React, { useState } from 'react';
 import { AgencyBillingItem } from '../AgencyBillingItem/AgencyBillingItem';
 import { SFButton } from 'sfui';
-import { BillingCycleType, SettingsError } from '../../../Models';
+import {
+  ApplicationProduct,
+  BillingCycleType,
+  SettingsError
+} from '../../../Models';
 import { ChangeBillingCycleModal } from '../ChangeBillingCycleModal/ChangeBillingCycleModal';
 
 export interface BillingCycleProps {
-  billing_cycle: BillingCycleType;
+  product: ApplicationProduct;
+  cycle: BillingCycleType;
+  nextCycle?: BillingCycleType;
   canChange: boolean;
   onClose: () => void;
   onError: (e: SettingsError) => void;
 }
 
 export const BillingCycle = ({
-  billing_cycle,
+  product,
+  cycle,
+  nextCycle,
   canChange,
   onClose,
   onError
@@ -22,6 +30,7 @@ export const BillingCycle = ({
   return (
     <>
       <ChangeBillingCycleModal
+        product={product}
         isOpen={isModalOpen}
         onClose={onClose}
         onPanelClose={() => setIsModalOpen(false)}
@@ -41,7 +50,7 @@ export const BillingCycle = ({
             </SFButton>
           ) : undefined
         }
-      >{`Annual plan / Pay ${billing_cycle}`}</AgencyBillingItem>
+      >{`Annual plan / Pay ${nextCycle || cycle}`}</AgencyBillingItem>
     </>
   );
 };

@@ -1,8 +1,11 @@
 import { apiGet, apiPost } from '../Helpers';
 import {
   ApplicationProduct,
+  BillingCycleType,
+  BillingDetailsValue,
   Subscription,
   SubscriptionPaymentCard,
+  SubscriptionPaymentMethod,
   SubscriptionValue
 } from '../Models';
 import { getUserSession } from './AuthService';
@@ -170,3 +173,38 @@ export const updateCreditCard = async (
     return Promise.reject(e);
   }
 };
+
+export function changePaymentMethod(
+  baseUrl: string,
+  product: ApplicationProduct,
+  payment_method: SubscriptionPaymentMethod,
+  billing_details: BillingDetailsValue,
+  card_token?: string
+): Promise<Subscription> {
+  const url: string = `${baseUrl}/subscriptions/${product}/payment_method/change`;
+  return apiPost(
+    url,
+    {
+      payment_method,
+      card_token,
+      billing_details
+    },
+    getUserSession().access_token
+  );
+}
+
+export function changeBillingCycle(
+  baseUrl: string,
+  product: ApplicationProduct,
+  billing_cycle: BillingCycleType
+): Promise<Subscription> {
+  const url: string = `${baseUrl}/subscriptions/${product}/billing_cycle/change`;
+
+  return apiPost(
+    url,
+    {
+      next_billing_cycle: billing_cycle
+    },
+    getUserSession().access_token
+  );
+}

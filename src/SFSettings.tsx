@@ -62,6 +62,7 @@ export interface SFSettingsProps {
   onActivate: (product: string) => void;
   onUpgrade: (product: string) => void;
   onSectionChange: (name: string) => void;
+  onGenerateDebitUrl: (url: string) => void;
 }
 
 export interface SectionItemValue {
@@ -89,7 +90,8 @@ export const SFSettings = ({
   onActivate,
   onUpgrade,
   onHome,
-  onSectionChange
+  onSectionChange,
+  onGenerateDebitUrl
 }: SFSettingsProps): React.ReactElement<SFSettingsProps> => {
   const { isPhone } = React.useContext(MediaContext);
   const { user } = React.useContext(UserContext);
@@ -226,6 +228,7 @@ export const SFSettings = ({
             }
             onUpgrade={onUpgrade}
             onActivate={onActivate}
+            onGenerateDebitUrl={onGenerateDebitUrl}
           />
         )
       }

@@ -35,6 +35,7 @@ export interface PanelModalProps {
   subTitle?: string;
   onBack?: () => void;
   onClose: () => void;
+  onExit?: () => void;
 }
 
 export const PanelModal = ({

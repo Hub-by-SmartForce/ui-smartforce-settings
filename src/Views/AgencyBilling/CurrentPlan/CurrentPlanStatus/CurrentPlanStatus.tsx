@@ -7,7 +7,7 @@ function getPlanStatus(
   subscription: Subscription,
   isPending: boolean
 ): string | undefined {
-  if (isPending) {
+  if (isPending || subscription.status === 'Past Due') {
     return 'Pending';
   } else if (!subscription.renew && !isFreeTrial(subscription)) {
     return 'Canceled';

@@ -1,9 +1,7 @@
 import React from 'react';
-import { WizardStepSection } from '../../WizardStepSection/WizardStepSection';
-import {
-  StripeCardError,
-  StripeCreditCardForm
-} from '../../../../../Components';
+import styles from './CreditCardForm.module.scss';
+import { StripeCardError, StripeCreditCardForm } from '../../Components';
+import { H3Alt } from '../H3Alt/H3Alt';
 
 export interface CreditCardFormProps {
   error?: StripeCardError;
@@ -19,13 +17,14 @@ export const CreditCardForm = ({
   onCardValidChange
 }: CreditCardFormProps): React.ReactElement<CreditCardFormProps> => {
   return (
-    <WizardStepSection title="Card Details">
+    <div className={styles.creditCardForm}>
+      <H3Alt>Card Details</H3Alt>
       <StripeCreditCardForm
         error={error}
         name={name}
         onNameChange={onNameChange}
         onCardValidChange={onCardValidChange}
       />
-    </WizardStepSection>
+    </div>
   );
 };

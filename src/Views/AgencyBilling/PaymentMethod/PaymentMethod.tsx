@@ -117,7 +117,10 @@ export const PaymentMethod = ({
         {subscription.unverified_payment &&
           subscription.unverified_payment?.method === 'debit' &&
           subscription.unverified_payment.debit && (
-            <DebitInfo debit={subscription.unverified_payment.debit} />
+            <DebitInfo
+              isPending
+              debit={subscription.unverified_payment.debit}
+            />
           )}
       </AgencyBillingItem>
     </>

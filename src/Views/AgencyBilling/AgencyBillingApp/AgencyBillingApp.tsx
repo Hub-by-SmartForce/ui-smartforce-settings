@@ -54,8 +54,10 @@ export const AgencyBillingApp = ({
 
   const isPending =
     !isFreePlan(subscription?.plan) &&
-    subscription?.payment?.method === 'debit' &&
-    !subscription.payment?.debit;
+    ((subscription?.payment?.method === 'debit' &&
+      !subscription.payment?.debit) ||
+      (subscription?.unverified_payment?.method === 'debit' &&
+        !subscription.unverified_payment.debit));
 
   const arePendingPayments =
     subscription?.renew ||

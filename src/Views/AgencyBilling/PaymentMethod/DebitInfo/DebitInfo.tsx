@@ -22,6 +22,7 @@ export const DebitInfo = ({
             label="Processing payment method change"
             size="small"
             sfColor="primary"
+            variant="outlined"
           />
         </div>
       )}

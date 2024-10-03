@@ -51,6 +51,13 @@ export interface SubscriptionCoupon {
   end?: string;
 }
 
+export interface SubscriptionUnverifiedPayment {
+  method: SubscriptionPaymentMethod;
+  payment_method_setup_url: string;
+  card?: SubscriptionPaymentCard;
+  debit?: SubscriptionPaymentDebit;
+}
+
 export interface Subscription {
   id: string;
   created_at: string;
@@ -73,6 +80,7 @@ export interface Subscription {
   current_coupon?: SubscriptionCoupon;
   next_coupon?: SubscriptionCoupon;
   coupons: SubscriptionCoupon[];
+  unverified_payment?: SubscriptionUnverifiedPayment;
 }
 
 export interface BillingDetailsValue {

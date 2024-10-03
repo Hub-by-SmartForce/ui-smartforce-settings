@@ -32,7 +32,12 @@ export interface SubscriptionPayment {
 }
 
 export type SubscriptionPlan = 'basic' | 'connect' | 'analytics' | 'schedule';
-export type SubscriptionStatus = 'Active' | 'Unpaid' | 'Canceled' | 'Pending';
+export type SubscriptionStatus =
+  | 'Active'
+  | 'Unpaid'
+  | 'Canceled'
+  | 'Pending'
+  | 'Past Due';
 
 export interface SubscriptionCoupon {
   id: string;
@@ -65,6 +70,7 @@ export interface Subscription {
   total_seats_billed: number;
   payment: SubscriptionPayment | null;
   billing_cycle: BillingCycleType;
+  next_billing_cycle?: BillingCycleType;
   start_date: string;
   end_date: string;
   renew: boolean;

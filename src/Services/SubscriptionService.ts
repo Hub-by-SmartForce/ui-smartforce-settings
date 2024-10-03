@@ -1,6 +1,7 @@
 import { apiGet, apiPost } from '../Helpers';
 import {
   ApplicationProduct,
+  BillingCycleType,
   Subscription,
   SubscriptionPaymentCard,
   SubscriptionPaymentMethod,
@@ -184,6 +185,22 @@ export function changePaymentMethod(
     {
       method,
       card_token
+    },
+    getUserSession().access_token
+  );
+}
+
+export function changeBillingCycle(
+  baseUrl: string,
+  product: ApplicationProduct,
+  billing_cycle: BillingCycleType
+): Promise<Subscription> {
+  const url: string = `${baseUrl}/subscriptions/${product}/billing_cycle/change`;
+
+  return apiPost(
+    url,
+    {
+      next_billing_cycle: billing_cycle
     },
     getUserSession().access_token
   );

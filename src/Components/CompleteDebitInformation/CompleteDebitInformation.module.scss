@@ -1,106 +1,68 @@
-@import '~sfui/dist/Styles/SFColors/SFColors.module.scss';
 @import '~sfui/dist/Styles/SFMedia/SFMedia.module.scss';
 
 .completeDebitInformation {
-  width: 100%;
-  height: 100%;
-  background-color: $sf-background-light;
   display: flex;
   align-items: center;
   justify-content: center;
+  box-sizing: border-box;
+  width: 100%;
+  height: 100%;
+  padding: 0 16px;
 
-  .topBar {
-    display: none;
-  }
-
-  .card {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    box-sizing: border-box;
-    width: 100%;
+  .cardContent {
     height: 100%;
-    padding: 0 16px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
 
-    .cardContent {
-      height: 100%;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
-      text-align: center;
+    .icon {
+      padding-bottom: 24px;
+    }
 
-      .icon {
-        padding-bottom: 24px;
-      }
+    .title {
+      margin: 0;
+      padding-bottom: 12px;
+    }
 
-      .title {
-        margin: 0;
-        padding-bottom: 12px;
-      }
-
-      .button {
-        padding-top: 36px;
-      }
+    .button {
+      padding-top: 36px;
     }
   }
 }
 
 @media screen and (min-width: $sf-media-sm-width) {
   .completeDebitInformation {
-    display: grid;
-    grid-template-rows: 66px minmax(0, 1fr);
-
-    .topBar {
-      display: flex;
-      justify-content: flex-end;
-    }
-
-    .card {
-      width: 720px;
-      height: 795px;
-    }
+    width: 720px;
+    height: 795px;
   }
 }
 
 @media screen and (min-width: $sf-media-md-width) {
   .completeDebitInformation {
-    .card {
-      width: 642px;
-      height: 654px;
-    }
+    width: 642px;
+    height: 654px;
   }
 }
 
 @media screen and (min-width: $sf-media-lg-width) {
   .completeDebitInformation {
-    .card {
-      width: 604px;
-      height: 584px;
-    }
+    width: 604px;
+    height: 584px;
   }
 }
 
 @media screen and (min-width: $sf-media-xl-width) {
   .completeDebitInformation {
-    .card {
-      width: 764px;
-      height: 764px;
-    }
+    width: 764px;
+    height: 764px;
   }
 }
 
 @media screen and (min-width: $sf-media-xxl-width) {
   .completeDebitInformation {
-    .card {
-      width: 608px;
-      height: 795px;
-    }
-  }
-}
-
-:global(.nightMode) {
-  .completeDebitInformation {
-    background-color: $sf-background-dark;
+    width: 608px;
+    height: 795px;
   }
 }

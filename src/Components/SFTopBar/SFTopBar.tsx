@@ -88,9 +88,16 @@ export const SFTopBar = ({
           )}
 
           <div className={styles.actions}>
-            {actions}
+            {!isMinimal && (
+              <>
+                {actions}
+                <SFTopBarNotification
+                  enviroment={enviroment}
+                  onError={onError}
+                />
+              </>
+            )}
 
-            <SFTopBarNotification enviroment={enviroment} onError={onError} />
             <SFTopBarApps />
           </div>
 

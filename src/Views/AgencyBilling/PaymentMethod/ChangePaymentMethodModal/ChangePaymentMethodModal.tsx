@@ -43,7 +43,7 @@ function getIsButtonDisabled(
   method?: SubscriptionPaymentMethod
 ): boolean {
   return (
-    (method === 'debit' && isFormEmpty<BillingDetailsValue>(billingDetails)) ||
+    isFormEmpty<BillingDetailsValue>(billingDetails) ||
     (method === 'card' && (!isCardValid || cardName.length === 0))
   );
 }
@@ -126,6 +126,7 @@ export const ChangePaymentMethodModal = ({
             apiBaseUrl,
             subscription.product,
             'card',
+            billingDetailsValue,
             stripeCardToken
           );
 
@@ -166,7 +167,8 @@ export const ChangePaymentMethodModal = ({
         const updatedSubscription = await changePaymentMethod(
           apiBaseUrl,
           subscription.product,
-          'debit'
+          'debit',
+          billingDetailsValue
         );
 
         setSubscriptions((subscriptions) => {
@@ -188,6 +190,7 @@ export const ChangePaymentMethodModal = ({
         setIsLoading(false);
         onPanelClose();
       } catch (e: any) {
+        setIsLoading(false);
         onError(e);
       }
     }

@@ -67,7 +67,9 @@ export const Main = (): React.ReactElement<{}> => {
   const onHome = () => console.log('onHome');
   const onActivate = () => console.log('onActivate');
   const onUpgrade = () => console.log('onUpgrade');
-  const onGenerateDebitUrl = () => console.log('onGenerateDebitUrl');
+  const onGenerateDebitUrl = (url: string) => {
+    console.log('onGenerateDebitUrl:', url);
+  };
 
   useEffect(() => {
     const init = async () => {

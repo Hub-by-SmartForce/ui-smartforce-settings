@@ -2,6 +2,7 @@ import { apiGet, apiPost } from '../Helpers';
 import {
   ApplicationProduct,
   BillingCycleType,
+  BillingDetailsValue,
   Subscription,
   SubscriptionPaymentCard,
   SubscriptionPaymentMethod,
@@ -176,15 +177,17 @@ export const updateCreditCard = async (
 export function changePaymentMethod(
   baseUrl: string,
   product: ApplicationProduct,
-  method: SubscriptionPaymentMethod,
+  payment_method: SubscriptionPaymentMethod,
+  billing_details: BillingDetailsValue,
   card_token?: string
 ): Promise<Subscription> {
   const url: string = `${baseUrl}/subscriptions/${product}/payment_method/change`;
   return apiPost(
     url,
     {
-      method,
-      card_token
+      payment_method,
+      card_token,
+      billing_details
     },
     getUserSession().access_token
   );

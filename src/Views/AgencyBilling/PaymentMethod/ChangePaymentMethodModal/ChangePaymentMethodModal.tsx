@@ -183,12 +183,12 @@ export const ChangePaymentMethodModal = ({
           );
         });
 
+        setIsLoading(false);
+        onPanelClose();
         onGenerateDebitUrl(
           updatedSubscription.unverified_payment
             ?.payment_method_setup_url as string
         );
-        setIsLoading(false);
-        onPanelClose();
       } catch (e: any) {
         setIsLoading(false);
         onError(e);

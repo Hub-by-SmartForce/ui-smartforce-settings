@@ -14,6 +14,7 @@ export interface PanelModalDialogClasses {
 export interface PanelModalDialogProps
   extends Omit<PanelModalProps, 'classes'> {
   classes?: PanelModalDialogClasses;
+  onExit?: () => void;
 }
 
 export const PanelModalDialog = ({
@@ -26,7 +27,8 @@ export const PanelModalDialog = ({
   actionButton,
   altActionButton,
   subTitle,
-  onClose
+  onClose,
+  onExit
 }: PanelModalDialogProps): React.ReactElement<PanelModalDialogProps> => {
   const showFooter =
     !!dialogCloseButton ||
@@ -35,6 +37,7 @@ export const PanelModalDialog = ({
 
   return (
     <SFDialog
+      TransitionProps={{ onExited: onExit }}
       className={`${styles.panelModalDialog} ${classes?.root ?? ''}`}
       PaperProps={{
         className: `${styles.paper} ${classes?.paper ?? ''}`

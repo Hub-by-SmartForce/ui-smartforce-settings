@@ -18,15 +18,26 @@ export interface SubscriptionPaymentDebit {
   account_type?: string;
 }
 
+export type SubscriptionPaymentMethod =
+  | 'card'
+  | 'debit'
+  | 'check'
+  | 'wire_transfer';
+
 export interface SubscriptionPayment {
-  method: 'card' | 'debit' | 'check' | 'wire_transfer';
+  method: SubscriptionPaymentMethod;
   card?: SubscriptionPaymentCard;
   debit?: SubscriptionPaymentDebit;
   payment_method_setup_url?: string;
 }
 
 export type SubscriptionPlan = 'basic' | 'connect' | 'analytics' | 'schedule';
-export type SubscriptionStatus = 'Active' | 'Unpaid' | 'Canceled' | 'Pending';
+export type SubscriptionStatus =
+  | 'Active'
+  | 'Unpaid'
+  | 'Canceled'
+  | 'Pending'
+  | 'Past Due';
 
 export interface SubscriptionCoupon {
   id: string;
@@ -38,6 +49,13 @@ export interface SubscriptionCoupon {
   months?: number;
   start: string;
   end?: string;
+}
+
+export interface SubscriptionUnverifiedPayment {
+  method: SubscriptionPaymentMethod;
+  payment_method_setup_url: string;
+  card?: SubscriptionPaymentCard;
+  debit?: SubscriptionPaymentDebit;
 }
 
 export interface Subscription {
@@ -52,6 +70,7 @@ export interface Subscription {
   total_seats_billed: number;
   payment: SubscriptionPayment | null;
   billing_cycle: BillingCycleType;
+  next_billing_cycle?: BillingCycleType;
   start_date: string;
   end_date: string;
   renew: boolean;
@@ -61,6 +80,7 @@ export interface Subscription {
   current_coupon?: SubscriptionCoupon;
   next_coupon?: SubscriptionCoupon;
   coupons: SubscriptionCoupon[];
+  unverified_payment?: SubscriptionUnverifiedPayment;
 }
 
 export interface BillingDetailsValue {

@@ -68,6 +68,9 @@ export const Main = (): React.ReactElement<{}> => {
   const onHome = () => console.log('onHome');
   const onActivate = () => console.log('onActivate');
   const onUpgrade = () => console.log('onUpgrade');
+  const onGenerateDebitUrl = (url: string) => {
+    console.log('onGenerateDebitUrl:', url);
+  };
 
   useEffect(() => {
     const init = async () => {
@@ -226,6 +229,7 @@ export const Main = (): React.ReactElement<{}> => {
                 onActivate={onActivate}
                 onUpgrade={onUpgrade}
                 onSectionChange={(name) => setSelectedSectionName(name)}
+                onGenerateDebitUrl={onGenerateDebitUrl}
               />
             </div>
           </div>

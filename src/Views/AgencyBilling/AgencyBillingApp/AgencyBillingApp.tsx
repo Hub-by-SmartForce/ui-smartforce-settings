@@ -14,6 +14,7 @@ import { NextInvoice } from '../NextInvoice/NextInvoice';
 import { PaymentMethod } from '../PaymentMethod/PaymentMethod';
 import { ThemeTypeContext } from '../../../Context';
 import { AgencyBillingItem } from '../AgencyBillingItem/AgencyBillingItem';
+import { BillingCycle } from '../BillingCycle/BillingCycle';
 
 function hasPayment(payment: SubscriptionPayment | null): boolean {
   return (
@@ -31,6 +32,7 @@ export interface AgencyBillingAppProps {
   canUpdate: boolean;
   onClose: () => void;
   onError: (e: SettingsError) => void;
+  onGenerateDebitUrl: (url: string) => void;
   onActivate: (product: ApplicationProduct) => void;
   onUpgrade: (product: string) => void;
   onGetStarted: (product: ApplicationProduct) => void;
@@ -45,14 +47,17 @@ export const AgencyBillingApp = ({
   onGetStarted,
   onActivate,
   onUpgrade,
-  onError
+  onError,
+  onGenerateDebitUrl
 }: AgencyBillingAppProps): React.ReactElement<AgencyBillingAppProps> => {
   const { themeType } = useContext(ThemeTypeContext);
 
   const isPending =
     !isFreePlan(subscription?.plan) &&
-    subscription?.payment?.method === 'debit' &&
-    !subscription.payment?.debit;
+    ((subscription?.payment?.method === 'debit' &&
+      !subscription.payment?.debit) ||
+      (subscription?.unverified_payment?.method === 'debit' &&
+        !subscription.unverified_payment.debit));
 
   const arePendingPayments =
     subscription?.renew ||
@@ -101,9 +106,18 @@ export const AgencyBillingApp = ({
             (!isFreeTrial(subscription) || !!subscription?.payment?.method) && (
               <Fragment>
                 <SFDivider />
-                <AgencyBillingItem
-                  title="Billing Cycle"
-                  children={`Annual plan / Pay ${subscription.billing_cycle}`}
+                <BillingCycle
+                  product={subscription.product}
+                  cycle={subscription.billing_cycle}
+                  nextCycle={subscription.next_billing_cycle}
+                  canChange={
+                    subscription.renew !== false &&
+                    subscription.payment?.method === 'card' &&
+                    !subscription.next_billing_cycle &&
+                    subscription.billing_cycle === 'annually'
+                  }
+                  onClose={onClose}
+                  onError={onError}
                 />
 
                 <SFDivider />
@@ -142,6 +156,7 @@ export const AgencyBillingApp = ({
                     subscription={subscription}
                     onClose={onClose}
                     onError={onError}
+                    onGenerateDebitUrl={onGenerateDebitUrl}
                   />
                 )}
               </Fragment>

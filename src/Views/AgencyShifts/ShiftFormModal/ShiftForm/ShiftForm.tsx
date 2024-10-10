@@ -215,6 +215,7 @@ export const ShiftForm = ({
         )}
 
         <MemberPicker
+          activeOnly
           baseUrl={apiBaseUrl}
           label="Supervisor"
           value={value.supervisor}

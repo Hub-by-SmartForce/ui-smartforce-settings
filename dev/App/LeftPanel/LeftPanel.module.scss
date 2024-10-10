@@ -1,0 +1,20 @@
+@import '~sfui/dist/Styles/SFMedia/SFMedia.module.scss';
+
+.leftPanel {
+  display: none;
+}
+
+@media screen and (min-width: $sf-media-lg-width) {
+  .leftPanel {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+    padding: 12px;
+
+    .tours {
+      display: flex;
+      gap: 12px;
+      cursor: pointer;
+    }
+  }
+}

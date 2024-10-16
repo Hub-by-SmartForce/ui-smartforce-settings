@@ -7,6 +7,7 @@ import {
 import { SFRadioGroup, SFRadioOptionsProps, SFText } from 'sfui';
 import { Member, MemberRole } from '../../../../Models';
 import { TourContext, TourTooltip } from '../../../../Modules/Tour';
+import { Avatar } from '../../../../Components';
 
 export interface ChangeRoleModalProps {
   isOpen: boolean;
@@ -92,29 +93,44 @@ export const ChangeRoleModal = ({
         onClose();
       }}
     >
-      <div className={styles.content}>
-        <TourTooltip
-          title="Select the role"
-          description="Click on the role you want to assign to the agency member and click on the “Save Changes” button.
-              If you are the owner, remember that if you transfer the ownership of the agency to another member, you will lose owner account permissions."
-          step={3}
-          lastStep={3}
-          tourId={2}
-          placement="right"
-          width="fit"
-          topZIndex
-        >
-          <SFText className={styles.dialogTitle} type="component-title">
-            Change Role
-          </SFText>
-        </TourTooltip>
+      {member && (
+        <div className={styles.content}>
+          <TourTooltip
+            title="Select the role"
+            description="Click on the role you want to assign to the agency member and click on the “Save Changes” button.
+            If you are the owner, remember that if you transfer the ownership of the agency to another member, you will lose owner account permissions."
+            step={3}
+            lastStep={3}
+            tourId={2}
+            placement="right"
+            width="fit"
+            topZIndex
+          >
+            <SFText className={styles.dialogTitle} type="component-title">
+              Change Role
+            </SFText>
+          </TourTooltip>
 
-        <SFRadioGroup
-          options={roleOptions}
-          value={roleSelected}
-          onChange={(_e, value: string) => setRoleSelected(value)}
-        />
-      </div>
+          <div className={styles.memberInfo}>
+            <Avatar size="medium" name={member.name} url={member.avatar_url} />
+
+            <div>
+              {member.title && (
+                <SFText type="component-3">
+                  {member.title.name.toUpperCase()}
+                </SFText>
+              )}
+              <SFText type="component-1-medium">{member.name}</SFText>
+            </div>
+          </div>
+
+          <SFRadioGroup
+            options={roleOptions}
+            value={roleSelected}
+            onChange={(_e, value: string) => setRoleSelected(value)}
+          />
+        </div>
+      )}
     </PanelModal>
   );
 };

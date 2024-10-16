@@ -1,5 +1,5 @@
 import { Pagination } from './Pagination';
-import { UserTitle } from './User';
+import { UserTitleBase } from './User';
 
 export type GetMemberType = 'invitations' | 'members';
 
@@ -36,5 +36,5 @@ export interface Member {
     | 'Account not verified'
     | 'Account not created';
   groups: MemberGroup[];
-  title?: UserTitle;
+  title?: UserTitleBase;
 }

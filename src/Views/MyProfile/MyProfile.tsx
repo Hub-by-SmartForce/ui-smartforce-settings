@@ -164,7 +164,7 @@ export const MyProfile = ({
   const renderContent = () => {
     return (
       <div className={styles.content}>
-        <div className={styles.role}>
+        <div className={styles.item}>
           <span>Role</span>
           <SFChip
             sfColor="default"
@@ -173,7 +173,8 @@ export const MyProfile = ({
             size="small"
           />
         </div>
-        <div className={styles.role}>
+
+        <div className={styles.item}>
           <span>Groups</span>
           <div className={styles.chipGroups}>
             {groups.length === 0 && (
@@ -193,6 +194,18 @@ export const MyProfile = ({
               ))}
           </div>
         </div>
+
+        {user?.title && (
+          <div className={styles.item}>
+            <span>Title</span>
+            <SFChip
+              sfColor="default"
+              label={user?.title?.name}
+              variant="outlined"
+              size="small"
+            />
+          </div>
+        )}
 
         <MyProfileForm
           user={editUser}

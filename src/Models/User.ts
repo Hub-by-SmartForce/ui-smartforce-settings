@@ -27,6 +27,12 @@ export interface UserRole extends MemberRole {
   permissions?: string[];
 }
 
+export interface UserTitle {
+  id: string;
+  name: string;
+  priority: number;
+}
+
 export interface User {
   agency_id: string;
   agency_name: string;
@@ -50,6 +56,7 @@ export interface User {
   weight?: number;
   groups?: UserGroup[];
   extra_jobs?: UserExtraJobs;
+  title?: UserTitle;
 }
 
 export interface BusinessCardSettings {
@@ -59,6 +66,7 @@ export interface BusinessCardSettings {
     show_email: boolean;
     show_phone: boolean;
     show_photo: boolean;
+    show_title: boolean;
   };
   agency_information: {
     show_name: boolean;

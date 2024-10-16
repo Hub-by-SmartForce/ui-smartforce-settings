@@ -1,6 +1,13 @@
-import React, { Fragment, useContext, useRef } from 'react';
+import React, { useContext, useRef } from 'react';
 import styles from './MemberListItem.module.scss';
-import { SFChip, SFCollapse, SFIconButton, SFMenu, SFMenuItem } from 'sfui';
+import {
+  SFChip,
+  SFCollapse,
+  SFIconButton,
+  SFMenu,
+  SFMenuItem,
+  SFText
+} from 'sfui';
 import { UserContext } from '../../../../../Context';
 import { Avatar } from '../../../../../Components/Avatar/Avatar';
 import {
@@ -12,6 +19,7 @@ import {
 import {
   checkPermissions,
   dispatchCustomEvent,
+  getRoleLabel,
   isRoleOwner
 } from '../../../../../Helpers';
 import { User, SettingsError } from '../../../../../Models';
@@ -92,14 +100,15 @@ export const MemberListItem = ({
 
   const showChangeRoleItem =
     isActive &&
+    isRoleLower &&
     checkPermissions(AGENCY_MEMBERS_ROLE_UPDATE, user.role.permissions);
 
-  const showRemoveItem = checkPermissions(
-    isActive ? AGENCY_MEMBERS_REMOVE : AGENCY_INVITATIONS_REMOVE,
-    user.role.permissions
-  );
-
-  const showMenu = !isUser && (showResendInvitationItem || isRoleLower);
+  const showRemoveItem =
+    isRoleLower &&
+    checkPermissions(
+      isActive ? AGENCY_MEMBERS_REMOVE : AGENCY_INVITATIONS_REMOVE,
+      user.role.permissions
+    );
 
   return (
     <SFCollapse
@@ -120,12 +129,14 @@ export const MemberListItem = ({
           <SFMenuItem tabIndex={0} onClick={onSeeProfile}>
             See profile
           </SFMenuItem>
+
           {showResendInvitationItem && (
             <SFMenuItem tabIndex={0} onClick={onResendInvitation}>
               Resend invitation
             </SFMenuItem>
           )}
-          {showChangeRoleItem && member.isFirstOfficer && (
+
+          {!isUser && showChangeRoleItem && member.isFirstOfficer && (
             <TourTooltip
               enterDelay={100}
               title="Change the role"
@@ -147,13 +158,13 @@ export const MemberListItem = ({
             </TourTooltip>
           )}
 
-          {showChangeRoleItem && !member.isFirstOfficer && (
+          {!isUser && showChangeRoleItem && !member.isFirstOfficer && (
             <SFMenuItem tabIndex={0} onClick={onChangeRole}>
               Change role
             </SFMenuItem>
           )}
 
-          {showRemoveItem && (
+          {!isUser && showRemoveItem && (
             <SFMenuItem tabIndex={0} onClick={onRemove}>
               Remove
             </SFMenuItem>
@@ -161,9 +172,19 @@ export const MemberListItem = ({
         </SFMenu>
 
         <InteractiveBox className={styles.content} onClick={onClick}>
-          <Avatar name={member.name} url={member.avatar_thumbnail_url} />
+          <Avatar
+            size="medium"
+            name={member.name}
+            url={member.avatar_thumbnail_url}
+          />
 
           <div className={styles.memberInfo}>
+            {member.title && (
+              <SFText type="component-3">
+                {member.title.name.toUpperCase()}
+              </SFText>
+            )}
+
             {member.name && (
               <p className={styles.nameWrapper}>
                 <span className={styles.name}>{member.name}</span>
@@ -180,7 +201,7 @@ export const MemberListItem = ({
             <div className={styles.chips}>
               {member.role && (
                 <SFChip
-                  label={member.role?.name}
+                  label={getRoleLabel(member.role)}
                   sfColor="primary"
                   variant={isRoleOwner(member.role.id) ? 'default' : 'outlined'}
                   size="small"
@@ -198,43 +219,39 @@ export const MemberListItem = ({
         </InteractiveBox>
 
         <div className={styles.menu} ref={refAnchorEl}>
-          {showMenu && (
-            <Fragment>
-              {member.isFirstOfficer && (
-                <TourTooltip
-                  title="Add managers to your agency"
-                  description="You can add as many managers as your agency needs. Just click on the 3 ellipses next to the name of the officer you want to make a manager."
-                  step={1}
-                  lastStep={3}
-                  tourId={2}
-                  preventOverflow
-                  placement="top-end"
-                >
-                  <SFIconButton
-                    className={styles.menuButton}
-                    aria-label="Open member options menu"
-                    sfIcon="Other"
-                    sfSize="medium"
-                    onClick={() => {
-                      setIsMenuOpen(true);
-                      onTourNext({ tourId: 2, step: 1 });
-                    }}
-                  />
-                </TourTooltip>
-              )}
+          {member.isFirstOfficer && (
+            <TourTooltip
+              title="Add managers to your agency"
+              description="You can add as many managers as your agency needs. Just click on the 3 ellipses next to the name of the officer you want to make a manager."
+              step={1}
+              lastStep={3}
+              tourId={2}
+              preventOverflow
+              placement="top-end"
+            >
+              <SFIconButton
+                className={styles.menuButton}
+                aria-label="Open member options menu"
+                sfIcon="Other"
+                sfSize="medium"
+                onClick={() => {
+                  setIsMenuOpen(true);
+                  onTourNext({ tourId: 2, step: 1 });
+                }}
+              />
+            </TourTooltip>
+          )}
 
-              {!member.isFirstOfficer && (
-                <SFIconButton
-                  className={styles.menuButton}
-                  aria-label="Open member options menu"
-                  sfIcon="Other"
-                  sfSize="medium"
-                  onClick={() => {
-                    setIsMenuOpen(true);
-                  }}
-                />
-              )}
-            </Fragment>
+          {!member.isFirstOfficer && (
+            <SFIconButton
+              className={styles.menuButton}
+              aria-label="Open member options menu"
+              sfIcon="Other"
+              sfSize="medium"
+              onClick={() => {
+                setIsMenuOpen(true);
+              }}
+            />
           )}
         </div>
       </div>

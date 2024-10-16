@@ -26,6 +26,14 @@
     line-height: 21px;
   }
 
+  &.medium {
+    min-width: 53px;
+    max-width: 53px;
+    height: 53px;
+    font-size: 17px;
+    line-height: 20px;
+  }
+
   &.large {
     width: 100px;
     height: 100px;

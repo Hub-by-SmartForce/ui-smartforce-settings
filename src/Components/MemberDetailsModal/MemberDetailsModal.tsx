@@ -44,6 +44,11 @@ export const MemberDetailsModal = ({
           <Avatar size="large" name={member.name} url={member.avatar_url} />
 
           <div className={styles.memberName}>
+            {member.title && (
+              <SFText type="component-1">
+                {member.title.name.toUpperCase()}
+              </SFText>
+            )}
             {member.name && <span className={styles.name}>{member.name}</span>}
             <span className={styles.email}>{member.email}</span>
           </div>

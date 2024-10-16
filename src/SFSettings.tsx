@@ -31,6 +31,7 @@ import {
   AGENCY_MEMBERS_READ,
   AGENCY_PREFERENCES_READ,
   AGENCY_SUBSCRIPTION_UPDATE,
+  AGENCY_TITLES_READ,
   USER_PROFILE_READ
 } from './Constants';
 import { AppEnv, ApplicationProduct } from './Models/Apps';
@@ -272,6 +273,25 @@ export const SFSettings = ({
                 onClose={onPanelDone}
               />
             )
+          }
+        ]
+      }
+    ];
+  }
+
+  if (user && checkPermissions(AGENCY_TITLES_READ, user.role?.permissions)) {
+    sectionCards = [
+      ...sectionCards,
+      {
+        title: 'Titles',
+        name: 'titles',
+        items: [
+          {
+            cardTitle: 'Titles',
+            viewTitle: 'Titles',
+            name: 'titles',
+            description: "Add and manage your agency's titles.",
+            component: <div></div>
           }
         ]
       }

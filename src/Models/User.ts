@@ -27,10 +27,18 @@ export interface UserRole extends MemberRole {
   permissions?: string[];
 }
 
-export interface UserTitle {
+export interface UserTitleBase {
   id: string;
   name: string;
   priority: number;
+}
+
+export interface UserTitle extends UserTitleBase {
+  agency_id: string;
+  created_at: string;
+  created_by: string;
+  updated_at?: string;
+  updated_by?: string;
 }
 
 export interface User {
@@ -56,7 +64,7 @@ export interface User {
   weight?: number;
   groups?: UserGroup[];
   extra_jobs?: UserExtraJobs;
-  title?: UserTitle;
+  title?: UserTitleBase;
 }
 
 export interface BusinessCardSettings {

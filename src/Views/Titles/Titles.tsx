@@ -1,0 +1,158 @@
+import React, { useContext, useEffect, useState } from 'react';
+import { SettingsContentRender } from '../SettingsContentRender';
+import { ListManagment } from '../../Components';
+import { SettingsError, UserTitle } from '../../Models';
+import { SFButton } from 'sfui';
+import { ApiContext } from '../../Context';
+import { TitleItem } from './TitleItem/TitleItem';
+import { getTitles } from '../../Services';
+import { TitleModal } from './TitleModal/TitleModal';
+
+const getFilteredValues = (list: UserTitle[], filter: string): UserTitle[] => {
+  return list.filter((l) =>
+    l.name.toLowerCase().includes(filter.toLowerCase())
+  );
+};
+
+export interface TitlesProps {
+  onClose: () => void;
+  onError: (e: SettingsError) => void;
+}
+
+export const Titles = ({
+  onClose,
+  onError
+}: TitlesProps): React.ReactElement<TitlesProps> => {
+  const apiBaseUrl = useContext(ApiContext).settings;
+  const [titles, setTitles] = useState<UserTitle[]>([]);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [modalValue, setModalValue] = useState<UserTitle>();
+  const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
+  const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState<boolean>(false);
+
+  //TODO remove
+  console.log(isDeleteDialogOpen);
+
+  useEffect(() => {
+    let isSubscribed: boolean = true;
+
+    const init = async () => {
+      setIsLoading(true);
+      try {
+        const titles = await getTitles(apiBaseUrl);
+
+        if (isSubscribed) {
+          setTitles(titles);
+          setIsLoading(false);
+        }
+      } catch (e: any) {
+        onError(e);
+      }
+    };
+
+    init();
+
+    // Unsuscribed when cleaning up
+    return () => {
+      isSubscribed = false;
+    };
+  }, [apiBaseUrl, onError]);
+
+  const onEdit = (title: UserTitle) => {
+    setModalValue(title);
+    setIsModalOpen(true);
+  };
+
+  const onCreate = () => {
+    setIsModalOpen(true);
+  };
+
+  const onOpenDeleteModal = (title: UserTitle) => {
+    setModalValue(title);
+    setIsDeleteDialogOpen(true);
+  };
+
+  const onModalClose = () => {
+    setIsModalOpen(false);
+    setIsDeleteDialogOpen(false);
+  };
+
+  const onTransitionEnd = () => {
+    setModalValue(undefined);
+  };
+
+  const onFinish = async () => {
+    setIsLoading(true);
+    try {
+      const response = await getTitles(apiBaseUrl);
+      setTitles(response);
+      setIsLoading(false);
+    } catch (e: any) {
+      setIsLoading(false);
+      onError(e);
+    }
+  };
+
+  const onDown = (_title: UserTitle) => {
+    //TODO
+  };
+  const onUp = (_title: UserTitle) => {
+    //TODO
+  };
+
+  return (
+    <>
+      <TitleModal
+        name={modalValue?.name}
+        isOpen={isModalOpen}
+        onClose={() => {
+          onClose();
+          onModalClose();
+        }}
+        onBack={onModalClose}
+        onError={onError}
+        onFinish={onFinish}
+        onTransitionEnd={onTransitionEnd}
+      />
+
+      <SettingsContentRender
+        renderContent={() => (
+          <ListManagment<UserTitle>
+            renderCreateButton={(props) => (
+              <SFButton {...props} onClick={onCreate}>
+                Create Title
+              </SFButton>
+            )}
+            emptyMessage="There are no titles created yet."
+            label="Title"
+            list={titles}
+            isLoading={isLoading}
+            filter={getFilteredValues}
+            options={[
+              {
+                label: 'Edit title',
+                onClick: onEdit
+              },
+
+              {
+                label: 'Delete',
+                onClick: onOpenDeleteModal
+              }
+            ]}
+            renderItem={(
+              item: UserTitle,
+              isFirst: boolean,
+              isLast: boolean
+            ) => (
+              <TitleItem
+                title={item}
+                onDown={!isLast ? () => onDown(item) : undefined}
+                onUp={!isFirst ? () => onUp(item) : undefined}
+              />
+            )}
+          />
+        )}
+      />
+    </>
+  );
+};

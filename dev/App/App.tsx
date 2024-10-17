@@ -19,7 +19,8 @@ import {
   UserProvider,
   TimezonesProvider,
   TourProvider,
-  AppNotificationsProvider
+  AppNotificationsProvider,
+  isLogin
 } from '../../src';
 import { Login } from './Login/Login';
 import { Main } from './Main/Main';
@@ -34,7 +35,7 @@ export const AuthContext = createContext<{
 export const App = () => {
   const { themeType } = React.useContext(ThemeTypeContext);
   const theme: SFTheme = createSFTheme(themeType);
-  const [isLogged, setIsLogged] = useState<boolean>(false);
+  const [isLogged, setIsLogged] = useState<boolean>(isLogin());
 
   return (
     <AuthContext.Provider value={{ isLogged, setIsLogged }}>

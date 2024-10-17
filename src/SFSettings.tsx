@@ -41,6 +41,7 @@ import { AgencyEvents } from './Views/AgencyEvents/AgencyEvents';
 import { ApiContext } from './Context/Api';
 import { InnerView } from './Components/InnerViews/InnerView/InnerView';
 import { AgencyBillingRender } from './Views/AgencyBilling/AgencyBillingRender';
+import { Titles } from './Views/Titles/Titles';
 
 const onGetStarted = (env: AppEnv, product: ApplicationProduct) => {
   window.open(getAppBaseUrl(env, product), '_blank');
@@ -291,7 +292,7 @@ export const SFSettings = ({
             viewTitle: 'Titles',
             name: 'titles',
             description: "Add and manage your agency's titles.",
-            component: <div></div>
+            component: <Titles onError={onError} onClose={onPanelDone} />
           }
         ]
       }

@@ -1,4 +1,4 @@
-import React, { Fragment, useState } from 'react';
+import React, { Fragment, useEffect, useRef, useState } from 'react';
 import styles from './ListManagment.module.scss';
 import { SFButton, SFButtonProps, SFSearch, SFSpinner, SFText } from 'sfui';
 import { Divider } from '../Divider/Divider';
@@ -21,6 +21,7 @@ export interface ListManagmentProps<T> {
   isLoading: boolean;
   options: ListManagmentMenuOption<T>[];
   filter: (list: T[], filter: string) => T[];
+  pagination?: boolean;
   onClick?: (item: T) => void;
   renderItem: (
     item: T,
@@ -34,9 +35,10 @@ export const ListManagment = <T,>(
 ): React.ReactElement<ListManagmentProps<T>> => {
   const [searchValue, setSearchValue] = useState<string>('');
   const [limit, setLimit] = useState<number>(LIST_LIMIT);
-  const refSearchValueLength = React.useRef<number>(searchValue.length);
+  const refSearchValueLength = useRef<number>(searchValue.length);
+  const hasPagination = props.pagination !== false;
 
-  React.useEffect(() => {
+  useEffect(() => {
     if (searchValue.length > 2 || refSearchValueLength.current > 2) {
       setLimit(LIST_LIMIT);
     }
@@ -46,7 +48,9 @@ export const ListManagment = <T,>(
 
   const filteredList =
     searchValue.length > 2 ? props.filter(props.list, searchValue) : props.list;
-  const visibleList: T[] = filteredList.slice(0, limit);
+  const visibleList: T[] = hasPagination
+    ? filteredList.slice(0, limit)
+    : filteredList;
   const isListEmpty: boolean = props.list.length === 0;
 
   return (
@@ -110,7 +114,7 @@ export const ListManagment = <T,>(
                       renderItem={props.renderItem}
                     />
 
-                    {limit < filteredList.length && (
+                    {hasPagination && limit < filteredList.length && (
                       <SFButton
                         fullWidth
                         sfColor="grey"
@@ -122,7 +126,8 @@ export const ListManagment = <T,>(
                       </SFButton>
                     )}
 
-                    {visibleList.length === filteredList.length &&
+                    {hasPagination &&
+                      visibleList.length === filteredList.length &&
                       limit > LIST_LIMIT && (
                         <SFButton
                           fullWidth

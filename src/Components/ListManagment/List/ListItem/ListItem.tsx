@@ -11,14 +11,22 @@ export interface ListManagmentMenuOption<T> {
   chip?: React.ReactElement;
 }
 export interface ListItemProps<T> {
+  isFirst: boolean;
+  isLast: boolean;
   showItemMenu?: boolean;
   item: T;
   options: ListManagmentMenuOption<T>[];
-  renderItem: (item: T) => React.ReactElement;
+  renderItem: (
+    item: T,
+    isFirst: boolean,
+    isLast: boolean
+  ) => React.ReactElement;
   onClick?: () => void;
 }
 
 export const ListItem = <T,>({
+  isFirst,
+  isLast,
   showItemMenu = true,
   item,
   options,
@@ -42,7 +50,7 @@ export const ListItem = <T,>({
 
   return (
     <InteractiveBox className={styles.listItem} onClick={onClick}>
-      {renderItem(item)}
+      {renderItem(item, isFirst, isLast)}
 
       <div
         className={styles.menu}

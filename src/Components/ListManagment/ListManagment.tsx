@@ -22,7 +22,11 @@ export interface ListManagmentProps<T> {
   options: ListManagmentMenuOption<T>[];
   filter: (list: T[], filter: string) => T[];
   onClick?: (item: T) => void;
-  renderItem: (item: T) => React.ReactElement;
+  renderItem: (
+    item: T,
+    isFirst: boolean,
+    isLast: boolean
+  ) => React.ReactElement;
 }
 
 export const ListManagment = <T,>(

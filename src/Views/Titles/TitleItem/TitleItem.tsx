@@ -5,31 +5,35 @@ import { SFIconButton, SFText } from 'sfui';
 
 export interface TitleItemProps {
   title: UserTitle;
+  showActions: boolean;
   onDown?: () => void;
   onUp?: () => void;
 }
 
 export const TitleItem = ({
   title,
+  showActions,
   onDown,
   onUp
 }: TitleItemProps): React.ReactElement<TitleItemProps> => {
   return (
     <div className={styles.titleItem}>
-      <div>
-        <SFIconButton
-          disabled={!onDown}
-          sfIcon="Down-7"
-          sfSize="small"
-          onClick={onDown}
-        />
-        <SFIconButton
-          disabled={!onUp}
-          sfIcon="Up-7"
-          sfSize="small"
-          onClick={onUp}
-        />
-      </div>
+      {showActions && (
+        <div>
+          <SFIconButton
+            disabled={!onDown}
+            sfIcon="Down-7"
+            sfSize="small"
+            onClick={onDown}
+          />
+          <SFIconButton
+            disabled={!onUp}
+            sfIcon="Up-7"
+            sfSize="small"
+            onClick={onUp}
+          />
+        </div>
+      )}
 
       <div className={styles.info}>
         <div className={styles.priority}>

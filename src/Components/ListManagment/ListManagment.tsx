@@ -11,7 +11,7 @@ const LIST_LIMIT = 10;
 export { ListManagmentMenuOption };
 
 export interface ListManagmentProps<T> {
-  renderCreateButton: (
+  renderCreateButton?: (
     props: Partial<SFButtonProps>
   ) => React.ReactElement<SFButtonProps>;
   showItemMenu?: boolean;
@@ -58,12 +58,13 @@ export const ListManagment = <T,>(
       <div
         className={`${styles.header} ${isListEmpty ? styles.emptyList : ''}`}
       >
-        {props.renderCreateButton({
-          fullWidth: true,
-          sfColor: 'blue',
-          variant: 'outlined',
-          size: 'medium'
-        })}
+        {props.renderCreateButton &&
+          props.renderCreateButton({
+            fullWidth: true,
+            sfColor: 'blue',
+            variant: 'outlined',
+            size: 'medium'
+          })}
 
         {!isListEmpty && (
           <div className={styles.searchField}>

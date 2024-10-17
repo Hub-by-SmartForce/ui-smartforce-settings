@@ -80,13 +80,9 @@ export const AgencyEventsModal = ({
 
   React.useEffect(() => {
     if (isOpen) {
-      if (value) {
-        setFormValue(value);
-      } else {
-        setFormValue(defaultFormValue);
-      }
+      setFormValue(value ?? defaultFormValue);
     }
-  }, [isOpen]);
+  }, [isOpen, value]);
 
   return (
     <PanelModal

@@ -7,6 +7,7 @@ import { ApiContext } from '../../Context';
 import { TitleItem } from './TitleItem/TitleItem';
 import { getTitles } from '../../Services';
 import { TitleModal } from './TitleModal/TitleModal';
+import { TitleDeleteDialog } from './TitleDeleteDialog/TitleDeleteDialog';
 
 const getFilteredValues = (list: UserTitle[], filter: string): UserTitle[] => {
   return list.filter((l) =>
@@ -29,9 +30,6 @@ export const Titles = ({
   const [modalValue, setModalValue] = useState<UserTitle>();
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState<boolean>(false);
-
-  //TODO remove
-  console.log(isDeleteDialogOpen);
 
   useEffect(() => {
     let isSubscribed: boolean = true;
@@ -82,6 +80,7 @@ export const Titles = ({
   };
 
   const onFinish = async () => {
+    setIsDeleteDialogOpen(false);
     setIsLoading(true);
     try {
       const response = await getTitles(apiBaseUrl);
@@ -102,6 +101,19 @@ export const Titles = ({
 
   return (
     <>
+      {modalValue && (
+        <TitleDeleteDialog
+          value={modalValue}
+          isOpen={isDeleteDialogOpen}
+          onError={onError}
+          onDelete={onFinish}
+          onClose={() => {
+            onModalClose();
+            setModalValue(undefined);
+          }}
+        />
+      )}
+
       <TitleModal
         name={modalValue?.name}
         isOpen={isModalOpen}

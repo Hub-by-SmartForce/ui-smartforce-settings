@@ -3,11 +3,12 @@ import { SettingsContentRender } from '../SettingsContentRender';
 import { ListManagment } from '../../Components';
 import { SettingsError, UserTitle } from '../../Models';
 import { SFButton } from 'sfui';
-import { ApiContext } from '../../Context';
+import { ApiContext, UserContext } from '../../Context';
 import { TitleItem } from './TitleItem/TitleItem';
 import { getTitles } from '../../Services';
 import { TitleModal } from './TitleModal/TitleModal';
 import { TitleDeleteDialog } from './TitleDeleteDialog/TitleDeleteDialog';
+import { isRoleOwner } from '../../Helpers';
 
 const getFilteredValues = (list: UserTitle[], filter: string): UserTitle[] => {
   return list.filter((l) =>
@@ -25,11 +26,14 @@ export const Titles = ({
   onError
 }: TitlesProps): React.ReactElement<TitlesProps> => {
   const apiBaseUrl = useContext(ApiContext).settings;
+  const { user } = useContext(UserContext);
   const [titles, setTitles] = useState<UserTitle[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [modalValue, setModalValue] = useState<UserTitle>();
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState<boolean>(false);
+
+  const isOwner = isRoleOwner(user?.role.id);
 
   useEffect(() => {
     let isSubscribed: boolean = true;
@@ -130,16 +134,25 @@ export const Titles = ({
       <SettingsContentRender
         renderContent={() => (
           <ListManagment<UserTitle>
-            renderCreateButton={(props) => (
-              <SFButton {...props} onClick={onCreate}>
-                Create Title
-              </SFButton>
-            )}
-            emptyMessage="There are no titles created yet."
+            renderCreateButton={
+              isOwner
+                ? (props) => (
+                    <SFButton {...props} onClick={onCreate}>
+                      Create Title
+                    </SFButton>
+                  )
+                : undefined
+            }
+            emptyMessage={
+              isOwner
+                ? 'There are no titles created yet.'
+                : 'Contact the agency owner to set the titles for the agency.'
+            }
             label="Title"
             list={titles}
             isLoading={isLoading}
             filter={getFilteredValues}
+            showItemMenu={isOwner}
             options={[
               {
                 label: 'Edit title',
@@ -158,6 +171,7 @@ export const Titles = ({
             ) => (
               <TitleItem
                 title={item}
+                showActions={isOwner}
                 onDown={!isLast ? () => onDown(item) : undefined}
                 onUp={!isFirst ? () => onUp(item) : undefined}
               />

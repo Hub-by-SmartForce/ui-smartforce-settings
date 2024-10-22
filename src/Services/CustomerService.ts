@@ -136,3 +136,12 @@ export async function createTitle(
   const url = `${baseUrl}/agencies/me/titles`;
   return apiPost(url, { name }, getUserSession().access_token);
 }
+
+export async function moveTitle(
+  baseUrl: string,
+  titleId: string,
+  priority: number
+): Promise<UserTitle> {
+  const url = `${baseUrl}/agencies/me/titles/${titleId}/move`;
+  return apiPost(url, { priority }, getUserSession().access_token);
+}

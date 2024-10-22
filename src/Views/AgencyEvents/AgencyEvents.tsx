@@ -107,7 +107,7 @@ export const AgencyEvents = ({
     return () => {
       isSubscribed = false;
     };
-  }, []);
+  }, [apiBaseUrl, onError]);
 
   return (
     <div>

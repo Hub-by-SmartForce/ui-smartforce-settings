@@ -18,6 +18,9 @@ export const getBusinessCardData = (
       email: values.officer_information.show_email ? user.email : undefined,
       avatarUrl: values.officer_information.show_photo
         ? user.avatar_url ?? undefined
+        : undefined,
+      title: values.officer_information.show_title
+        ? user.title?.name
         : undefined
     },
     customer: {

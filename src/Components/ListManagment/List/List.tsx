@@ -9,7 +9,11 @@ export interface ListProps<T> {
   list: T[];
   options: ListManagmentMenuOption<T>[];
   onClick?: (item: T) => void;
-  renderItem: (item: T) => React.ReactElement;
+  renderItem: (
+    item: T,
+    isFirst: boolean,
+    isLast: boolean
+  ) => React.ReactElement;
 }
 
 export const List = <T,>({
@@ -24,6 +28,8 @@ export const List = <T,>({
       {list.map((item: T, index: number) => (
         <SFCollapse key={(item as { id: string }).id} timeout={480}>
           <ListItem
+            isFirst={index === 0}
+            isLast={index === list.length - 1}
             showItemMenu={showItemMenu}
             item={item}
             options={options}

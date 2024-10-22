@@ -1,6 +1,6 @@
 @import '~sfui/dist/Styles/SFMedia/SFMedia.module.scss';
 
-div.changeRoleModal {
+div.setTitleModal {
   div.content {
     display: flex;
     flex-direction: column;
@@ -21,7 +21,7 @@ div.changeRoleModal {
 }
 
 @media screen and (min-width: $sf-media-sm-width) {
-  div.changeRoleModal {
+  div.setTitleModal {
     div.dialogContainer {
       grid-template-rows: minmax(0, 1fr) auto !important;
 

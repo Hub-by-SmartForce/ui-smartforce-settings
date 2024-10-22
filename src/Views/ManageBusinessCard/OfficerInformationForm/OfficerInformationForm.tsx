@@ -24,6 +24,10 @@ const getEmptyFields = (user: User): string[] => {
     emptyFields.push('show_photo');
   }
 
+  if (!user.title) {
+    emptyFields.push('show_title');
+  }
+
   return emptyFields;
 };
 
@@ -37,6 +41,8 @@ function getLabel(key: string): string {
       return 'Phone';
     case 'show_officer_id':
       return 'Officer ID Number';
+    case 'show_title':
+      return 'Title';
     default:
       return 'Photo';
   }
@@ -52,6 +58,8 @@ export const OfficerInformationForm = ({
   value,
   onChange
 }: OfficerInformationFormProps): React.ReactElement<OfficerInformationFormProps> => {
+  const { show_title, ...others } = value;
+
   return (
     <div className={styles.officerInformationForm}>
       <TourTooltip
@@ -69,7 +77,7 @@ export const OfficerInformationForm = ({
       <BusinessCardSwitchForm
         disabledList={OFFICER_DISABLED_LIST}
         hiddenList={getEmptyFields(user)}
-        value={value}
+        value={{ show_title, ...others }}
         onChange={onChange}
         getLabel={getLabel}
       />

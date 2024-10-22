@@ -28,6 +28,7 @@ interface QRCodeData {
   in?: string | null;
   pn?: string | null;
   ei?: string | null;
+  ot?: string | null;
 }
 
 const isEmpty = (value: any): boolean => {
@@ -84,6 +85,9 @@ function getQRCodeData(
   }
   if (isIncident || settings?.officer_information.show_photo) {
     data.oa = encodeURIComponent(user.avatar_url as string);
+  }
+  if (user.title && (isIncident || settings?.officer_information.show_title)) {
+    data.ot = encodeURIComponent(user.title.name);
   }
   if (isIncident) {
     data.in = encodeURIComponent(incidentNumber as string);

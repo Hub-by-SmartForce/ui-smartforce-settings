@@ -1,6 +1,6 @@
 import { getUserSession } from './AuthService';
-import { apiGet } from '../Helpers';
-import { Customer } from '../Models';
+import { apiGet, apiPost } from '../Helpers';
+import { Customer, UserTitle } from '../Models';
 
 export const saveCustomer = async (
   baseUrl: string,
@@ -123,3 +123,16 @@ export const updateBadge = async (
     });
   }
 };
+
+export async function getTitles(baseUrl: string): Promise<UserTitle[]> {
+  const url = `${baseUrl}/agencies/me/titles`;
+  return apiGet<UserTitle[]>(url, getUserSession().access_token);
+}
+
+export async function createTitle(
+  baseUrl: string,
+  name: string
+): Promise<UserTitle> {
+  const url = `${baseUrl}/agencies/me/titles`;
+  return apiPost(url, { name }, getUserSession().access_token);
+}

@@ -52,6 +52,9 @@ export const AGENCY_AREAS_UPDATE: string = 'agency.areas.update';
 export const AGENCY_GROUPS_READ: string = 'agency.groups.read';
 export const AGENCY_GROUPS_CREATE: string = 'agency.groups.create';
 
+export const AGENCY_TITLES_READ: string = 'agency.titles.read';
+export const AGENCY_TITLES_CREATE: string = 'agency.titles.create';
+
 /**
  * USER PERMISSIONS
  */

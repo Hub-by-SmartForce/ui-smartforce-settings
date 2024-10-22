@@ -31,6 +31,7 @@ import {
   AGENCY_MEMBERS_READ,
   AGENCY_PREFERENCES_READ,
   AGENCY_SUBSCRIPTION_UPDATE,
+  AGENCY_TITLES_READ,
   USER_PROFILE_READ
 } from './Constants';
 import { AppEnv, ApplicationProduct } from './Models/Apps';
@@ -40,6 +41,7 @@ import { AgencyEvents } from './Views/AgencyEvents/AgencyEvents';
 import { ApiContext } from './Context/Api';
 import { InnerView } from './Components/InnerViews/InnerView/InnerView';
 import { AgencyBillingRender } from './Views/AgencyBilling/AgencyBillingRender';
+import { Titles } from './Views/Titles/Titles';
 
 const onGetStarted = (env: AppEnv, product: ApplicationProduct) => {
   window.open(getAppBaseUrl(env, product), '_blank');
@@ -237,29 +239,6 @@ export const SFSettings = ({
 
   if (
     user &&
-    checkPermissions(AGENCY_MEMBERS_READ, user.role?.permissions) &&
-    checkPermissions(AGENCY_INVITATIONS_READ, user.role?.permissions)
-  ) {
-    agencyItems = [
-      ...agencyItems,
-      {
-        cardTitle: 'Members',
-        viewTitle: 'Members',
-        name: 'members',
-        description: "Add and manage your agency's members.",
-        component: (
-          <AgencyMembers
-            onHome={onHome}
-            onError={onError}
-            onClose={onPanelDone}
-          />
-        )
-      }
-    ];
-  }
-
-  if (
-    user &&
     checkPermissions(AGENCY_INFORMATION_UPDATE, user.role?.permissions)
   ) {
     sectionCards = [
@@ -272,11 +251,59 @@ export const SFSettings = ({
     ];
   }
 
+  if (
+    user &&
+    checkPermissions(AGENCY_MEMBERS_READ, user.role?.permissions) &&
+    checkPermissions(AGENCY_INVITATIONS_READ, user.role?.permissions)
+  ) {
+    sectionCards = [
+      ...sectionCards,
+      {
+        title: 'Members',
+        name: 'members',
+        items: [
+          {
+            cardTitle: 'Members',
+            viewTitle: 'Members',
+            name: 'members',
+            description: "Add and manage your agency's members.",
+            component: (
+              <AgencyMembers
+                onHome={onHome}
+                onError={onError}
+                onClose={onPanelDone}
+              />
+            )
+          }
+        ]
+      }
+    ];
+  }
+
+  if (user && checkPermissions(AGENCY_TITLES_READ, user.role?.permissions)) {
+    sectionCards = [
+      ...sectionCards,
+      {
+        title: 'Titles',
+        name: 'titles',
+        items: [
+          {
+            cardTitle: 'Titles',
+            viewTitle: 'Titles',
+            name: 'titles',
+            description: "Add and manage your agency's titles.",
+            component: <Titles onError={onError} onClose={onPanelDone} />
+          }
+        ]
+      }
+    ];
+  }
+
   if (user && checkPermissions(AGENCY_AREAS_CREATE, user.role.permissions)) {
     sectionCards = [
       ...sectionCards,
       {
-        title: 'Agency Areas',
+        title: 'Areas',
         name: 'areas',
         items: [
           {
@@ -295,7 +322,7 @@ export const SFSettings = ({
     sectionCards = [
       ...sectionCards,
       {
-        title: 'Agency Groups',
+        title: 'Groups',
         name: 'groups',
         items: [
           {
@@ -315,7 +342,7 @@ export const SFSettings = ({
     sectionCards = [
       ...sectionCards,
       {
-        title: 'Agency Shifts',
+        title: 'Shifts',
         name: 'shifts',
         items: [
           {
@@ -328,7 +355,7 @@ export const SFSettings = ({
         ]
       },
       {
-        title: 'Agency Tasks',
+        title: 'Tasks',
         name: 'tasks',
         items: [
           {
@@ -341,7 +368,7 @@ export const SFSettings = ({
         ]
       },
       {
-        title: 'Agency Events',
+        title: 'Events',
         name: 'events',
         items: [
           {
@@ -354,7 +381,7 @@ export const SFSettings = ({
         ]
       },
       {
-        title: 'Agency Inventory',
+        title: 'Inventory',
         name: 'inventory',
         items: [
           {
@@ -376,7 +403,7 @@ export const SFSettings = ({
     sectionCards = [
       ...sectionCards,
       {
-        title: 'Agency Preferences',
+        title: 'Preferences',
         name: 'preferences',
         items: [
           {

@@ -17,7 +17,7 @@ export interface AvatarProps {
   className?: string;
   url?: string | null;
   name?: string;
-  size?: 'extraSmall' | 'small' | 'large';
+  size?: 'extraSmall' | 'small' | 'medium' | 'large';
 }
 
 export const Avatar = ({

@@ -1,0 +1,40 @@
+@import '~sfui/dist/Styles/SFMedia/SFMedia.module.scss';
+
+div.setTitleModal {
+  div.content {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+
+    .memberInfo {
+      display: flex;
+      gap: 12px;
+      padding: 20px 13px;
+      box-sizing: border-box;
+      align-items: center;
+    }
+
+    .dialogTitle {
+      display: none;
+    }
+  }
+}
+
+@media screen and (min-width: $sf-media-sm-width) {
+  div.setTitleModal {
+    div.dialogContainer {
+      grid-template-rows: minmax(0, 1fr) auto !important;
+
+      > div:first-of-type {
+        display: none;
+      }
+    }
+
+    div.content {
+      .dialogTitle {
+        display: block;
+        padding-right: 55px;
+      }
+    }
+  }
+}

@@ -26,7 +26,9 @@ import {
   changeRole,
   getSubscriptions,
   getUser,
-  removeMember
+  removeMember,
+  deleteTitle,
+  setTitle
 } from '../../../../Services';
 import {
   AGENCY_SUBSCRIPTION_READ,
@@ -38,6 +40,7 @@ import {
   isRoleOwner
 } from '../../../../Helpers';
 import { TourContext } from '../../../../Modules/Tour';
+import { SetTitleModal } from '../SetTitleModal/SetTitleModal';
 
 const filterRoles = (
   customerRoles: MemberRole[],
@@ -86,6 +89,8 @@ export const MemberList = ({
   const [isDowngradeModalOpen, setIsDowngradeModalOpen] =
     useState<boolean>(false);
   const [isTransferModalOpen, setIsTransferModalOpen] =
+    useState<boolean>(false);
+  const [isSetTitleModalOpen, setIsSetTitleModalOpen] =
     useState<boolean>(false);
   const [isSaving, setIsSaving] = useState(false);
   const [removeMemberItem, setRemoveMemberItem] = React.useState<Member>();
@@ -257,6 +262,40 @@ export const MemberList = ({
     }
   };
 
+  const onSetTitle = (member: Member) => {
+    setSelected(member);
+    setIsSetTitleModalOpen(true);
+  };
+
+  const onSaveTitle = async (member: Member, titleId: string) => {
+    try {
+      setIsSaving(true);
+
+      let memberUpdated = { ...member };
+
+      if (titleId.length === 0) {
+        await deleteTitle(apiBaseUrl, member.id as string);
+        memberUpdated.title = undefined;
+      } else {
+        const newTitle = await setTitle(
+          apiBaseUrl,
+          member.id as string,
+          titleId
+        );
+        memberUpdated.title = newTitle;
+      }
+
+      onUpdateMember(memberUpdated);
+
+      setIsSaving(false);
+      setIsSetTitleModalOpen(false);
+    } catch (e: any) {
+      console.error('MemberList::onSaveTitle', e);
+      onError(e);
+      return;
+    }
+  };
+
   const rolesAvailable: MemberRole[] = filterRoles(
     customer?.roles as MemberRole[],
     user?.role as MemberRole
@@ -289,6 +328,18 @@ export const MemberList = ({
             isSaving={isSaving}
             onTransfer={onTransfer}
             onClose={onTransferModalClose}
+          />
+
+          <SetTitleModal
+            isOpen={isSetTitleModalOpen}
+            member={selected}
+            isSaving={isSaving}
+            onSave={onSaveTitle}
+            onBack={() => setIsSetTitleModalOpen(false)}
+            onClose={() => {
+              onClose();
+              setIsSetTitleModalOpen(false);
+            }}
           />
         </Fragment>
       )}
@@ -328,6 +379,7 @@ export const MemberList = ({
               wasRemoved={member.email === removeMemberItem?.email}
               onError={onError}
               onClick={() => onSelectMember(member)}
+              onSetTitle={() => onSetTitle(member)}
               onChangeRole={() => onChangeMemberRole(member)}
               onRemove={() => onRemoveMember(member)}
               onTransitionEnd={onRemoveTransitionEnd}

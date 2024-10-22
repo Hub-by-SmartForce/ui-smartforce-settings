@@ -35,6 +35,7 @@ export interface MemberListItemProps {
   wasRemoved: boolean;
   onError: (e: SettingsError) => void;
   onClick: () => void;
+  onSetTitle: () => void;
   onChangeRole: () => void;
   onRemove: () => void;
   onTransitionEnd: () => void;
@@ -83,6 +84,11 @@ export const MemberListItem = ({
     onClick();
   };
 
+  const onSetTitle = () => {
+    setIsMenuOpen(false);
+    props.onSetTitle();
+  };
+
   const onChangeRole = () => {
     setIsMenuOpen(false);
     props.onChangeRole();
@@ -129,6 +135,12 @@ export const MemberListItem = ({
           <SFMenuItem tabIndex={0} onClick={onSeeProfile}>
             See profile
           </SFMenuItem>
+
+          {isActive && (isRoleLower || isUser) && (
+            <SFMenuItem tabIndex={0} onClick={onSetTitle}>
+              Set title
+            </SFMenuItem>
+          )}
 
           {showResendInvitationItem && (
             <SFMenuItem tabIndex={0} onClick={onResendInvitation}>

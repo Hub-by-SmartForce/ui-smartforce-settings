@@ -5,7 +5,7 @@ import { SettingsError, UserTitle } from '../../Models';
 import { SFButton } from 'sfui';
 import { ApiContext, UserContext } from '../../Context';
 import { TitleItem } from './TitleItem/TitleItem';
-import { getTitles } from '../../Services';
+import { getTitles, moveTitle } from '../../Services';
 import { TitleModal } from './TitleModal/TitleModal';
 import { TitleDeleteDialog } from './TitleDeleteDialog/TitleDeleteDialog';
 import { isRoleOwner } from '../../Helpers';
@@ -96,11 +96,25 @@ export const Titles = ({
     }
   };
 
-  const onDown = (_title: UserTitle) => {
-    //TODO
+  const onMove = async (id: string, newPriority: number) => {
+    setIsLoading(true);
+    try {
+      await moveTitle(apiBaseUrl, id, newPriority);
+      const response = await getTitles(apiBaseUrl);
+      setTitles(response);
+      setIsLoading(false);
+    } catch (e: any) {
+      console.error('Titles::onMove', e);
+      setIsLoading(false);
+      onError(e);
+    }
   };
-  const onUp = (_title: UserTitle) => {
-    //TODO
+
+  const onDown = (title: UserTitle) => {
+    onMove(title.id, title.priority + 1);
+  };
+  const onUp = (title: UserTitle) => {
+    onMove(title.id, title.priority - 1);
   };
 
   return (

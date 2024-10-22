@@ -5,7 +5,6 @@ import {
   SFCounter,
   SFRadioGroup,
   SFRadioOptionsProps,
-  SFScrollable,
   SFText
 } from 'sfui';
 import { WizardStepSection } from '../WizardStepSection/WizardStepSection';
@@ -73,7 +72,7 @@ export const PurchaseDetails = ({
 
   return (
     <div className={styles.purchaseDetails}>
-      <SFScrollable containerClassName={styles.scrollable}>
+      <div className={styles.scrollable}>
         <WizardStepSection title="Billing Cycle for your Annual Plan">
           <SFRadioGroup
             className={styles.options}
@@ -166,7 +165,7 @@ export const PurchaseDetails = ({
           <h3>Total</h3>
           <h3>US${total.toFixed(2)}</h3>
         </div>
-      </SFScrollable>
+      </div>
 
       <div className={styles.button}>
         <SFButton size="large" fullWidth onClick={onContinue}>

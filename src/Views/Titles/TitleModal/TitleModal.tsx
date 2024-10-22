@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { PanelModal, PanelModalAnchor } from '../../../Components';
-import { SFTextField } from 'sfui';
+import { HttpStatusCode, SFTextField } from 'sfui';
 import { ApiContext } from '../../../Context';
 import { createTitle } from '../../../Services';
 import { SettingsError } from '../../../Models';
@@ -28,6 +28,7 @@ export const TitleModal = ({
   const [anchor, setAnchor] = useState<PanelModalAnchor>('right');
   const [isSaving, setIsSaving] = useState<boolean>(false);
   const [nameValue, setNameValue] = useState<string>(name ?? '');
+  const [isError, setIsError] = useState<boolean>(false);
 
   const isEdit = !!name && name.length > 0;
 
@@ -46,15 +47,28 @@ export const TitleModal = ({
       onClose();
     } catch (e: any) {
       setIsSaving(false);
-      onError(e);
+      if (e.code === HttpStatusCode.BAD_REQUEST) {
+        setIsError(true);
+      } else {
+        console.error('Settings::CreateGroupModal::Create', e);
+        onError(e);
+      }
     }
   };
 
   useEffect(() => {
     if (isOpen) {
       setNameValue(name ?? '');
+      setIsError(false);
     }
   }, [isOpen, name]);
+
+  const onNameChange: React.ChangeEventHandler<HTMLInputElement> = (e) => {
+    if (isError) {
+      setIsError(false);
+    }
+    setNameValue(e.target.value);
+  };
 
   return (
     <PanelModal
@@ -86,10 +100,15 @@ export const TitleModal = ({
         <SFTextField
           required
           label="Name"
-          helperText="It must be between 1 and 32 characters."
+          error={isError}
+          helperText={
+            isError
+              ? 'This name is already taken.'
+              : 'It must be between 1 and 32 characters.'
+          }
           inputProps={{ maxLength: 32 }}
           value={nameValue}
-          onChange={(e) => setNameValue(e.target.value)}
+          onChange={onNameChange}
         />
       </div>
     </PanelModal>

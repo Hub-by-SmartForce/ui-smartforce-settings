@@ -1,11 +1,12 @@
-import { apiGet, apiPatch, apiPost } from '../Helpers';
+import { apiDelete, apiGet, apiPatch, apiPost, apiPut } from '../Helpers';
 import { isUserInvitationAlreadyAccepted } from '../Helpers/errors';
 import {
   BusinessCardSettings,
   User,
   UserExtraJobs,
   UserGroup,
-  UserSettings
+  UserSettings,
+  UserTitle
 } from '../Models';
 import { getUserSession } from './AuthService';
 
@@ -268,4 +269,18 @@ export async function saveTourAction(
   } catch (e) {
     console.error('Save Tour action error:', e);
   }
+}
+
+export function setTitle(
+  baseUrl: string,
+  userId: string,
+  titleId: string
+): Promise<UserTitle> {
+  const url: string = `${baseUrl}/users/${userId}/title`;
+  return apiPut(url, { id: titleId }, getUserSession().access_token);
+}
+
+export function deleteTitle(baseUrl: string, userId: string): Promise<void> {
+  const url: string = `${baseUrl}/users/${userId}/title`;
+  return apiDelete(url, getUserSession().access_token);
 }

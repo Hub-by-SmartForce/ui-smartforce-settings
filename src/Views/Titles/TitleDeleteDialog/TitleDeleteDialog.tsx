@@ -1,7 +1,9 @@
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import styles from './TitleDeleteDialog.module.scss';
 import { SFAlertDialog, SFText } from 'sfui';
 import { SettingsError, UserTitle } from '../../../Models';
+import { ApiContext } from '../../../Context';
+import { deleteTitle } from '../../../Services';
 
 export interface TitleDeleteDialogProps {
   isOpen: boolean;
@@ -18,18 +20,19 @@ export const TitleDeleteDialog = ({
   onDelete,
   value
 }: TitleDeleteDialogProps): React.ReactElement<TitleDeleteDialogProps> => {
-  //   const apiBaseUrl = useContext(ApiContext).shifts;
+  const apiBaseUrl = useContext(ApiContext).settings;
   const [isSaving, setIsSaving] = useState<boolean>(false);
 
   const onTitleDelete = async () => {
     setIsSaving(true);
 
     try {
-      // TODO endpoint call
+      await deleteTitle(apiBaseUrl, value.id);
       setIsSaving(false);
       onDelete(value);
     } catch (e: any) {
       setIsSaving(false);
+      console.error('TitleDeleteDialog::onTitleDelete', e);
       onError(e);
     }
   };

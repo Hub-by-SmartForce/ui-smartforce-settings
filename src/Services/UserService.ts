@@ -280,7 +280,7 @@ export function setTitle(
   return apiPut(url, { id: titleId }, getUserSession().access_token);
 }
 
-export function deleteTitle(baseUrl: string, userId: string): Promise<void> {
+export function unsetTitle(baseUrl: string, userId: string): Promise<void> {
   const url: string = `${baseUrl}/users/${userId}/title`;
   return apiDelete(url, getUserSession().access_token);
 }

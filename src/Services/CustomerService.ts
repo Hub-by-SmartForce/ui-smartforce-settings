@@ -141,7 +141,7 @@ export async function moveTitle(
   baseUrl: string,
   titleId: string,
   priority: number
-): Promise<UserTitle> {
+): Promise<UserTitle[]> {
   const url = `${baseUrl}/agencies/me/titles/${titleId}/move`;
   return apiPost(url, { priority }, getUserSession().access_token);
 }

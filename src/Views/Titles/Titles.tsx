@@ -99,9 +99,8 @@ export const Titles = ({
   const onMove = async (id: string, newPriority: number) => {
     setIsLoading(true);
     try {
-      await moveTitle(apiBaseUrl, id, newPriority);
-      const response = await getTitles(apiBaseUrl);
-      setTitles(response);
+      const titles = await moveTitle(apiBaseUrl, id, newPriority);
+      setTitles(titles);
       setIsLoading(false);
     } catch (e: any) {
       console.error('Titles::onMove', e);

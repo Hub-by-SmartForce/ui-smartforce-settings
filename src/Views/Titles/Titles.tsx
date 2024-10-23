@@ -84,6 +84,7 @@ export const Titles = ({
   };
 
   const onFinish = async () => {
+    setModalValue(undefined);
     setIsDeleteDialogOpen(false);
     setIsLoading(true);
     try {

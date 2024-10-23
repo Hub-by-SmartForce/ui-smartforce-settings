@@ -27,7 +27,7 @@ import {
   getSubscriptions,
   getUser,
   removeMember,
-  deleteTitle,
+  unsetTitle,
   setTitle
 } from '../../../../Services';
 import {
@@ -274,7 +274,7 @@ export const MemberList = ({
       let memberUpdated = { ...member };
 
       if (titleId.length === 0) {
-        await deleteTitle(apiBaseUrl, member.id as string);
+        await unsetTitle(apiBaseUrl, member.id as string);
         memberUpdated.title = undefined;
       } else {
         const newTitle = await setTitle(

@@ -136,7 +136,7 @@ export const MemberListItem = ({
             See profile
           </SFMenuItem>
 
-          {isActive && (isRoleLower || isUser) && (
+          {isActive && (isRoleOwner(user.role.id) || isRoleLower) && (
             <SFMenuItem tabIndex={0} onClick={onSetTitle}>
               Set title
             </SFMenuItem>

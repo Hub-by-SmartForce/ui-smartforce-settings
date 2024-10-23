@@ -1,5 +1,5 @@
 import { getUserSession } from './AuthService';
-import { apiGet, apiPost } from '../Helpers';
+import { apiGet, apiPatch, apiPost } from '../Helpers';
 import { Customer, UserTitle } from '../Models';
 
 export const saveCustomer = async (
@@ -144,4 +144,13 @@ export async function moveTitle(
 ): Promise<UserTitle> {
   const url = `${baseUrl}/agencies/me/titles/${titleId}/move`;
   return apiPost(url, { priority }, getUserSession().access_token);
+}
+
+export async function editTitle(
+  baseUrl: string,
+  titleId: string,
+  name: string
+): Promise<UserTitle> {
+  const url = `${baseUrl}/agencies/me/titles/${titleId}`;
+  return apiPatch(url, { name }, getUserSession().access_token);
 }

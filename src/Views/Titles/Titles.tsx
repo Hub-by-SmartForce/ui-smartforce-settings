@@ -133,7 +133,7 @@ export const Titles = ({
       )}
 
       <TitleModal
-        name={modalValue?.name}
+        title={modalValue}
         isOpen={isModalOpen}
         onClose={() => {
           onClose();

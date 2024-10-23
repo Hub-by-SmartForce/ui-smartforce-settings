@@ -2,11 +2,11 @@ import React, { useContext, useEffect, useState } from 'react';
 import { PanelModal, PanelModalAnchor } from '../../../Components';
 import { HttpStatusCode, SFTextField } from 'sfui';
 import { ApiContext } from '../../../Context';
-import { createTitle } from '../../../Services';
-import { SettingsError } from '../../../Models';
+import { createTitle, editTitle } from '../../../Services';
+import { SettingsError, UserTitle } from '../../../Models';
 
 export interface TitleModalProps {
-  name?: string;
+  title?: UserTitle;
   isOpen: boolean;
   onBack: () => void;
   onClose: () => void;
@@ -16,7 +16,7 @@ export interface TitleModalProps {
 }
 
 export const TitleModal = ({
-  name,
+  title,
   isOpen,
   onBack,
   onClose,
@@ -27,17 +27,17 @@ export const TitleModal = ({
   const apiBaseUrl = useContext(ApiContext).settings;
   const [anchor, setAnchor] = useState<PanelModalAnchor>('right');
   const [isSaving, setIsSaving] = useState<boolean>(false);
-  const [nameValue, setNameValue] = useState<string>(name ?? '');
+  const [nameValue, setNameValue] = useState<string>(title?.name ?? '');
   const [isError, setIsError] = useState<boolean>(false);
 
-  const isEdit = !!name && name.length > 0;
+  const isEdit = !!title;
 
   const onSave = async () => {
     setIsSaving(true);
 
     try {
       if (isEdit) {
-        //TODO
+        await editTitle(apiBaseUrl, title.id, nameValue);
       } else {
         await createTitle(apiBaseUrl, nameValue);
       }
@@ -58,10 +58,10 @@ export const TitleModal = ({
 
   useEffect(() => {
     if (isOpen) {
-      setNameValue(name ?? '');
+      setNameValue(title?.name ?? '');
       setIsError(false);
     }
-  }, [isOpen, name]);
+  }, [isOpen, title]);
 
   const onNameChange: React.ChangeEventHandler<HTMLInputElement> = (e) => {
     if (isError) {
@@ -91,7 +91,9 @@ export const TitleModal = ({
         label: isEdit ? 'Save Changes' : 'Create Title',
         isLoading: isSaving,
         disabled:
-          isSaving || nameValue.length === 0 || (isEdit && nameValue === name),
+          isSaving ||
+          nameValue.length === 0 ||
+          (isEdit && nameValue === title.name),
         onClick: onSave
       }}
       onExit={onTransitionEnd}

@@ -18,7 +18,8 @@ import {
   MemberRole,
   SettingsError,
   Subscription,
-  User
+  User,
+  UserTitle
 } from '../../../../Models';
 import { ApiContext } from '../../../../Context';
 import {
@@ -271,22 +272,30 @@ export const MemberList = ({
     try {
       setIsSaving(true);
 
-      let memberUpdated = { ...member };
+      let newTitle: UserTitle | undefined;
 
       if (titleId.length === 0) {
         await unsetTitle(apiBaseUrl, member.id as string);
-        memberUpdated.title = undefined;
       } else {
-        const newTitle = await setTitle(
-          apiBaseUrl,
-          member.id as string,
-          titleId
-        );
-        memberUpdated.title = newTitle;
+        newTitle = await setTitle(apiBaseUrl, member.id as string, titleId);
       }
 
-      onUpdateMember(memberUpdated);
+      onUpdateMember({
+        ...member,
+        title: newTitle
+      });
 
+      // If the owner its assigning a title to himself
+      if (member.id === user?.id) {
+        setUser((currentUser) => {
+          if (!currentUser) return currentUser;
+          else
+            return {
+              ...currentUser,
+              title: newTitle
+            };
+        });
+      }
       setIsSaving(false);
       setIsSetTitleModalOpen(false);
     } catch (e: any) {

@@ -5,6 +5,7 @@ import { InteractiveBox } from '../../../InteractiveBox/InteractiveBox';
 
 export interface ListManagmentMenuOption<T> {
   label: string;
+
   disabled?: boolean;
   filter?: (item: T) => boolean;
   onClick: (item: T) => void;
@@ -13,6 +14,7 @@ export interface ListManagmentMenuOption<T> {
 export interface ListItemProps<T> {
   isFirst: boolean;
   isLast: boolean;
+  clickeable?: boolean;
   showItemMenu?: boolean;
   item: T;
   options: ListManagmentMenuOption<T>[];
@@ -27,6 +29,7 @@ export interface ListItemProps<T> {
 export const ListItem = <T,>({
   isFirst,
   isLast,
+  clickeable = true,
   showItemMenu = true,
   item,
   options,
@@ -49,7 +52,10 @@ export const ListItem = <T,>({
   };
 
   return (
-    <InteractiveBox className={styles.listItem} onClick={onClick}>
+    <InteractiveBox
+      className={`${styles.listItem} ${clickeable ? styles.clickeable : ''}`}
+      onClick={onClick}
+    >
       {renderItem(item, isFirst, isLast)}
 
       <div

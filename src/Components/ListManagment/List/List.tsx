@@ -28,6 +28,7 @@ export const List = <T,>({
       {list.map((item: T, index: number) => (
         <SFCollapse key={(item as { id: string }).id} timeout={480}>
           <ListItem
+            clickeable={!!onClick}
             isFirst={index === 0}
             isLast={index === list.length - 1}
             showItemMenu={showItemMenu}
